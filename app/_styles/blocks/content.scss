@@ -1,0 +1,9 @@
+.content {
+    &__header {
+        @include wrap(site);
+    }
+
+    &__title {
+        @include textstyle(title);
+    }
+}

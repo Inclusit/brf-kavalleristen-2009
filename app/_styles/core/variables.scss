@@ -1,0 +1,281 @@
+$assetsPath: "../_assets/";
+
+// Measurements
+$maxwidths: (
+    site: 1440px,
+    wrapped: 1260px,
+    content: 800px,
+);
+
+$breakpoints: (
+    S: 480px,
+    SL: 600px,
+    M: 720px,
+    L: 1260px,
+    XL: 1440px,
+
+    wp-S: 601px,
+    wp-M: 783px,
+);
+
+$gutters: (
+    d: 16px,
+    M: 24px,
+);
+
+$wp-admin-bar-height: 46px;
+$wp-admin-bar-height--wp-M: 32px;
+
+$mobile-menu: M;
+$menuHeight: 88px;
+
+$section-content-margin-256: 15rem;
+$section-content-margin-130: 8.125rem;
+$section-content-margin-50: 3.125rem;
+$section-content-margin-80: 80px;
+$section-content-margin-48: 48px;
+$section-content-margin-24: 24px;
+
+// Z-index bases
+$z-cookie: 200;
+$z-card: 1;
+$menu-z-position: 10;
+
+// Transitions & animations
+$transition: 0.3s ease-in-out;
+
+// Colors
+$white: #fff;
+$black: #181818;
+$grey: #E7E7E8;
+$grey-5: #EDEDED;
+$grey-10: #FCFCFC;
+$grey-40: #F6F6F6;
+$grey-100: #E9E9E9;
+$grey-200: #D9D9D9;
+$grey-300: #C4C4C4;
+$grey-500: #7B7B7B;
+$grey-700: #434343;
+$grey-750: #2A2A2A;
+$grey-800: #181818;
+
+//DEPRECATED Custom colors
+$pink: #F4B2C0;
+$navy: #004976;
+$purple: #6D2B9A;
+
+//Custom Colors
+$orange: #DD3800;
+$light-orange: #FDE6D8;
+$lightgray: #EDEAE4;
+
+$blue-50: #E7F6FF;
+$blue-700: #0A77D4;
+$blue-900: #052364;
+
+$custom-blue: #3050B1;
+$custom-blue-light: #3B86C8;
+$custom-orange: #FF790B;
+
+// $base-color: $white;
+$base-color: $black;
+$primary-color: $orange;
+$secondary-color: $blue-900;
+
+$link-color: $orange;
+$link-hover-color: $black;
+$error-color: red;
+$border-radius : 1.25rem;
+
+// Style
+$fontfamilies: (
+    text: #{"FuturaStd",
+ sans
+}
+
+,
+heading: #{"FuturaStd",
+ sans
+}
+
+,
+handwritten: #{"Newport",
+ serif
+}
+
+,
+sans: #{Arial,
+ sans-serif
+}
+
+,
+serif: #{"Times",
+ serif
+}
+
+,
+alternative: #{"Druk",
+ sans
+}
+
+,
+);
+
+$base-font: map-get($fontfamilies, "text");
+$heading-font: map-get($fontfamilies, "heading");
+$heading-alteranative: map-get($fontfamilies, "alternative");
+
+// Font weights
+$light: 300;
+$regular: 400;
+$bold: 500;
+$heavy: 900;
+
+// No other font sizes are needed
+// Font sizes and line heights as defined by styleguide in pixels
+$textstyles: (
+    title: (d: (font-size: 40,
+            line-height: 52,
+            font-weight: $bold,
+            font-family: $heading-font,
+            text-transform: uppercase,
+            letter-spacing: 1px),
+        M: (font-size: 84,
+            line-height: 94,
+        ),
+    ),
+    custom-event-title: (d: (font-size: 40,
+            line-height: 52,
+            font-weight: $bold,
+            font-family: $heading-font,
+            text-transform: uppercase,
+            letter-spacing: 1px),
+        M: (font-size: 72,
+            line-height: 78,
+        ),
+    ),
+    custom-event-subtitle: (d: (font-size: 32,
+            line-height: 28,
+            font-family: $heading-font,
+            text-transform: uppercase,
+            letter-spacing: 1px,
+            font-weight: $regular ),
+        M: (font-size: 54,
+            line-height: 41,
+        ),
+    ),
+    h2: (d: (font-size: 32,
+            line-height: 40,
+            font-family: $heading-font,
+            text-transform: uppercase,
+            letter-spacing: 1px),
+        M: (font-size: 54,
+            line-height: 78,
+        ),
+    ),
+    h2-richtext: (d: (font-size: 20,
+            line-height: 28,
+            font-weight: $regular,
+            font-family: $heading-font,
+            text-transform: uppercase,
+            letter-spacing: 1px),
+        M: (font-size: 32,
+            line-height: 41,
+        ),
+    ),
+    h3: (d: (font-size: 20,
+            line-height: 28,
+            font-weight: $regular,
+            font-family: $heading-font,
+            text-transform: uppercase,
+            letter-spacing: 1px),
+        M: (font-size: 32,
+            line-height: 41,
+        ),
+    ),
+    h3-richtext: (d: (font-size: 18,
+            line-height: 26.64,
+            font-weight: $bold,
+            font-family: $heading-font,
+            letter-spacing: 0.5px),
+        M: (font-size: 24,
+            line-height: 31.92,
+        ),
+    ),
+    h4: (d: (font-size: 18,
+            line-height: 26.64,
+            font-weight: $bold,
+            font-family: $heading-font,
+            letter-spacing: 0.5px),
+        M: (font-size: 24,
+            line-height: 31.92,
+        ),
+    ),
+    h5: (d: (font-size: 18,
+            line-height: 39,
+            font-weight: $bold,
+            font-family: $heading-font,
+        ),
+        M: (font-size: 20,
+        ),
+    ),
+    h6: (d: (font-size: 18,
+            line-height: 39,
+            font-weight: $bold,
+            font-family: $heading-font,
+        ),
+        M: (font-size: 18,
+        ),
+    ),
+    card-title: (d: (font-size: 54,
+            line-height: 54,
+            font-weight: $regular,
+            font-family: $heading-alteranative,
+            text-transform: uppercase,
+            letter-spacing: 1px),
+        M: (font-size: 74,
+            line-height: 74,
+        ),
+    ),
+    button: (d: (font-size: 14,
+            line-height: 1,
+            font-weight: $regular,
+            font-family: $base-font,
+            text-transform: uppercase,
+            letter-spacing: 1.7px),
+        M: (font-size: 17,
+        ),
+    ),
+    preamble: (d: (font-size: 20,
+            line-height: 31,
+            font-weight: $regular,
+            font-family: $base-font,
+        ),
+        M: (font-size: 24,
+            line-height: 36,
+        ),
+    ),
+    body: (d: (font-size: 18,
+            line-height: 28,
+            font-family: $base-font,
+        ),
+        M: (font-size: 18,
+            line-height: 28,
+        ),
+    ),
+    body-small: (d: (font-size: 16,
+            line-height: 26,
+            font-family: $base-font,
+        ),
+        M: (font-size: 16,
+            line-height: 26,
+        ),
+    ),
+    label: (d: (font-size: 14,
+            line-height: 39,
+            letter-spacing: 0.5px,
+            text-transform: uppercase,
+            font-family: $base-font,
+        ),
+    ),
+);

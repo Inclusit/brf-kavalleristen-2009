@@ -1,0 +1,115 @@
+%link-button-orange {
+    @include textstyle(button);
+
+    padding: 18px 32px;
+    color: $orange;
+    border-radius: 100px;
+    line-height: 1.8;
+    background-color: $orange;
+    color: $white;
+    border: 1px solid $orange;
+    text-decoration: none;
+
+    @include media(L) {
+        transition: background-color ease-in-out 0.2s, color ease-in-out 0.2s, border ease-in-out 0.2s;
+
+        &:hover {
+            background-color: $light-orange;
+            color: $black;
+            border: 1px solid $black;
+        }
+    }
+
+    @include href-download() {
+        &::before {
+            display: none;
+        }
+
+        &::after {
+            content: "";
+            width: 24px;
+            height: 24px;
+            margin-bottom: -5px;
+            margin-left: 10px;
+            display: inline-block;
+            background-color: currentColor;
+            mask-image: url("#{$assetsPath}images/download-purple.svg");
+            mask-repeat: no-repeat;
+            mask-size: cover;
+            mask-position: center center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: contain;
+            -webkit-mask-position: center center;
+        }
+    }
+}
+
+%link-text-orange {
+    padding: 10px 8px;
+    border-radius: 4px;
+
+    a {
+        @include textstyle(button);
+
+        color: $orange;
+        line-height: 1;
+
+        @include media(L) {
+            transition: color ease-in-out 0.2s;
+        }
+
+        @include href-external() {
+            &::after {
+                content: "";
+                width: 18px;
+                height: 18px;
+                margin-bottom: -2px;
+                margin-left: 10px;
+                display: inline-block;
+                background-color: currentColor;
+                mask-image: url('#{$assetsPath}images/external-link-white.svg');
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                mask-position: center center;
+                mask-image: url('#{$assetsPath}images/external-link-white.svg');
+                -webkit-mask-repeat: no-repeat;
+                -webkit-mask-size: contain;
+                -webkit-mask-position: center center;
+            }
+        }
+    }
+
+    @include media(L) {
+        transition: color ease-in-out 0.2s, background-color ease-in-out 0.2s;
+
+        &:hover {
+            a {
+                color: $black;
+            }
+
+            background-color: $light-orange;
+        }
+    }
+
+}
+
+%link-button-blue {
+    @include textstyle(button);
+
+    padding: 18px 32px;
+    border-radius: 100px;
+    line-height: 1.8;
+    background-color: $custom-blue;
+    color: $white;
+    border: 1px solid $custom-blue;
+    text-decoration: none;
+
+    @include media(L) {
+        transition: background-color ease-in-out 0.2s, color ease-in-out 0.2s, border ease-in-out 0.2s;
+
+        &:hover {
+            background-color: $blue-900;
+            color: $grey-10;
+        }
+    }
+}
