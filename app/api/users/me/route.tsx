@@ -1,19 +1,18 @@
-//src/app/api/users/me/route.tsx
-
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { UserUpdateData } from "../../../types/user";
+import { UserUpdateData, SafeUser } from "@/app/types/user";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
-  try {
-    // Get the userId from the request headers
-    const userId = request.headers.get("userId");
-    if (!userId) {
-      throw new Error("Failed to retrieve userId from headers");
-    }
+  // Get the userId from the request headers
+  const userId = request.headers.get("userId");
 
+  if (!userId) {
+    throw new Error("Failed to retrieve userId from headers");
+  }
+
+  try {
     // Find the user in the database using the userId from the headers
     const user = await prisma.user.findUniqueOrThrow({
       where: {
@@ -35,8 +34,17 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
+  const userId = request.headers.get("userId");
+
+  if (!userId) {
+    return NextResponse.json(
+      { message: "Failed to retrieve userId from headers" },
+      { status: 401 }
+    );
+  }
+
   try {
-    const body = await request.json();
+    const body = await request.json() as Partial<Pick<UserUpdateData,  "email" | "password">>;
 
     if (!body) {
       return NextResponse.json(
@@ -45,19 +53,29 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    if (!body.email && !body.password) {
+      return NextResponse.json(
+        { message: "No data to update" },
+        { status: 400 }
+      );
+    }
+
     const user = await prisma.user.update({
       where: {
-        id: body.id,
+        id: userId,
       },
       data: {
-        email: body.email,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        password: body.password,
+        ...(body.email && { email: body.email.toLowerCase() }),
+        ...(body.password && { password: body.password }),
       },
     });
 
-    return NextResponse.json(user);
+    const { password, ...safeUser } = user; 
+
+    return NextResponse.json(safeUser, 
+      { status: 200 }
+    );
+
   } catch (error: any) {
     console.warn("Error: Failed to update user", error.message);
     return NextResponse.json(
@@ -80,6 +98,13 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    if (!userId) {
+      return NextResponse.json(
+        { message: "Failed to retrieve userId from headers" },
+        { status: 401 }
+      );
+    }
+
     if (body.id !== userId) {
       return NextResponse.json(
         { message: "You are not authorized to delete this user" },
@@ -87,21 +112,9 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    await prisma.booking.deleteMany({
-      where: {
-        userId: body.id,
-      },
-    });
-
-    await prisma.property.deleteMany({
-      where: {
-        ownerId: body.id,
-      },
-    });
-
     await prisma.user.delete({
       where: {
-        id: body.id,
+        id: userId,
       },
     });
 

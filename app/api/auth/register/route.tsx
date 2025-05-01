@@ -1,5 +1,3 @@
-//src/app/api/auth/register/route.tsx
-
 import { UserRegistrationData } from "../../../types/user";
 import { hashPassword } from "../../../lib/utils/bcrypt";
 import { signJWT } from "../../../lib/utils/jwt";
@@ -11,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
+  console.log("POST /api/auth/register called");
   try {
     //get user data from request body and run it through the validator
     const body: UserRegistrationData = await request.json();
@@ -37,15 +36,14 @@ export async function POST(request: NextRequest) {
       data: {
         email: body.email.toLowerCase(),
         password: hashedPassword,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        role: body.role,
+        role: "USER"
       },
     });
 
     //Sign JWT token and return it to the user for authentication
     const token = await signJWT({
       userId: user.id,
+      role: user.role,
     });
 
     return NextResponse.json({ token }, { status: 201 });
