@@ -17,9 +17,7 @@ export function UserRegistrationValidator(
   } else if (data.password.length < 6) {
     errors.password = "Password must be at least 6 characters";
   }
-  if (!data.firstName) {
-    errors.firstName = "First name is required";
-  }
+  
 
   const hasErrors = Object.keys(errors).length > 0;
 

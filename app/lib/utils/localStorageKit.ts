@@ -11,12 +11,12 @@ class LocalStorageKit {
   static get(key: LocalStorageKey) {
     const jsonData = localStorage.getItem(key);
     try {
-      if (!jsonData) {
-        return null;
-      }
+      if (!jsonData) return null;
+
       return JSON.parse(jsonData);
-    } catch (error) {
-      return jsonData;
+      
+    } catch {
+      return jsonData; // <-- JWT fallback
     }
   }
 

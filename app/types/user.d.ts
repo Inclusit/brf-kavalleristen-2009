@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 
-type UserData = Omit<User, "id" | "role">;
+type UserData = Omit<User, "id" | "role" | "createdAt" | "updatedAt">;;
 
 type UserRegistrationData = Omit<
   User,
@@ -9,6 +9,6 @@ type UserRegistrationData = Omit<
 
 type UserLoginData = Pick<User, "email" | "password">;
 
-type UserUpdateData = Omit<User, "id" | "role" | "createdAt" | "updatedAt">;
+type UserUpdateData = Omit<User,"createdAt" | "updatedAt">;
 
 type SafeUser = Omit<User, "password">;
