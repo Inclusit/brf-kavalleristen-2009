@@ -1,0 +1,15 @@
+@mixin respond-min($breakpoint) {
+    @media (min-width: $breakpoint) {
+        @content;
+    }
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin transition($prop: all, $speed: $transition) {
+    transition: $prop $speed;
+}
