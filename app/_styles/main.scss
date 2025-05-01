@@ -1,15 +1,15 @@
-// core (måste komma först!)
-@import './core/variables';
-@import './core/functions';
-@import './core/mixins'; // <-- Här ligger troligen mixin "wrap"
+// core 
+@use './core/variables';
+@use './core/functions';
+@use './core/mixins'; 
 
 // globals
-@import './globals/_reset';
-@import './globals/base';
-@import './globals/fonts';
+@use './globals/_reset';
+@use './globals/base';
+@use './globals/typography';
 
 // extends
-@import './extends/buttons';
+@use './extends/buttons';
 
-// blocks (lägg sist eftersom de använder mixins)
-@import './blocks/content';
+// blocks 
+@use './blocks/content';

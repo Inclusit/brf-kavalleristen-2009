@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 @mixin respond-min($breakpoint) {
     @media (min-width: $breakpoint) {
         @content;
@@ -12,4 +14,37 @@
 
 @mixin transition($prop: all, $speed: $transition) {
     transition: $prop $speed;
+}
+
+@mixin wrap($size: site) {
+    @if $size ==site {
+        max-width: $max-width;
+    }
+
+    @else if $size ==content {
+        max-width: $content-width;
+    }
+
+    margin-inline: auto;
+    padding-inline: $gutter;
+}
+
+@mixin textstyle($type) {
+    @if $type == title {
+        font-size: $font-size-title;
+        font-weight: $font-weight-title;
+        line-height: $line-height-title;
+    }
+
+    @else if $type == button {
+        font-size: $font-size-button;
+        font-weight: $font-weight-button;
+        line-height: $line-height-button;
+    }
+
+    @else if $type == text {
+        font-size: $font-size-text;
+        font-weight: $font-weight-text;
+        line-height: $line-height-text;
+    }
 }

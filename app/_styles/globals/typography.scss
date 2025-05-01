@@ -1,0 +1,9 @@
+@use '../core/variables' as *;
+
+@font-face {
+    font-family: 'Arial';
+    src: url('/fonts/arial-webfont/ARIAL.woff') format('truetype');
+    font-style: normal;
+    font-weight: $font-normal;
+    font-display: swap;
+}
