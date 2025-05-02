@@ -1,4 +1,5 @@
 @use './variables' as *;
+@use "sass:map";
 
 @mixin respond-min($breakpoint) {
     @media (min-width: $breakpoint) {
@@ -50,10 +51,10 @@
 }
 
 @mixin respond($breakpoint) {
-    $value: map-get($breakpoints, $breakpoint);
+    $value: map.get($breakpoints, $breakpoint);
     
     @if $value {
-        @media (max-width: $value) {
+        @media (min-width: $value) {
             @content;
         }
     } @else {

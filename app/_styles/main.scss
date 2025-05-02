@@ -2,6 +2,7 @@
 @use './core/variables';
 @use './core/functions';
 @use './core/mixins'; 
+@use './core/animations.scss';
 
 // globals
 @use './globals/_reset';

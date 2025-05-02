@@ -1,0 +1,14 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.layout__container {
+  @include wrap(site); // max-width + auto margin + $gutter-padding
+
+  @include respond(md) {
+    padding-inline: 2rem;
+  }
+
+  @include respond(lg) {
+    padding-inline: 4rem;
+  }
+}

@@ -1,0 +1,54 @@
+@use "./mixins.scss" as *;
+@use "./variables.scss" as *;
+@use "sass:map";
+
+@mixin hamburger-icon($block) {
+  .#{$block} {
+    width: 28px; // Fast bredd för kontroll – justera efter behov
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    z-index: 10;
+
+    @include respond-min(map.get($breakpoints, md)) {
+      display: none;
+    }
+
+    span {
+      display: block;
+      height: 3px;
+      width: 100%;
+      background: black;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    &--open {
+      span:nth-child(1) {
+        transform: rotate(45deg);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform-origin: center;
+      }
+
+      span:nth-child(2) {
+        opacity: 0;
+      }
+
+      span:nth-child(3) {
+        transform: rotate(-45deg);
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform-origin: center;
+      }
+    }
+  }
+}
+

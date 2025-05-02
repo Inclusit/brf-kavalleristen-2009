@@ -2,20 +2,40 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { navData } from "./data/navData";
+import { navData } from "../data/navData";
 
 export default function Navbar() {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [isOpen, setIsOpen] = useState(null);
+  const [mobileMenu, setMobileMenu] = useState(false);
+
 
   const toggleDropdown = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
+    setIsOpen(isOpen === index ? null : index);
   };
 
   return (
     <nav className="navbar">
       <div className="navbar__container">
-        <div className="navbar__logo"></div>
-        <ul className="navbar__link-list">
+        <button
+          className={`navbar__mobile ${
+            mobileMenu ? "navbar__mobile--open" : ""
+          }`}
+          onClick={() => setMobileMenu(!mobileMenu)}
+          aria-expanded={mobileMenu}
+          aria-controls="mobile-menu"
+          aria-label={mobileMenu ? "Stäng meny" : "Öppna meny"}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul
+          className={`navbar__link-list ${
+            mobileMenu ? "navbar__link-list--open" : ""
+          }`}
+          role="navigation"
+        >
           {navData.map((item, index) => (
             <li
               key={index}
@@ -24,7 +44,7 @@ export default function Navbar() {
               }`}
             >
               {item.href ? (
-                <Link href={item.href} className="navbar__link">
+                <Link href={item.href} className="navbar__link" role="menuitem">
                   {item.label}
                 </Link>
               ) : (
@@ -36,13 +56,14 @@ export default function Navbar() {
                 </button>
               )}
 
-              {item.children && openIndex === index && (
+              {item.children && isOpen === index && (
                 <ul className="navbar__dropdown">
                   {item.children.map((subItem, subIndex) => (
                     <li key={subIndex} className="navbar__dropdown-item">
                       <Link
                         href={subItem.href}
                         className="navbar__dropdown-link"
+                        role="menuitem"
                       >
                         {subItem.label}
                       </Link>

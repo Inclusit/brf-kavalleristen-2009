@@ -1,65 +1,113 @@
+@use "../core/mixins" as *;
+@use "../core/animations.scss" as *;
+
 .navbar {
-  background-color: #333;
-  color: white;
-  padding: 16px;
+  width: 100%;
+  background: white;
+  padding: 1rem;
 
   &__container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
+    position: relative;
+    @include wrap(site); 
   }
 
-  &__logo {
-    font-size: 1.5rem;
-    font-weight: bold;
+  &__mobile {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    display: block;
+    z-index: 2;
   }
+
+  @include hamburger-icon("navbar__mobile");
+
+  
 
   &__link-list {
-    display: flex;
-    gap: 20px;
+    display: none;
+    flex-direction: column;
     list-style: none;
-  }
-
-  &__link {
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s;
-
-    &:hover {
-      color: #ccc;
-    }
-  }
-
-  &__item {
-    position: relative;
-  }
-
-  &__dropdown {
+    padding: 0;
+    margin: 1rem 0 0;
+    background: white;
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    list-style: none;
-    padding: 0.5rem 0;
-    min-width: 200px;
-    z-index: 100;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+
+    &--open {
+      display: flex;
+    }
   }
 
-  &__dropdown-item {
-    a.navbar__dropdown-link {
-      display: block;
-      padding: 0.5rem 1rem;
-      text-decoration: none;
-      color: #333;
-      transition: background 0.3s;
+  &__dropdown-link {
+  display: block;
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
 
-      &:hover {
-        background-color: #f0f0f0;
-      }
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+
+  &__item {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+
+  &__dropdown {
+    padding-left: 1rem;
+  }
+
+  @include respond(md) {
+    &__mobile {
+      display: none;
+    }
+
+    &__link-list {
+      position: static;
+      display: flex !important;
+      flex-direction: row;
+      justify-content: space-around;
+      margin: 0;
+      background: none;
+      box-shadow: none;
+    }
+
+    &__link {
+        cursor: pointer;
+    }
+
+
+    &__item {
+      border: none;
+      padding: 0;
+      position: relative;
+    }
+
+    &__dropdown {
+      position: absolute;
+      background: white;
+      top: 100%;
+      left: 0;
+      margin-top: 16px;
+      //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding-left: 0; 
+    }
+
+    &__dropdown-item {
+        border-bottom: 1px solid #eee;
+        white-space: nowrap;
     }
   }
 }
