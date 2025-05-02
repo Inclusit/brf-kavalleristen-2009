@@ -4,14 +4,14 @@
 .navbar {
   width: 100%;
   background: white;
-  padding: 1rem;
 
   &__container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    @include wrap(site); 
+    padding: 1.05rem;
+    @include wrap(site);
   }
 
   &__mobile {
@@ -24,7 +24,18 @@
 
   @include hamburger-icon("navbar__mobile");
 
-  
+  &__link {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    text-align: left;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
 
   &__link-list {
     display: none;
@@ -46,30 +57,37 @@
   }
 
   &__dropdown-link {
-  display: block;
-  padding: 1rem;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
+    display: block;
+    padding: 1rem;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
 
-  &:hover {
-    background-color: #f0f0f0;
+    &:hover {
+      background-color: #f0f0f0;
+    }
   }
-}
-
 
   &__item {
-    padding: 1rem;
+    padding: 0;
     border-bottom: 1px solid #eee;
     cursor: pointer;
   }
 
   &__dropdown {
     padding-left: 1rem;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+    will-change: max-height;
   }
 
   @include respond(md) {
+
+    &__container {
+      padding: 0;
+    }
+    
     &__mobile {
       display: none;
     }
@@ -85,9 +103,12 @@
     }
 
     &__link {
-        cursor: pointer;
+      cursor: pointer;
+      display: block;
+      padding: 1rem 2rem;
+      width: 100%;
+      height: 100%;
     }
-
 
     &__item {
       border: none;
@@ -100,14 +121,14 @@
       background: white;
       top: 100%;
       left: 0;
-      margin-top: 16px;
       //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding-left: 0; 
+      padding-left: 0;
+      width: 100%;
     }
 
     &__dropdown-item {
-        border-bottom: 1px solid #eee;
-        white-space: nowrap;
+      border-bottom: 1px solid #eee;
+
     }
   }
 }

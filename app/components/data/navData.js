@@ -8,8 +8,8 @@ export const navData = [
         children : [
             { label: "Stadgar & formalia", href: "/stadgar" },
             { label: "Goda grannar & trivselföreskrifter", href: "/goda-grannar" },
-            { label: "Medlemmar", href: "/medlemmar" },
-            { label: "Hyresgäster", href: "/hyresgaster" },
+            { label: "Medlemmar", href: "google.se", external: true },
+            { label: "Hyresgäster", href: "google.se", external: true },
             { label: "Energideklaration", href: "/energideklaration" },
         ],
     },

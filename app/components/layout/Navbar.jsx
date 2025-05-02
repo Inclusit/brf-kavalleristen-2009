@@ -1,20 +1,21 @@
 "use client";
 
-import {  useState } from "react";
+import {  useRef, useState } from "react";
 import Link from "next/link";
 import { navData } from "../data/navData";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
-
+  const dropdownRefs = useRef([]);
 
   const toggleDropdown = (index) => {
     setIsOpen(isOpen === index ? null : index);
   };
+  
 
   return (
-    <nav className="navbar">
+    <div className="navbar">
       <div className="navbar__container">
         <button
           className={`navbar__mobile ${
@@ -56,17 +57,40 @@ export default function Navbar() {
                 </button>
               )}
 
-              {item.children && isOpen === index && (
-                <ul className="navbar__dropdown">
+              {item.children && (
+                <ul
+                  ref={(el) => (dropdownRefs.current[index] = el)}
+                  className={`navbar__dropdown ${
+                    isOpen === index ? "navbar__dropdown--open" : ""
+                  }`}
+                  style={{
+                    maxHeight:
+                      isOpen === index
+                        ? `${dropdownRefs.current[index]?.scrollHeight}px`
+                        : "0px",
+                  }}
+                >
                   {item.children.map((subItem, subIndex) => (
                     <li key={subIndex} className="navbar__dropdown-item">
-                      <Link
-                        href={subItem.href}
-                        className="navbar__dropdown-link"
-                        role="menuitem"
-                      >
-                        {subItem.label}
-                      </Link>
+                      {subItem.external ? (
+                        <a
+                          href={subItem.href}
+                          className="navbar__dropdown-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          role="menuitem"
+                        >
+                          {subItem.label} ↗
+                        </a>
+                      ) : (
+                        <Link
+                          href={subItem.href}
+                          className="navbar__dropdown-link"
+                          role="menuitem"
+                        >
+                          {subItem.label}
+                        </Link>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -75,6 +99,6 @@ export default function Navbar() {
           ))}
         </ul>
       </div>
-    </nav>
+    </div>
   );
 }

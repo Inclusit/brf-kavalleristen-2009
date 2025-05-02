@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Header() {
    return (
-     <header className="header">
+     <div className="header">
        <div className="header__container">
         <div className="header__logo">
             <Image src={"/images/logo-placeholder.jpg"} alt="Logo" width={100} height={100} />
@@ -16,6 +16,6 @@ export default function Header() {
            </p>
          </div>
        </div>
-     </header>
+     </div>
    );
 }

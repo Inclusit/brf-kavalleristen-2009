@@ -15,6 +15,9 @@ body {
     font-family: $font-base;
     color: $base-color;
     background-color: $white;
+    background-image: url("#{$img-path}/website-texture.svg");
+  background-repeat: repeat;
+  background-size: auto;
     font-size: 16px;
     line-height: 1.5;
 }
@@ -26,6 +29,10 @@ a {
     &:hover {
         color: $link-hover-color;
     }
+}
+
+main {
+    background-color: $white;
 }
 
 
@@ -46,15 +53,24 @@ a {
     border: 0;
 }
 
-.site-wrap {
-    @include wrap(site);
+.site-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 5rem;
 
-    padding:  $gutter;
-
-     @include respond(md) {
-        padding-block: 2rem;
-    }
+    > main {
+    flex: 1;
+  }
 }
+
+.site-wrap {
+    width: 100%;
+   max-width: $max-width;
+  margin-inline: auto;
+  padding-inline: clamp($padding-mobile, 5vw, $padding-desktop);
+}
+
 
 
 

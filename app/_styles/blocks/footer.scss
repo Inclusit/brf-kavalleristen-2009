@@ -1,0 +1,51 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.footer {
+  background-color: $gray;
+  padding-block: 2rem;
+  color: $black;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    @include respond(md) {
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+
+  &__logo img {
+    max-height: 40px;
+    width: auto;
+  }
+
+  &__info {
+    font-size: 0.875rem;
+    line-height: 1.4;
+
+    a {
+      color: $link-color;
+
+      &:hover {
+        color: $link-hover-color;
+      }
+    }
+  }
+
+  &__login-button {
+    background: none;
+    border: none;
+    color: $link-color;
+    cursor: pointer;
+    font-weight: $font-bold;
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: underline;
+    }
+  }
+}

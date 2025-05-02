@@ -19,16 +19,22 @@
 }
 
 @mixin wrap($size: site) {
-    @if $size ==site {
-        max-width: $max-width;
-    }
+  @if $size == site {
+    max-width: $max-width;
+  } @else if $size == content {
+    max-width: $content-width;
+  }
 
-    @else if $size ==content {
-        max-width: $content-width;
-    }
+  margin-inline: auto;
+  padding-inline: 16px;
 
-    margin-inline: auto;
-    padding-inline: $gutter;
+  @include respond(md) {
+    padding-inline: 30px;
+  }
+
+  @include respond(lg) {
+    padding-inline: 90px;
+  }
 }
 
 @mixin textstyle($type) {
