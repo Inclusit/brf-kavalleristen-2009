@@ -1,4 +1,7 @@
+//app/_styles/globals/base.scss
 @use '../core/variables' as *;
+@use '../core/mixins' as *;
+@use '../core/functions' as *;
 
 * {
     box-sizing: border-box;
@@ -41,6 +44,16 @@ a {
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+}
+
+.site-wrap {
+    @include wrap(site);
+
+    padding:  $gutter;
+
+     @include respond(md) {
+        padding-block: 2rem;
+    }
 }
 
 
