@@ -2,7 +2,6 @@
 @use '../core/variables' as *;
 @use '../core/mixins' as *;
 @use '../core/functions' as *;
-
 * {
     box-sizing: border-box;
 }
@@ -23,13 +22,55 @@ body {
 }
 
 a {
-    color: $link-color;
-    text-decoration: none;
+  color: $link-color;
+  text-decoration: none;
+  position: relative;
+  padding-right: 1.5em;
 
-    &:hover {
-        color: $link-hover-color;
-    }
+  &:hover {
+    color: $link-hover-color;
+  }
+
+  // Intern länkikon
+  &[href^="/"]::after {
+    content: "";
+    background-image: url("#{$icons-path}/internal-link-icon.svg") no-repeat center center;
+    background-size: 1em;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Extern länkikon
+  &[href^="http"]::after {
+    content: "";
+    background-image: url("#{$icons-path}/external-link-icon.svg") no-repeat center center;
+    background-size: 1em;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Nedladdningsikon (om du t.ex. använder download-attributet)
+  &[download]::after {
+    content: "";
+    background-image: url("#{$icons-path}/download-link-icon.svg") no-repeat center center;
+    background-size: 1em;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
+
 
 main {
     background-color: $white;

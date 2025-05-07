@@ -18,12 +18,14 @@ type OnError = (error?: any) => void;
 // default state
 type UserContextState = {
   token: string | null;
+  setToken?: (token: string | null) => void;
   user: SafeUser | null;
   loading?: boolean;
 };
 
 const defaultState: UserContextState = {
   token: null,
+  setToken: ()=> {},
   user: null,
   loading: true,
 };
@@ -55,23 +57,9 @@ function UserProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     fetchUser();
-
-    // Event listener for storage changes
-    const handleStorageChange = () => {
-      fetchUser();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  }, [token]);
 
   const fetchUser = async () => {
-    if (user) {
-      return;
-    }
     console.log("Fetching user...");
     try {
       const token = LocalStorageKit.get("@library/token");
@@ -109,6 +97,7 @@ function UserProvider({ children }: PropsWithChildren) {
     <UserContext.Provider
       value={{
         token,
+        setToken,
         user,
         loading,
       }}

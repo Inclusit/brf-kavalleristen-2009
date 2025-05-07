@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^9.5.0",
     "@lexical/react": "^0.30.0",
-    "@prisma/client": "^6.6.0",
+    "@prisma/client": "^6.7.0",
     "bcrypt": "^5.1.1",
     "jose": "^6.0.10",
     "lexical": "^0.30.0",

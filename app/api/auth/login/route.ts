@@ -36,6 +36,8 @@ export async function POST(request: NextRequest) {
     //Sign JWT token and return it to the user for authentication
     const token = await signJWT({
       userId: user.id,
+      email: user.email,
+      role: user.role,
     });
 
     //Return token to user for authentication purposes

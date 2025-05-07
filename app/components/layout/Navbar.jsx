@@ -1,6 +1,6 @@
 "use client";
 
-import {  useRef, useState } from "react";
+import {  useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { navData } from "../data/navData";
 
@@ -8,14 +8,30 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
   const dropdownRefs = useRef([]);
+  const navRef = useRef(null);
 
+  useEffect(() => {
+    
+    function handleClickOutside(event) {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsOpen(null);
+      }
+    }
+  
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);  
+    }
+  }, [])
+  
   const toggleDropdown = (index) => {
     setIsOpen(isOpen === index ? null : index);
   };
   
 
   return (
-    <div className="navbar">
+    <div className="navbar" ref={navRef}>
       <div className="navbar__container">
         <button
           className={`navbar__mobile ${
@@ -80,7 +96,7 @@ export default function Navbar() {
                           rel="noopener noreferrer"
                           role="menuitem"
                         >
-                          {subItem.label} ↗
+                          {subItem.label} 
                         </a>
                       ) : (
                         <Link

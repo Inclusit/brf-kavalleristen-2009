@@ -10,10 +10,12 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    padding: 0 $gutter;
+    
 
     @include respond(md) {
       flex-direction: row;
-      justify-content: space-around;
+      justify-content: space-evenly;
       align-items: center;
     }
   }
