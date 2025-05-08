@@ -20,6 +20,7 @@ type UserContextState = {
   token: string | null;
   setToken?: (token: string | null) => void;
   user: SafeUser | null;
+  setUser?: (user: SafeUser | null) => void;
   loading?: boolean;
 };
 
@@ -48,6 +49,7 @@ function UserProvider({ children }: PropsWithChildren) {
       let _token = LocalStorageKit.get("@library/token");
       if (_token) {
         setToken(_token);
+        fetchUser();
         return;
       } else {
         setLoading(false);
@@ -98,6 +100,7 @@ function UserProvider({ children }: PropsWithChildren) {
       value={{
         token,
         setToken,
+        setUser,
         user,
         loading,
       }}

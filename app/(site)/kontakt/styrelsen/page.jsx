@@ -11,9 +11,9 @@ export default function StyrelsenPage() {
       </Head>
       <h1>Styrelsen</h1>
       <p>Information om styrelsen.</p>
-      /*
+      
       <CardGrid people={members} />
-      */
+      
     </div>
   );
 }

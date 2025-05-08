@@ -1,15 +1,22 @@
+//app/api/content/[slug]/route.ts
 import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import {
+  ContentBlockData,
+  ContentUpdateData,
+  SafeContentBlock,
+} from "@/app/types/content";
 import { parse } from "path";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: { slug: string } }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await context.params;
+
     if (!slug) {
       return NextResponse.json(
         { message: "Slug is required" },
@@ -17,17 +24,19 @@ export async function GET(
       );
     }
 
-    const content = await prisma.contentBlock.findUnique({
-      where: {
-        slug: slug,
-      },
+    let content = await prisma.contentBlock.findUnique({
+      where: { slug },
     });
 
     if (!content) {
-      return NextResponse.json(
-        { message: "Content not found" },
-        { status: 404 }
-      );
+      content = await prisma.contentBlock.create({
+        data: {
+          slug,
+          title: "Auto-skapat innehåll",
+          content: "",
+        },
+      });
+      console.log("Skapade ny contentBlock för:", slug);
     }
 
     return NextResponse.json(content);
@@ -40,17 +49,15 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
+    const { slug } = await context.params;
+
     const role = request.headers.get("role");
     if (role !== "ADMIN" && role !== "MODERATOR") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
-    const { slug } = params;
     if (!slug) {
       return NextResponse.json(
         { message: "Slug is required" },
@@ -58,16 +65,8 @@ export async function PUT(
       );
     }
 
-    const body = await request.json();
-    if (!body) {
-      return NextResponse.json(
-        { message: "Invalid request body" },
-        { status: 400 }
-      );
-    }
-
-    const content = body.content;
-    if (!content) {
+    const body: ContentUpdateData = await request.json();
+    if (!body || !body.content) {
       return NextResponse.json(
         { message: "Content is required" },
         { status: 400 }
@@ -75,30 +74,42 @@ export async function PUT(
     }
 
     let contentBlock = await prisma.contentBlock.findUnique({
-      where: {
-        slug: slug,
-      },
+      where: { slug },
+      include: { author: true },
     });
 
     if (!contentBlock) {
-      return NextResponse.json(
-        { message: "Content not found" },
-        { status: 404 }
-      );
-    }
-
-    if (contentBlock) {
-      contentBlock = await prisma.contentBlock.update({
-        where: {
-          slug: slug,
-        },
+      contentBlock = await prisma.contentBlock.create({
         data: {
-          content: content,
+          slug,
+          content: body.content,
+          title: body.title ?? "Nytt innehåll",
         },
+        include: { author: true },
       });
-      return NextResponse.json(contentBlock, { status: 200 });
+    } else {
+      contentBlock = await prisma.contentBlock.update({
+        where: { slug },
+        data: body,
+        include: { author: true },
+      });
     }
 
+    const safeContent: SafeContentBlock = {
+      ...contentBlock,
+      author: contentBlock.author
+        ? {
+            id: contentBlock.author.id,
+            name: contentBlock.author.name,
+            email: contentBlock.author.email ?? null,
+            role: contentBlock.author.role,
+            createdAt: contentBlock.author.createdAt,
+            updatedAt: contentBlock.author.updatedAt,
+          }
+        : null,
+    };
+
+    return NextResponse.json(safeContent, { status: 200 });
   } catch (error: any) {
     console.warn("Error: Failed to update content", error.message);
     return NextResponse.json(
@@ -108,14 +119,15 @@ export async function PUT(
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
+    const { slug } = await context.params;
+
     const role = request.headers.get("role");
     if (role !== "ADMIN") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
-    const { slug } = params;
     if (!slug) {
       return NextResponse.json(
         { message: "Slug is required" },
@@ -124,9 +136,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { slug:
     }
 
     const contentBlock = await prisma.contentBlock.findUnique({
-      where: {
-        slug
-      },
+      where: { slug },
     });
 
     if (!contentBlock) {
@@ -137,9 +147,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { slug:
     }
 
     await prisma.contentBlock.delete({
-      where: {
-        slug: slug,
-      },
+      where: { slug },
     });
 
     return NextResponse.json({ message: "Content deleted successfully" });

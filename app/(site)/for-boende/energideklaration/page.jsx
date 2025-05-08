@@ -1,14 +1,7 @@
-import Head from "next/head";
+"use client";
+import DynamicPage from "@/app/components/layout/DynamicPage.jsx";
+
 
 export default function EnergideklarationPage() {
-    return (
-        <div className="energideklaration-page">
-        <Head>
-            <title>Energideklaration</title>
-            <meta name="description" content="Energideklaration information" />
-        </Head>
-        <h1>Energideklaration</h1>
-        <p>Information about energideklaration.</p>
-        </div>
-    );
-}
+    return <DynamicPage slug="energideklaration" />;
+    }

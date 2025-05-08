@@ -1,14 +1,8 @@
-import Head from "next/head";
+"use client";
+import DynamicPage from "@/app/components/layout/DynamicPage.jsx";
 
 export default function StadgarPage() {
   return (
-    <div className="stadgar-page">
-      <Head>
-        <title>Stadgar</title>
-        <meta name="description" content="Information about stadgar." />
-      </Head>
-      <h1>Stadgar</h1>
-      <p>Information om stadgar.</p>
-    </div>
+    <DynamicPage slug="stadgar" />
   );
 }

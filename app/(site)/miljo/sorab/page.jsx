@@ -1,14 +1,6 @@
-import Head from "next/head";
+"use client";
+import DynamicPage from "@/app/components/layout/DynamicPage";
 
 export default function SorabPage() {
-  return (
-    <div className="sorab-page">
-      <Head>
-        <title>SÖRAB</title>
-        <meta name="description" content="Information about SORAB." />
-      </Head>
-      <h1>SÖRAB</h1>
-      <p>Information om SÖRAB.</p>
-    </div>
-  );
+  return <DynamicPage slug="sorab" />;
 }

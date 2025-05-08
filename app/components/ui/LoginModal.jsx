@@ -8,7 +8,7 @@ export default function LoginModal({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const { setToken } = useUser();
+  const { setToken, setUser } = useUser();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,6 +33,7 @@ export default function LoginModal({ onClose }) {
 
       const data = await response.json();
       setToken(data.token);
+      setUser?.(data.user);
       LocalStorageKit.set("user", data.user);
       LocalStorageKit.set("@library/token", data.token);
       LocalStorageKit.set("role", data.role);

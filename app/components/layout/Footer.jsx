@@ -12,7 +12,7 @@ export default function Footer() {
 
   const handleLogout = () => {
     LocalStorageKit.remove("user");
-    LocalStorageKit.remove("token");
+    LocalStorageKit.remove("@library/token");
     LocalStorageKit.remove("role");
     window.dispatchEvent(new Event("storage"));
     window.location.reload(); 

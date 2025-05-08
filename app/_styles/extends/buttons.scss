@@ -1,127 +1,80 @@
-@use '../core/variables' as *;
-
-/*%link-button-orange {
-    @include textstyle(button);
-
-    padding: 18px 32px;
-    color: $orange;
-    border-radius: 100px;
-    line-height: 1.8;
-    background-color: $orange;
-    color: $white;
-    border: 1px solid $orange;
-    text-decoration: none;
-
-    @include media(L) {
-        transition: background-color ease-in-out 0.2s, color ease-in-out 0.2s, border ease-in-out 0.2s;
-
-        &:hover {
-            background-color: $light-orange;
-            color: $black;
-            border: 1px solid $black;
-        }
-    }
-
-    @include href-download() {
-        &::before {
-            display: none;
-        }
-
-        &::after {
-            content: "";
-            width: 24px;
-            height: 24px;
-            margin-bottom: -5px;
-            margin-left: 10px;
-            display: inline-block;
-            background-color: currentColor;
-            mask-image: url();
-            mask-repeat: no-repeat;
-            mask-size: cover;
-            mask-position: center center;
-            -webkit-mask-repeat: no-repeat;
-            -webkit-mask-size: contain;
-            -webkit-mask-position: center center;
-        }
-    }
-}
-
-%link-text-orange {
-    padding: 10px 8px;
-    border-radius: 4px;
-
-    a {
-        @include textstyle(button);
-
-        color: $orange;
-        line-height: 1;
-
-        @include media(L) {
-            transition: color ease-in-out 0.2s;
-        }
-
-        @include href-external() {
-            &::after {
-                content: "";
-                width: 18px;
-                height: 18px;
-                margin-bottom: -2px;
-                margin-left: 10px;
-                display: inline-block;
-                background-color: currentColor;
-                mask-image: url('');
-                mask-repeat: no-repeat;
-                mask-size: contain;
-                mask-position: center center;
-                mask-image: url('');
-                -webkit-mask-repeat: no-repeat;
-                -webkit-mask-size: contain;
-                -webkit-mask-position: center center;
-            }
-        }
-    }
-
-    @include media(L) {
-        transition: color ease-in-out 0.2s, background-color ease-in-out 0.2s;
-
-        &:hover {
-            a {
-                color: $black;
-            }
-
-            background-color: $light-orange;
-        }
-    }
-
-}
-
-%link-button-blue {
-    @include textstyle(button);
-
-    padding: 18px 32px;
-    border-radius: 100px;
-    line-height: 1.8;
-    background-color: $custom-blue;
-    color: $white;
-    border: 1px solid $custom-blue;
-    text-decoration: none;
-
-    @include media(L) {
-        transition: background-color ease-in-out 0.2s, color ease-in-out 0.2s, border ease-in-out 0.2s;
-
-        &:hover {
-            background-color: $blue-900;
-            color: $grey-10;
-        }
-    }
-}*/
+@use "../core/variables" as vars;
+@use "../core/mixins" as mixins;
+@use "sass:color";
 
 %btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border-radius: $border-radius;
-    font-family: $font-base;
-    font-weight: $font-bold;
-    text-transform: uppercase;
-    transition: $transition;
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: vars.$border-radius;
+  font-family: vars.$font-base;
+  font-weight: vars.$font-bold;
+  text-transform: uppercase;
+  transition: vars.$transition;
+}
+
+%base-button {
+  @include mixins.textstyle(button);
+
+  padding: 18px 32px;
+  border-radius: vars.$border-radius;
+  text-decoration: none;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.cta-btn {
+  @extend %base-button;
+
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  &--save {
+    background-color: vars.$blue;
+    color: vars.$white;
+    border-color: vars.$blue;
+
+    &:hover {
+      background-color: vars.$secondary-blue;
+    }
+  }
+
+  &--post {
+    background-color: vars.$black;
+    color: vars.$white;
+    border-color: vars.$black;
+
+    &:hover {
+      background-color: color.adjust(vars.$black, $lightness: 10%);
+      color: vars.$black;
+    }
+  }
+
+  &--delete {
+    background-color: vars.$error-color;
+    color: vars.$white;
+    border-color: vars.$error-color;
+
+    &:hover {
+      background-color: color.adjust(vars.$error-color, $lightness: -10%);
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
