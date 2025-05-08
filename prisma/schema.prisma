@@ -55,3 +55,10 @@ model NewsPost {
   authorId String? @db.ObjectId
   author   User?   @relation(fields: [authorId], references: [id]) 
 }
+
+model Navigation {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  category String
+  label   String
+  href    String @unique
+}

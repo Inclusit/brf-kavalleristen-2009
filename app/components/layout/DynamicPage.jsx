@@ -1,5 +1,5 @@
-//app/components/layout/DynamicPage.jsx
 "use client";
+
 import Head from "next/head";
 import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
 import { useUser } from "@/app/context/user";
@@ -11,16 +11,17 @@ const RichTextEditor = dynamic(
   { ssr: false }
 );
 
-export default function DynamicPage({ slug }) {
+export default function DynamicPage({ slug: propSlug }) {
+  // 🟢 Stöd för både dynamiska och hårdkodade
   const { user } = useUser();
   const role = user?.role || "guest";
   const [content, setContent] = useState(null);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!propSlug || typeof propSlug !== "string") return;
     const fetchContent = async () => {
       try {
-        const res = await fetch(`/api/content/${slug}`);
+        const res = await fetch(`/api/content/${propSlug}`);
         if (!res.ok) return;
         const data = await res.json();
         if (data?.content !== undefined) {
@@ -31,18 +32,22 @@ export default function DynamicPage({ slug }) {
       }
     };
     fetchContent();
-  }, [slug]);
+  }, [propSlug]);
+
+  if (!propSlug || typeof propSlug !== "string") {
+    return <div className="dynamic-page">Ingen information tillgänglig</div>;
+  }
 
   return (
     <div className="dynamic-page">
       <Head>
-        <title>{slug}</title>
+        <title>{propSlug}</title>
         <meta
           name="description"
           content={
             content
               ? content.replace(/<[^>]+>/g, "").slice(0, 160)
-              : `Information om ${slug}.`
+              : `Information om ${propSlug}.`
           }
         />
       </Head>
@@ -55,7 +60,7 @@ export default function DynamicPage({ slug }) {
         ) : role === "MODERATOR" || role === "ADMIN" ? (
           <div className="dynamic-page__editor">
             <RichTextEditor
-              contentId={slug}
+              contentId={propSlug}
               fallback={content ?? ""}
               onContentChange={setContent}
               role={role}

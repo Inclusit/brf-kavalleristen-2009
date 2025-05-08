@@ -1,4 +1,5 @@
 import Navbar from "../components/layout/Navbar";
+import AdminNavWrapper from "../components/admin/AdminNavWrapper";
 import Footer from "../components/layout/Footer";
 import "../_styles/main.scss";
 import Header from "../components/layout/Header";
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
             <nav>
               <Navbar />
             </nav>
+            <AdminNavWrapper />
 
             <main className="site-wrap">{children}</main>
 

@@ -1,8 +1,9 @@
 "use client";
 
-import {  useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { navData } from "../data/navData";
+import { useDynamicNav } from "@/app/context/dynamicNav";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(null);
@@ -10,25 +11,35 @@ export default function Navbar() {
   const dropdownRefs = useRef([]);
   const navRef = useRef(null);
 
+  const dynamicNav = useDynamicNav();
+
   useEffect(() => {
-    
     function handleClickOutside(event) {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setIsOpen(null);
       }
     }
-  
-    document.addEventListener("mousedown", handleClickOutside);
 
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);  
-    }
-  }, [])
-  
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const toggleDropdown = (index) => {
     setIsOpen(isOpen === index ? null : index);
   };
-  
+
+  const groupedDynamic = dynamicNav.reduce((acc, item) => {
+    if (!acc[item.category]) acc[item.category] = [];
+    acc[item.category].push(item);
+    return acc;
+  }, {});
+
+  const allLabels = new Set(navData.map((item) => item.label));
+  const extraCategories = Object.entries(groupedDynamic).filter(
+    ([label]) => !allLabels.has(label)
+  );
 
   return (
     <div className="navbar" ref={navRef}>
@@ -73,7 +84,7 @@ export default function Navbar() {
                 </button>
               )}
 
-              {item.children && (
+              {(item.children || groupedDynamic[item.label]) && (
                 <ul
                   ref={(el) => (dropdownRefs.current[index] = el)}
                   className={`navbar__dropdown ${
@@ -86,8 +97,11 @@ export default function Navbar() {
                         : "0px",
                   }}
                 >
-                  {item.children.map((subItem, subIndex) => (
-                    <li key={subIndex} className="navbar__dropdown-item">
+                  {item.children?.map((subItem, subIndex) => (
+                    <li
+                      key={`static-${subIndex}`}
+                      className="navbar__dropdown-item"
+                    >
                       {subItem.external ? (
                         <a
                           href={subItem.href}
@@ -96,7 +110,7 @@ export default function Navbar() {
                           rel="noopener noreferrer"
                           role="menuitem"
                         >
-                          {subItem.label} 
+                          {subItem.label}
                         </a>
                       ) : (
                         <Link
@@ -109,8 +123,72 @@ export default function Navbar() {
                       )}
                     </li>
                   ))}
+
+                  {groupedDynamic[item.label]?.map((nav, dynIndex) => (
+                    <li
+                      key={`dynamic-${dynIndex}`}
+                      className="navbar__dropdown-item"
+                    >
+                      <Link
+                        href={nav.href}
+                        className="navbar__dropdown-link"
+                        role="menuitem"
+                      >
+                        {nav.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               )}
+            </li>
+          ))}
+
+          {/* 🔵 Extra dynamiska kategorier som inte finns i navData */}
+          {extraCategories.map(([label, items], dynCatIndex) => (
+            <li
+              key={`extra-cat-${dynCatIndex}`}
+              className="navbar__item navbar__item--has-dropdown"
+            >
+              <button
+                className="navbar__link"
+                onClick={() => toggleDropdown(`extra-${dynCatIndex}`)}
+              >
+                {label}
+              </button>
+              <ul
+                ref={(el) =>
+                  (dropdownRefs.current[`extra-${dynCatIndex}`] = el)
+                }
+                className={`navbar__dropdown ${
+                  isOpen === `extra-${dynCatIndex}`
+                    ? "navbar__dropdown--open"
+                    : ""
+                }`}
+                style={{
+                  maxHeight:
+                    isOpen === `extra-${dynCatIndex}`
+                      ? `${
+                          dropdownRefs.current[`extra-${dynCatIndex}`]
+                            ?.scrollHeight
+                        }px`
+                      : "0px",
+                }}
+              >
+                {items.map((nav, subIndex) => (
+                  <li
+                    key={`extra-link-${subIndex}`}
+                    className="navbar__dropdown-item"
+                  >
+                    <Link
+                      href={nav.href}
+                      className="navbar__dropdown-link"
+                      role="menuitem"
+                    >
+                      {nav.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
