@@ -28,6 +28,6 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "app/api/admin/users"  ],
   "exclude": ["node_modules"]
 }

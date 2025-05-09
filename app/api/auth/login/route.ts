@@ -1,3 +1,4 @@
+//app/api/auth/login/route.ts
 import { UserLoginData } from "../../../types/user";
 import { comparePasswords } from "../../../lib/utils/bcrypt";
 import { signJWT } from "../../../lib/utils/jwt";

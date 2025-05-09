@@ -4,22 +4,23 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CTAbtn from "../ui/CTAbtn";
 import UploadHandler from "./UploadHandler";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Role } from "@prisma/client";
 
-export default function RichTextEditor({ contentId, fallback, role }) {
-
+export default function RichTextEditor({
+  contentId,
+  fallback,
+  role,
+  onContentChange,
+  enableSave = true,
+  type = "content",
+  title,
+  userId,
+}) {
   const [content, setContent] = useState(fallback || "");
-  const [isEditing, setIsEditing] = useState(
-    role === "ADMIN" || role === "MODERATOR"
-  );
+  const isEditing = role === "ADMIN" || role === "MODERATOR";
 
+  // 🟢 Hämta bara om det är en vanlig innehållssida
   const fetchContent = async () => {
-    if (!contentId) {
-      console.error("Innehålls-ID saknas");
-      return null;
-    }
-
-    if (content) return; 
+    if (!contentId || type !== "content") return;
 
     try {
       const response = await fetch(`/api/content/${contentId}`);
@@ -31,46 +32,60 @@ export default function RichTextEditor({ contentId, fallback, role }) {
     }
   };
 
-
   useEffect(() => {
     fetchContent();
   }, [contentId]);
 
   const saveContent = async () => {
+    const isNews = type === "news";
+
+    if (isNews && (!title || !userId)) {
+      alert("Titel och användar-ID krävs för att spara nyhet.");
+      return;
+    }
+
+    const endpoint = isNews
+      ? `/api/nyheter/${contentId}`
+      : `/api/content/${contentId}`;
+
+    const body = isNews
+      ? JSON.stringify({ title, content })
+      : JSON.stringify({ content });
+
+    const headers = {
+      "Content-Type": "application/json",
+      role,
+    };
+
+    if (isNews) headers.userId = userId;
+
     try {
-      const response = await fetch(`/api/content/${contentId}`, {
+      const response = await fetch(endpoint, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          role,
-        },
-        body: JSON.stringify({ content }),
+        headers,
+        body,
       });
       if (!response.ok) throw new Error("Misslyckades att spara innehåll");
-      alert("Sparat!");
+      alert("Innehåll sparat!");
     } catch (err) {
       console.error(err);
       alert("Något gick fel vid sparning");
     }
   };
 
+  // 📜 Scroll + länkfix om man inte redigerar
   useEffect(() => {
     if (!isEditing) {
       const container = document.querySelector(".richtext__content");
-      
       if (!container) return;
 
-      if (container) {
-        container.scrollIntoView({ behavior: "smooth" });
-      }
-
+      container.scrollIntoView({ behavior: "smooth" });
       const links = container.querySelectorAll("a");
-
       links.forEach((link) => {
         link.setAttribute("target", "_blank");
         link.setAttribute("rel", "noopener noreferrer");
       });
-}
+    }
   }, [isEditing, content]);
 
   return (
@@ -80,20 +95,29 @@ export default function RichTextEditor({ contentId, fallback, role }) {
           <CKEditor
             editor={ClassicEditor}
             data={content || `Information om ${contentId}`}
-            onChange={(__, editor) => setContent(editor.getData())}
-          />
-          <UploadHandler
-            onUpload={(html) => {
-              setContent((prev) => prev + "<p>" + html + "</p>");
+            onChange={(__, editor) => {
+              const newData = editor.getData();
+              setContent(newData);
+              onContentChange?.(newData);
             }}
           />
+          <UploadHandler
+            onUpload={(html) =>
+              setContent((prev) => prev + "<p>" + html + "</p>")
+            }
+          />
 
-          <div>
-            <CTAbtn type="save" onClick={saveContent} role={role} />
-          </div>
+          {isEditing && enableSave && (
+            <div>
+              <CTAbtn type="save" onClick={saveContent} role={role} />
+            </div>
+          )}
         </>
       ) : (
-        <div className="richtext__content" dangerouslySetInnerHTML={{ __html: content }} />
+        <div
+          className="richtext__content"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       )}
     </>
   );

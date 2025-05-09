@@ -22,9 +22,12 @@ enum Role {
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String?
+ firstName String?
+  lastName  String?
   email     String?  @unique
   password  String?
+  phone     String?  
+  address   String?
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

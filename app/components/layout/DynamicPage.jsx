@@ -12,7 +12,6 @@ const RichTextEditor = dynamic(
 );
 
 export default function DynamicPage({ slug: propSlug }) {
-  // 🟢 Stöd för både dynamiska och hårdkodade
   const { user } = useUser();
   const role = user?.role || "guest";
   const [content, setContent] = useState(null);

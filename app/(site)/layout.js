@@ -13,11 +13,11 @@ export default function RootLayout({ children }) {
           <div className="site-container">
             <header>
               <Header />
+              <AdminNavWrapper />
             </header>
             <nav>
               <Navbar />
             </nav>
-            <AdminNavWrapper />
 
             <main className="site-wrap">{children}</main>
 

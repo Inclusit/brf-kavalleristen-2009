@@ -1,3 +1,4 @@
+//app/api/auth/login/route.ts
 import { UserRegistrationData } from "../../../types/user";
 import { hashPassword } from "../../../lib/utils/bcrypt";
 import { signJWT } from "../../../lib/utils/jwt";
@@ -25,6 +26,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const { email, password, firstName, lastName, address, phone } = body;
+
     const hashedPassword = await hashPassword(body.password);
 
     const userCheck = await userExists(prisma, body.email);
@@ -33,9 +36,13 @@ export async function POST(request: NextRequest) {
 
     const user: User = await prisma.user.create({
       data: {
-        email: body.email.toLowerCase(),
-        password: hashedPassword,
-        role: "USER"
+        email: email.toLowerCase(),
+        password: await hashPassword(password),
+        role: "USER",
+        firstName,
+        lastName,
+        address,
+        phone,
       },
     });
 

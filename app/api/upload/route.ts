@@ -38,6 +38,14 @@ export async function POST(req: NextRequest) {
     let html = "";
 
     if (fileType.startsWith("image/")) {
+      const url = new URL(req.url);
+      const type = url.searchParams.get("type");
+
+      const metadata = await sharp(buffer).metadata();
+      if (type === "header" && metadata.width! < 1440) {
+        throw createBadRequest("Headerbilden måste vara minst 1440px bred.");
+      }
+
       savedFilename = savedFilename.replace(/\.\w+$/, ".webp");
       fileUrl = `/uploads/${savedFilename}`;
       const outputPath = path.join(UPLOAD_DIR, savedFilename);

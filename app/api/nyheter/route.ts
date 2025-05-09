@@ -10,6 +10,17 @@ import {
 
 const prisma = new PrismaClient();
 
+export async function GET(request: NextRequest) {
+    try {
+        const newsPost = await prisma.newsPost.findMany({
+            orderBy: { createdAt: "desc" },
+        });
+        return NextResponse.json(newsPost, { status: 200 });
+    } catch (error) {
+        return handleApiErrors(error);
+    }
+}
+
 export async function POST(request: NextRequest) {
     const role = request.headers.get("role");
     const userId = request.headers.get("userId");
@@ -18,6 +29,9 @@ export async function POST(request: NextRequest) {
         throw createUnauthorized("Unauthorized");
     }
 
+    if (!userId) throw createBadRequest("User ID is required");
+    
+
     try {
         const body = await request.json();
 
@@ -25,11 +39,7 @@ export async function POST(request: NextRequest) {
             throw createBadRequest("Title, content, and slug are required");
         }
 
-        if (body.title.length < 5 || body.content.length < 10) {
-            throw createBadRequest("Title must be at least 5 characters and content at least 10 characters long");
-        }
-
-        const post = await prisma.newsPost.create({
+        const newsPost = await prisma.newsPost.create({
             data: {
                 title: body.title,
                 content: body.content,
@@ -38,7 +48,7 @@ export async function POST(request: NextRequest) {
                 createdAt: new Date(),
             },
         });
-        return NextResponse.json(post, { status: 201 });
+        return NextResponse.json(newsPost, { status: 201 });
     } catch (error) {
         return handleApiErrors(error);
     }

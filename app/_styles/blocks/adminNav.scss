@@ -1,0 +1,49 @@
+.admin-nav {
+  position: absolute;
+  display: inline-block;
+
+  &__toggle {
+    padding: 0.5rem 1rem;
+    background-color: #012063;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+
+    &:hover {
+      background-color: darken(#012063, 10%);
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
+    width: 200px;
+    z-index: 5;
+  }
+
+  &__link {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #012063;
+    text-decoration: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f4f4f4;
+    }
+  }
+}

@@ -1,5 +1,6 @@
+// === LoginModal.jsx (uppdaterad registrering) ===
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useUser } from "@/app/context/user";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
 
@@ -7,8 +8,21 @@ export default function LoginModal({ onClose }) {
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
   const { setToken, setUser } = useUser();
+
+  const doorOptions = [
+    "Kavallerigatan 1",
+    "Kavallerigatan 3",
+    "Kavallerigatan 5",
+    "Kavallerigatan 7",
+    "Kavallerigatan 9",
+    "Kavallerigatan 11",
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,13 +31,18 @@ export default function LoginModal({ onClose }) {
     const urlEndpoint =
       mode === "login" ? "/api/auth/login" : "/api/auth/register";
 
+    const payload =
+      mode === "login"
+        ? { email, password }
+        : { email, password, firstName, lastName, address, phone };
+
     try {
       const response = await fetch(urlEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -39,8 +58,6 @@ export default function LoginModal({ onClose }) {
       LocalStorageKit.set("role", data.role);
       window.dispatchEvent(new Event("storage"));
       onClose();
-
-
     } catch (error) {
       console.error("Error:", error);
       setError(error.message);
@@ -51,7 +68,7 @@ export default function LoginModal({ onClose }) {
     <div className="modal-backdrop">
       <div className="modal">
         <button className="modal__close" onClick={onClose}>
-          Stäng 
+          Stäng
         </button>
 
         <div className="modal__button-containers">
@@ -86,6 +103,7 @@ export default function LoginModal({ onClose }) {
               required
             />
           </div>
+
           <div className="modal__form-content">
             <label htmlFor="password">Lösenord</label>
             <input
@@ -96,6 +114,54 @@ export default function LoginModal({ onClose }) {
               required
             />
           </div>
+
+          {mode === "register" && (
+            <>
+              <div className="modal__form-content">
+                <label>Förnamn</label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="modal__form-content">
+                <label>Efternamn</label>
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="modal__form-content">
+                <label>Port (adress)</label>
+                <select
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                >
+                  <option value="">-- Välj port --</option>
+                  {doorOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="modal__form-content">
+                <label>Telefonnummer</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          )}
+
           <button type="submit" className="modal__submit-button">
             {mode === "login" ? "Logga in" : "Registrera"}
           </button>

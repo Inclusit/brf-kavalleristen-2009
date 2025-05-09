@@ -1,48 +1,70 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { verifyJWT } from "@/app/lib/utils/jwt";
 import { handleApiErrors } from "@/app/lib/handleApiErrors";
 import {
-  createBadRequest,
   createUnauthorized,
+  createBadRequest,
   createForbidden,
 } from "@/app/lib/errors";
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
-  const userId = request.headers.get("userId");
-  if (!userId) throw createUnauthorized("Saknar userId i header");
+async function authenticateAdmin(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer "))
+    throw createUnauthorized("Ingen auth-header");
 
+  const token = authHeader.split(" ")[1];
+  const payload = await verifyJWT(token);
+  if (!payload || payload.role !== "ADMIN")
+    throw createForbidden("Endast admin har behörighet");
+
+  return payload;
+}
+
+export async function GET(request: NextRequest) {
   try {
-    const user = await prisma.user.findUniqueOrThrow({
-      where: { id: userId },
+    await authenticateAdmin(request);
+
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        firstName: true,
+        lastName: true,
+        address: true,
+        phone: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
-    const { password, ...safeUser } = user;
-    return NextResponse.json(safeUser);
+    return NextResponse.json(users);
   } catch (error: any) {
-    console.warn("Error: Failed to get user from request", error.message);
+    console.warn("Error: Failed to get users", error.message);
     return handleApiErrors(error);
   }
 }
 
 export async function PUT(request: NextRequest) {
-  const userId = request.headers.get("userId");
-  if (!userId) throw createUnauthorized("Saknar userId i header");
-
   try {
+    await authenticateAdmin(request);
+
     const body = await request.json();
-    if (!body) throw createBadRequest("Body saknas");
+    if (!body.id) throw createBadRequest("User ID krävs");
 
     const updatedUser = await prisma.user.update({
-      where: { id: userId },
+      where: { id: body.id },
       data: {
         ...(body.email && { email: body.email.toLowerCase() }),
         ...(body.password && { password: body.password }),
+        ...(body.role && { role: body.role }),
         ...(body.firstName && { firstName: body.firstName }),
         ...(body.lastName && { lastName: body.lastName }),
-        ...(body.address && { address: body.address }),
         ...(body.phone && { phone: body.phone }),
+        ...(body.address && { address: body.address }),
       },
     });
 
@@ -55,16 +77,13 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const userId = request.headers.get("userId");
-
   try {
-    const body = await request.json();
-    if (!body?.id) throw createBadRequest("User ID krävs");
-    if (!userId) throw createUnauthorized("Saknar userId i header");
-    if (body.id !== userId)
-      throw createForbidden("Du kan bara radera ditt eget konto");
+    await authenticateAdmin(request);
 
-    await prisma.user.delete({ where: { id: userId } });
+    const body = await request.json();
+    if (!body.id) throw createBadRequest("User ID krävs");
+
+    await prisma.user.delete({ where: { id: body.id } });
     return NextResponse.json(null, { status: 204 });
   } catch (error: any) {
     console.warn("Error: Failed to delete user", error.message);

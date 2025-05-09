@@ -1,3 +1,4 @@
+//app/api/nyheter/route.ts
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { handleApiErrors } from "@/app/lib/handleApiErrors";
@@ -11,8 +12,9 @@ import {
 const prisma = new PrismaClient();
 
 export async function GET(
-  request: NextRequest, 
-  { params }: { params: { slug: string } }) {
+  request: NextRequest,
+  { params }: { params: { slug: string } }
+) {
   try {
     const news = await prisma.newsPost.findUnique({
       where: {
@@ -23,7 +25,6 @@ export async function GET(
     if (!news) throw createNotFound("News not found");
 
     return NextResponse.json(news, { status: 200 });
-
   } catch (error) {
     return handleApiErrors(error);
   }
@@ -31,28 +32,49 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  context: { params: { slug: string } }
 ) {
+  const { slug } = context.params;
   const role = request.headers.get("role");
+  const userId = request.headers.get("userId");
+
+  console.log("🔄 PUT /api/nyheter/", { slug, role, userId });
+
+  if (!slug) throw createBadRequest("Slug is required");
+
   if (role !== "ADMIN" && role !== "MODERATOR") {
-    throw createUnauthorized("Unauthorized");
+    throw createUnauthorized("Du har inte rätt att uppdatera nyheter.");
   }
 
   try {
     const body = await request.json();
-    const post = await prisma.newsPost.update({
-      where: { slug: params.slug },
+    const { title, content } = body;
+
+    if (!title || !content) {
+      throw createBadRequest("Titel och innehåll krävs");
+    }
+
+    const existingPost = await prisma.newsPost.findUnique({ where: { slug } });
+
+    if (!existingPost) {
+      throw createNotFound(`Nyhet med slug '${slug}' finns inte`);
+    }
+
+    const updated = await prisma.newsPost.update({
+      where: { slug },
       data: {
-        title: body.title,
-        content: body.content,
+        title,
+        content,
         updatedAt: new Date(),
       },
     });
-    return NextResponse.json(post);
+
+    return NextResponse.json(updated);
   } catch (error) {
     return handleApiErrors(error);
   }
 }
+
 
 export async function DELETE(
   request: NextRequest,
@@ -66,7 +88,10 @@ export async function DELETE(
     await prisma.newsPost.delete({
       where: { slug: params.slug },
     });
-    return NextResponse.json({ message: "News deleted successfully" }, { status: 200 });
+    return NextResponse.json(
+      { message: "News deleted successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     return handleApiErrors(error);
   }

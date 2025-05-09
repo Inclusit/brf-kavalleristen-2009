@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { navData } from "../data/navData";
 import { useDynamicNav } from "@/app/context/dynamicNav";
 
@@ -10,6 +11,7 @@ export default function NavEditModal({ onClose }) {
   const [slug, setSlug] = useState("");
   const [loading, setLoading] = useState(false);
   const dynamicNav = useDynamicNav();
+  const router = useRouter();
 
   useEffect(() => {
     const generatedSlug = title
@@ -67,6 +69,7 @@ export default function NavEditModal({ onClose }) {
 
       if (!res.ok) throw new Error("Fel vid sparande av navigering");
       alert("Sidan har sparats!");
+      router.refresh();
       onClose();
     } catch (error) {
       console.error(error);

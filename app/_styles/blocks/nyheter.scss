@@ -1,0 +1,57 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.skapa-nyhet {
+  padding: 1rem;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  input {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  &__submit {
+    background-color: #012063;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    font-weight: bold;
+  }
+
+  @include respond(md) {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+.news-detail {
+  padding: 1rem;
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__editor,
+  &__content {
+    margin-top: 1rem;
+  }
+
+  &__delete {
+    margin-top: 2rem;
+    padding: 0.5rem 1rem;
+    background-color: #b00020;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
