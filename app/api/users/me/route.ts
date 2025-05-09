@@ -1,26 +1,29 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { UserUpdateData, SafeUser } from "@/app/types/user";
+import { handleApiErrors } from "@/app/lib/handleApiErrors";
+import {
+  createBadRequest,
+  createUnauthorized,
+  createForbidden,
+} from "@/app/lib/errors";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
-  // Get the userId from the request headers
+
   const userId = request.headers.get("userId");
 
-  if (!userId) {
-    throw new Error("Failed to retrieve userId from headers");
-  }
+  if (!userId) throw createUnauthorized("Failed to retrieve userId from headers");
 
   try {
-    // Find the user in the database using the userId from the headers
+
     const user = await prisma.user.findUniqueOrThrow({
       where: {
         id: userId,
       },
     });
 
-    // Remove the password from the user object before returning it to the client
     const safeUser = {
       ...user,
       password: undefined,
@@ -29,36 +32,21 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(safeUser);
   } catch (error: any) {
     console.warn("Error: Failed to get user from request", error.message);
-    return NextResponse.json({ message: "Unauthenticated" }, { status: 401 });
+    return handleApiErrors(error);
   }
 }
 
 export async function PUT(request: NextRequest) {
   const userId = request.headers.get("userId");
 
-  if (!userId) {
-    return NextResponse.json(
-      { message: "Failed to retrieve userId from headers" },
-      { status: 401 }
-    );
-  }
+  if (!userId) throw createUnauthorized("Failed to retrieve userId from headers");
 
   try {
     const body = await request.json() as Partial<Pick<UserUpdateData,  "email" | "password">>;
 
-    if (!body) {
-      return NextResponse.json(
-        { error: "Invalid request body" },
-        { status: 400 }
-      );
-    }
+    if (!body) throw createBadRequest("Invalid request body");
 
-    if (!body.email && !body.password) {
-      return NextResponse.json(
-        { message: "No data to update" },
-        { status: 400 }
-      );
-    }
+    if (!body.email && !body.password) throw createBadRequest("No data to update");
 
     const user = await prisma.user.update({
       where: {
@@ -78,10 +66,7 @@ export async function PUT(request: NextRequest) {
 
   } catch (error: any) {
     console.warn("Error: Failed to update user", error.message);
-    return NextResponse.json(
-      { message: "An error occurred while updating user" },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }
 
@@ -91,26 +76,13 @@ export async function DELETE(request: NextRequest) {
   try {
     const body = await request.json();
 
-    if (!body) {
-      return NextResponse.json(
-        { error: "Invalid request body" },
-        { status: 400 }
-      );
-    }
+    if (!body) throw createBadRequest("Invalid request body");
 
-    if (!userId) {
-      return NextResponse.json(
-        { message: "Failed to retrieve userId from headers" },
-        { status: 401 }
-      );
-    }
+    if (!body.id) throw createBadRequest("User ID is required");
 
-    if (body.id !== userId) {
-      return NextResponse.json(
-        { message: "You are not authorized to delete this user" },
-        { status: 403 }
-      );
-    }
+    if (!userId) throw createUnauthorized("Failed to retrieve userId from headers");
+
+    if (body.id !== userId) throw createForbidden("You can only delete your own account");
 
     await prisma.user.delete({
       where: {
@@ -121,9 +93,6 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json(null, { status: 204 });
   } catch (error: any) {
     console.warn("Error: Failed to delete user", error.message);
-    return NextResponse.json(
-      { message: "An error occurred while deleting user" },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }

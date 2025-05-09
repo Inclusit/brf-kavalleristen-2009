@@ -1,28 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import type { UserUpdateData, SafeUser } from "@/app/types/user";
+import { handleApiErrors } from "@/app/lib/handleApiErrors";
+import {
+  createUnauthorized,
+  createBadRequest,
+  createForbidden,
+} from "@/app/lib/errors";
 
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
-  const role = request.headers.get("role");
-
-  if (!role) {
-    return NextResponse.json(
-      { message: "Failed to retrieve role from headers" },
-      { status: 401 }
-    );
-  }
-  
-  if (role !== "ADMIN") {
-    return NextResponse.json(
-      { message: "Unauthorized" },
-      { status: 403 }
-    );
-  };
-
-
   try {
+    const role = request.headers.get("role");
+
+    if (!role) throw createUnauthorized("Failed to retrieve role from headers");
+    if (role !== "ADMIN") throw createForbidden("Unauthorized");
+
     const users = await prisma.user.findMany({
       select: {
         id: true,
@@ -35,41 +29,20 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(users);
   } catch (error: any) {
-
     console.warn("Error: Failed to get users", error.message);
-    return NextResponse.json(
-      { message: "An error occurred while fetching users" },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }
 
 export async function PUT(request: NextRequest) {
-  const role = request.headers.get("role");
-
-  if (!role) {
-    return NextResponse.json(
-      { message: "Failed to retrieve role from headers" },
-      { status: 401 }
-    );
-  }
-
-  if (role !== "ADMIN") {
-    return NextResponse.json(
-      { message: "Unauthorized" },
-      { status: 403 }
-    );
-  };
-
   try {
-    const body = await request.json();
+    const role = request.headers.get("role");
 
-    if (!body.id) {
-      return NextResponse.json(
-        { error: "Invalid request body" },
-        { status: 400 }
-      );
-    }
+    if (!role) throw createUnauthorized("Failed to retrieve role from headers");
+    if (role !== "ADMIN") throw createForbidden("Unauthorized");
+
+    const body = await request.json();
+    if (!body.id) throw createBadRequest("User ID is required");
 
     const updatedData = {
       ...(body.email && { email: body.email.toLowerCase() }),
@@ -87,9 +60,6 @@ export async function PUT(request: NextRequest) {
 
   } catch (error: any) {
     console.warn("Error: Failed to update user", error.message);
-    return NextResponse.json(
-      { message: "An error occurred while updating user" },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }

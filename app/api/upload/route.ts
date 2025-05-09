@@ -3,6 +3,8 @@ import path from "path";
 import { mkdir, writeFile } from "fs/promises";
 import { existsSync } from "fs";
 import sharp from "sharp";
+import { handleApiErrors } from "@/app/lib/handleApiErrors";
+import { createBadRequest } from "@/app/lib/errors";
 
 // Mapp för uppladdade filer
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
@@ -20,12 +22,8 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
-    if (!file || typeof file === "string") {
-      return NextResponse.json(
-        { error: "Ingen giltig fil skickades." },
-        { status: 400 }
-      );
-    }
+    if (!file || typeof file === "string")
+      throw createBadRequest("Ingen fil uppladdad.");
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -58,9 +56,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ url: fileUrl, html }, { status: 201 });
   } catch (error) {
     console.error("Uppladdningsfel:", error);
-    return NextResponse.json(
-      { error: "Serverfel vid uppladdning." },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }

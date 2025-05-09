@@ -1,5 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
+import { handleApiErrors } from "@/app/lib/handleApiErrors";
+import {
+    createBadRequest,
+    createNotFound,
+    createUnauthorized,
+    createForbidden,
+} from "@/app/lib/errors";
 
 const prisma = new PrismaClient();
 
@@ -8,11 +15,20 @@ export async function POST(request: NextRequest) {
     const userId = request.headers.get("userId");
     
     if (role !== "ADMIN" && role !== "MODERATOR") {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+        throw createUnauthorized("Unauthorized");
     }
 
     try {
         const body = await request.json();
+
+        if (!body.title || !body.content || !body.slug) {
+            throw createBadRequest("Title, content, and slug are required");
+        }
+
+        if (body.title.length < 5 || body.content.length < 10) {
+            throw createBadRequest("Title must be at least 5 characters and content at least 10 characters long");
+        }
+
         const post = await prisma.newsPost.create({
             data: {
                 title: body.title,
@@ -24,6 +40,6 @@ export async function POST(request: NextRequest) {
         });
         return NextResponse.json(post, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ error: "News posting failed" }, { status: 500 });
+        return handleApiErrors(error);
     }
 }

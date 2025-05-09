@@ -1,5 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { handleApiErrors } from "@/app/lib/handleApiErrors";
+import {
+  createBadRequest,
+  createNotFound,
+  createUnauthorized,
+  createForbidden,
+} from "@/app/lib/errors";
 
 const prisma = new PrismaClient();
 
@@ -13,14 +20,12 @@ export async function GET(
       },
     });
 
-    if (!news) {
-      return NextResponse.json({ message: "News not found" }, { status: 404 });
-    }
+    if (!news) throw createNotFound("News not found");
 
     return NextResponse.json(news, { status: 200 });
 
   } catch (error) {
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return handleApiErrors(error);
   }
 }
 
@@ -30,7 +35,7 @@ export async function PUT(
 ) {
   const role = request.headers.get("role");
   if (role !== "ADMIN" && role !== "MODERATOR") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    throw createUnauthorized("Unauthorized");
   }
 
   try {
@@ -45,7 +50,7 @@ export async function PUT(
     });
     return NextResponse.json(post);
   } catch (error) {
-    return NextResponse.json({ error: "Update failed" }, { status: 500 });
+    return handleApiErrors(error);
   }
 }
 
@@ -54,9 +59,8 @@ export async function DELETE(
   { params }: { params: { slug: string } }
 ) {
   const role = request.headers.get("role");
-  if (role !== "ADMIN") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  if (role !== "ADMIN") throw createUnauthorized("Unauthorized");
+  if (!params.slug) throw createBadRequest("Slug is required");
 
   try {
     await prisma.newsPost.delete({
@@ -64,6 +68,6 @@ export async function DELETE(
     });
     return NextResponse.json({ message: "News deleted successfully" }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: "Delete failed" }, { status: 500 });
+    return handleApiErrors(error);
   }
 }

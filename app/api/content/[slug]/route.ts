@@ -1,4 +1,3 @@
-//app/api/content/[slug]/route.ts
 import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import {
@@ -7,6 +6,13 @@ import {
   SafeContentBlock,
 } from "@/app/types/content";
 import { parse } from "path";
+import { handleApiErrors } from "@/app/lib/handleApiErrors";
+import {
+  createBadRequest,
+  createNotFound,
+  createUnauthorized,
+  createForbidden,
+} from "@/app/lib/errors";
 
 const prisma = new PrismaClient();
 
@@ -17,12 +23,7 @@ export async function GET(
   try {
     const { slug } = await context.params;
 
-    if (!slug) {
-      return NextResponse.json(
-        { message: "Slug is required" },
-        { status: 400 }
-      );
-    }
+    if (!slug) throw createBadRequest("Slug is required");
 
     let content = await prisma.contentBlock.findUnique({
       where: { slug },
@@ -42,10 +43,7 @@ export async function GET(
     return NextResponse.json(content);
   } catch (error: any) {
     console.warn("Error: Failed to get content", error.message);
-    return NextResponse.json(
-      { message: "An error occurred while fetching content" },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }
 
@@ -55,23 +53,13 @@ export async function PUT(request: NextRequest, context: any) {
 
     const role = request.headers.get("role");
     if (role !== "ADMIN" && role !== "MODERATOR") {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
+      throw createUnauthorized("Unauthorized");
     }
 
-    if (!slug) {
-      return NextResponse.json(
-        { message: "Slug is required" },
-        { status: 400 }
-      );
-    }
+    if (!slug) throw createBadRequest("Slug is required");
 
     const body: ContentUpdateData = await request.json();
-    if (!body || !body.content) {
-      return NextResponse.json(
-        { message: "Content is required" },
-        { status: 400 }
-      );
-    }
+    if (!body || !body.content) throw createBadRequest("Content is required");
 
     let contentBlock = await prisma.contentBlock.findUnique({
       where: { slug },
@@ -112,10 +100,7 @@ export async function PUT(request: NextRequest, context: any) {
     return NextResponse.json(safeContent, { status: 200 });
   } catch (error: any) {
     console.warn("Error: Failed to update content", error.message);
-    return NextResponse.json(
-      { message: "An error occurred while updating content" },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }
 
@@ -124,27 +109,15 @@ export async function DELETE(request: NextRequest, context: any) {
     const { slug } = await context.params;
 
     const role = request.headers.get("role");
-    if (role !== "ADMIN") {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
-    }
+    if (role !== "ADMIN") throw createUnauthorized("Unauthorized");
 
-    if (!slug) {
-      return NextResponse.json(
-        { message: "Slug is required" },
-        { status: 400 }
-      );
-    }
+    if (!slug) throw createBadRequest("Slug is required");
 
     const contentBlock = await prisma.contentBlock.findUnique({
       where: { slug },
     });
 
-    if (!contentBlock) {
-      return NextResponse.json(
-        { message: "Content not found" },
-        { status: 404 }
-      );
-    }
+    if (!contentBlock) throw createNotFound("Content not found");
 
     await prisma.contentBlock.delete({
       where: { slug },
@@ -153,9 +126,6 @@ export async function DELETE(request: NextRequest, context: any) {
     return NextResponse.json({ message: "Content deleted successfully" });
   } catch (error: any) {
     console.warn("Error: Failed to delete content", error.message);
-    return NextResponse.json(
-      { message: "An error occurred while deleting content" },
-      { status: 500 }
-    );
+    return handleApiErrors(error);
   }
 }
