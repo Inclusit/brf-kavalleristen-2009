@@ -4,7 +4,7 @@
 .footer {
   background-color: $secondary-blue;
   padding-block: 2rem;
-  color: $primary-beige;
+  color: $black;
 
   &__container {
     display: flex;
@@ -16,7 +16,7 @@
     @include respond(md) {
       flex-direction: row;
       justify-content: space-evenly;
-      align-items: center;
+     
     }
   }
 
@@ -26,18 +26,20 @@
   }
 
   &__info {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: $gutter;
-    font-size: 0.875rem;
-    line-height: 1.4;      
+    display: grid;
+  grid-template-columns: 1fr;
+  gap: $gutter;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: $primary-beige;
 
-    @include respond(md) {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-    }
+  @include respond(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond(lg) {
+    grid-template-columns: repeat(4, 1fr); // Tillbaka till fyra kolumner vid stor desktop
+  }
   }
 
   &__info-item {
@@ -62,7 +64,15 @@
     margin: 0;
     padding: 0;
     font-size: inherit;
+    
 
+  }
+
+  &__login {
+    p {
+      color: $primary-beige;
+      margin:0;
+    }
   }
 
   &__login-button {
@@ -72,6 +82,7 @@
     cursor: pointer;
     font-weight: $font-bold;
     font-size: 1rem;
+    padding-left:0;
 
     &:hover {
       color: $secondary-gray;

@@ -16,6 +16,9 @@ export default function RootLayout({ children }) {
               <Header />
             </header>
             <nav>
+              <h2 id="mainnav-heading" className="sr-only">
+                Webbplatsnavigation
+              </h2>
               <Navbar />
             </nav>
 

@@ -1,4 +1,3 @@
-import { members } from "@/app/api/boardMembers/route";
 import CardGrid from "@/app/components/cards/CardGrid";
 import Head from "next/head";
 
@@ -12,7 +11,7 @@ export default function StyrelsenPage() {
       <h1>Styrelsen</h1>
       <p>Information om styrelsen.</p>
       
-      <CardGrid people={members} />
+      
       
     </div>
   );

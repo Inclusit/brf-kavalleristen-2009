@@ -74,10 +74,17 @@ model Navigation {
   href    String @unique
 }
 
+enum boardPosition{
+  ORDFÖRANDE
+  SEKRETERARE
+  KASSÖR
+  SUPPLEANT
+}
+
 model BoardMembers {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   name     String
-  position String
+  position boardPosition
   phone   String
   email    String
   image    String

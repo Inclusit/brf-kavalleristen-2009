@@ -93,12 +93,13 @@ export default function RichTextEditor({
   }, [isEditing, content]);
 
   return (
-    <div >
+    <div>
       {isEditing ? (
         <>
           <CKEditor
             editor={ClassicEditor}
             data={content || `Information om ${contentId}`}
+
             onChange={(__, editor) => {
               const newData = editor.getData();
               setContent(newData);

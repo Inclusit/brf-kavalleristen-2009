@@ -1,19 +1,144 @@
-export default function ProfileCard({ person }) {
-  const { name, role, imageUrl, email, phone } = person;
+"use client";
+import {useState, useEffect} from "react";
+import { useUser } from "@/app/context/user";
+import UploadHandler from "../cms/UploadHandler";
+import SkeletonLoader from "../ui/SkeletonLoader";
+
+export default function ProfileCard({ memberId }) {
+  const { user } = useUser();
+  const role = user?.role; 
+
+  const [data, setData] = useState(null);
+  const [edit, setEdit] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState({
+    name: "",
+    role: "",
+    email: "",
+    phone: "",
+    image: "",
+  });
+
+ useEffect(() => {
+    const fetchMember = async () => {
+      try {
+        const response = await fetch(`/api/board-members/${memberId}`);
+        if (!response.ok) throw new Error("Failed to fetch member data");
+        const data = await response.json();
+        setData(data);
+        setForm(data);
+      } catch (error) {
+        console.error("Error fetching member:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMember();
+    
+    
+  }, [memberId]);
+
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  const handleSave = async () => {
+    const response = await fetch(`/api/board-members/${memberId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    if (!response.ok) {
+      alert("Failed to update member");
+      return;
+    }
+
+    const updatedMember = await response.json();
+    setData(updatedMember);
+    setEdit(false);
+  }
+
+  const handleDelete = async () => {
+    const response = await fetch(`/api/board-members/${memberId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      alert("Failed to delete member");
+      return;
+    }
+
+    setData(null);
+  }
+
+  if (loading) {
+    return (
+      <div className="profile-card">
+        <SkeletonLoader />
+      </div>
+    );
+  }
+
 
   return (
-    <div className="bg-white shadow rounded p-4 text-center">
-      {imageUrl && (
-        <img
-          src={imageUrl}
-          alt={name}
-          className="w-24 h-24 mx-auto rounded-full object-cover mb-2"
-        />
+    <div className="profile-card">
+      {edit ? (
+        <div className="profile-card__edit">
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Name"
+          />
+          <input
+            type="text"
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            placeholder="Role"
+          />
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="Email"
+          />
+          <input
+            type="tel"
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+            placeholder="Phone"
+          />
+          <UploadHandler
+            image={form.image}
+            setImage={(image) => setForm((prev) => ({ ...prev, image }))}
+          />
+          <button onClick={handleSave}>Save</button>
+        </div>
+      ) : (
+        <div className="profile-card__view">
+          <img src={data.image} alt={`${data.name}'s profile`} />
+          <h2>{data.name}</h2>
+          <p>{data.role}</p>
+          <p>{data.email}</p>
+          <p>{data.phone}</p>
+          {role === "admin" && (
+            <>
+              <button onClick={() => setEdit(true)}>Edit</button>
+              <button onClick={handleDelete}>Delete</button>
+            </>
+          )}
+        </div>
       )}
-      <h3 className="text-lg font-semibold">{name}</h3>
-      <p className="text-gray-600">{role}</p>
-      {email && <p className="text-sm mt-2">{email}</p>}
-      {phone && <p className="text-sm">{phone}</p>}
     </div>
-  );
+  )
+
 }

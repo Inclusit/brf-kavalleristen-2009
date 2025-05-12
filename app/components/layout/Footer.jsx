@@ -70,7 +70,7 @@ export default function Footer() {
             </button>
           ) : (
             <div>
-              <p>Boende i föreningen?</p>
+              <p >Boende i föreningen?</p>
               <button
                 className="footer__login-button"
                 onClick={() => setShowModal(true)}

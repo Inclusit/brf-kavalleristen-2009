@@ -45,87 +45,152 @@
  
 }
 
-.news-detail {
-  padding: 1rem;
-
-  h1 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  &__editor,
-  &__content {
-    margin-top: 1rem;
-  }
-
-  &__delete {
-    margin-top: 2rem;
-    padding: 0.5rem 1rem;
-    background-color: #b00020;
-    color: white;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-weight: bold;
-  }
-}
-
 .news-collection {
+
+  &__title {
+    color: $blue;
+    
+    @include respond(md) {
+      margin-left: auto;
+      margin-right: auto;
+
+    }
+  }
+
   &__list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-    gap: calc(1rem + 0.5vw);
-    padding: 2rem 0;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem 1rem;
   }
 
   &__news-card {
+    max-width: 320px;
+    list-style: none;
+  }
+}
+
+.news-card {
+  &__article {
+    background-color: $white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    max-width: 280px;
-    border-radius: 0.25rem;
-    background-color: $secondary-beige;
-    box-shadow: $border-shadow;
-    overflow: hidden;
+
+    &:hover,
+    &:focus-within {
+      transform: translateY(-4px);
+      color: $secondary-blue;
+    }
+  }
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    padding: 1rem;
+    outline: none;
+
+    &:focus {
+      outline: 3px solid $blue; 
+      outline-offset: 4px;
+      border-radius: 0.75rem;
+    }
+  }
+
+  &__date {
     text-align: left;
+    margin-bottom: 1rem;
+    display: inline-block;
+
+    .news-card__day {
+      font-size: 2rem;
+      font-weight: $font-bold;
+      line-height: 1;
+      margin-top: 0.5rem;
+      color: $blue;
+    }
+
+    .news-card__month {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      font-weight: $font-normal;
+      color: $gray;
+      margin-top: 0.2rem;
+
+      
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: $font-bold;
+    margin-bottom: 0.75rem;
+    color: $black;
+  }
+
+  &__excerpt {
+    font-size: 0.95rem;
+    color: $secondary-blue;
+    line-height: 1.6;
+    line-clamp: 4;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+
+  &__list {
+    display: flex;
+    gap: 0.5rem;
+    list-style: none;
     padding: 0;
+    margin: 0;
+  }
 
-    a.news-card__link {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      padding: 1rem;
-      text-decoration: none;
-      color: inherit;
+  &__button {
+    background-color: $secondary-beige;
+    border: 1px solid $gray;
+    color: $black;
+    font-weight: $font-bold;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    min-width: 2.5rem;
 
-      &:hover {
-        .news-card__title h2 {
-          text-decoration: underline;
-        }
-      }
+    &:hover {
+      background-color: $blue;
+      color: $white;
     }
 
-    .news-card__date {
-      font-size: 0.875rem;
-      font-weight: $font-light;
-      color: $gray;
-      margin-bottom: 0.5rem;
-      font-style: italic;
-      text-align: left;
+    &:focus {
+      outline: 3px solid $blue;
+      outline-offset: 2px;
     }
 
-    .news-card__title {
-      h2 {
-        font-size: 1.25rem;
-        font-weight: $font-bold;
-        margin: 0 0 0.5rem;
-        color: $black;
-      }
-    }
-
-    .news-card__author {
-      font-size: 0.875rem;
-      color: $gray;
+    &.is-active {
+      background-color: $blue;
+      color: $white;
+      border-color: $blue;
     }
   }
 }
@@ -136,6 +201,7 @@
 
   &__heading {
     color: $primary-beige;
+    text-align: center;
   }
 
   &__scroll-wrapper {
@@ -191,6 +257,10 @@
       color: $white;
     }
   }
+}
+
+.right {
+  margin-left: 20px;
 }
 
 .latest-news--fullbleed {

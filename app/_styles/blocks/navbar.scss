@@ -40,6 +40,7 @@
     font-size: inherit;
     text-align: left;
     text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out;
     &:hover {
       background-color: $primary-beige;
       color: $black;
@@ -94,10 +95,12 @@
     text-decoration: none;
     color: inherit;
     font-size: inherit;
+    transition: background-color 0.2s ease-in-out;
 
     &:hover {
       background-color: $primary-beige;
       color: $black;
+      
     }
   }
 

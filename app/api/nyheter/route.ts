@@ -11,36 +11,35 @@ import {
 const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
-    try {
-        const newsPost = await prisma.newsPost.findMany({
-            orderBy: { createdAt: "desc" },
-        });
-        return NextResponse.json(newsPost, { status: 200 });
-    } catch (error) {
-        return handleApiErrors(error);
-    }
-}
-
-export async function GET_LATEST(request: NextRequest) {
   try {
-    const newsPost = await prisma.newsPost.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: {
-        author: {
-          select: {
-            firstName: true,
-            lastName: true,
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const pageSize = 6;
+
+    const [totalCount, newsPost] = await Promise.all([
+      prisma.newsPost.count(),
+      prisma.newsPost.findMany({
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        include: {
+          author: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
           },
         },
-      },
-    });
+      }),
+    ]);
 
-    return NextResponse.json(newsPost, { status: 200 });
+    return NextResponse.json({ newsPost, totalCount }, { status: 200 });
   } catch (error) {
     return handleApiErrors(error);
   }
 }
+
+
 
 export async function POST(request: NextRequest) {
     const role = request.headers.get("role");

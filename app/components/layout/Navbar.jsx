@@ -50,7 +50,7 @@ export default function Navbar() {
           }`}
           onClick={() => setMobileMenu(!mobileMenu)}
           aria-expanded={mobileMenu}
-          aria-controls="mobile-menu"
+          aria-controls="main-navigation"
           aria-label={mobileMenu ? "Stäng meny" : "Öppna meny"}
         >
           <span></span>
@@ -59,10 +59,10 @@ export default function Navbar() {
         </button>
 
         <ul
+          id="main-navigation"
           className={`navbar__link-list ${
             mobileMenu ? "navbar__link-list--open" : ""
           }`}
-          role="navigation"
         >
           {navData.map((item, index) => (
             <li
@@ -72,13 +72,16 @@ export default function Navbar() {
               }`}
             >
               {item.href ? (
-                <Link href={item.href} className="navbar__link" role="menuitem">
+                <Link href={item.href} className="navbar__link" >
                   {item.label}
                 </Link>
               ) : (
                 <button
                   className="navbar__link"
                   onClick={() => toggleDropdown(index)}
+                  aria-expanded={isOpen === index}
+                  aria-controls={`dropdown-${index}`}
+                  aria-label={`Öppna meny för ${item.label}`}
                 >
                   {item.label}
                 </button>
@@ -86,6 +89,7 @@ export default function Navbar() {
 
               {(item.children || groupedDynamic[item.label]) && (
                 <ul
+                  id={`dropdown-${index}`}
                   ref={(el) => (dropdownRefs.current[index] = el)}
                   className={`navbar__dropdown ${
                     isOpen === index ? "navbar__dropdown--open" : ""
@@ -108,7 +112,7 @@ export default function Navbar() {
                           className="navbar__dropdown-link"
                           target="_blank"
                           rel="noopener noreferrer"
-                          role="menuitem"
+                          
                         >
                           {subItem.label}
                         </a>
@@ -116,7 +120,7 @@ export default function Navbar() {
                         <Link
                           href={subItem.href}
                           className="navbar__dropdown-link"
-                          role="menuitem"
+                          
                         >
                           {subItem.label}
                         </Link>
@@ -132,7 +136,7 @@ export default function Navbar() {
                       <Link
                         href={nav.href}
                         className="navbar__dropdown-link"
-                        role="menuitem"
+                        
                       >
                         {nav.label}
                       </Link>
@@ -143,7 +147,7 @@ export default function Navbar() {
             </li>
           ))}
 
-          {/* 🔵 Extra dynamiska kategorier som inte finns i navData */}
+          
           {extraCategories.map(([label, items], dynCatIndex) => (
             <li
               key={`extra-cat-${dynCatIndex}`}
@@ -152,10 +156,14 @@ export default function Navbar() {
               <button
                 className="navbar__link"
                 onClick={() => toggleDropdown(`extra-${dynCatIndex}`)}
+                aria-expanded={isOpen === `extra-${dynCatIndex}`}
+                aria-controls={`extra-dropdown-${dynCatIndex}`}
+                aria-label={`Öppna meny för ${label}`}
               >
                 {label}
               </button>
               <ul
+                id={`extra-dropdown-${dynCatIndex}`}
                 ref={(el) =>
                   (dropdownRefs.current[`extra-${dynCatIndex}`] = el)
                 }
@@ -182,7 +190,7 @@ export default function Navbar() {
                     <Link
                       href={nav.href}
                       className="navbar__dropdown-link"
-                      role="menuitem"
+                      
                     >
                       {nav.label}
                     </Link>

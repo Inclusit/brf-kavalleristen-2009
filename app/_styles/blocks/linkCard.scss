@@ -29,6 +29,7 @@
     overflow: hidden;
     text-align: center;
     padding:0;
+
   }
 
   &__link-content {
@@ -45,6 +46,7 @@
       width: 100%;
       height: 120px;
       overflow: hidden;
+      margin-bottom: 2rem;
 
       img {
         width: 100%;
@@ -59,7 +61,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%; 
+      height: 85px; 
       margin-top: 1rem;
 
       svg,
@@ -89,10 +91,12 @@
 
   @include respond(md) {
     &__link-card {
+      
       &:hover {
         .home-page__link-svg-wrapper {
           background-color: $primary-beige;
           border-color: $blue;
+          transition: background-color 0.3s;
         }
 
         .home-page__link-svg {
