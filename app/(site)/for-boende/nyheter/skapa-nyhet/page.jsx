@@ -63,7 +63,7 @@ export default function CreateNewsPage() {
   }
 
   return (
-    <div className="skapa-nyhet">
+    <div className="skapa-nyhet site-content">
       <h1>Skapa nyhet</h1>
 
       <label htmlFor="title">Titel</label>

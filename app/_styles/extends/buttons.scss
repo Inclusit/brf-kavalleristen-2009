@@ -14,7 +14,8 @@
 
 %base-button {
   @include mixins.textstyle(button);
-
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
   padding: 18px 32px;
   border-radius: vars.$border-radius;
   text-decoration: none;
@@ -69,6 +70,16 @@
 
     &:hover {
       background-color: color.adjust(vars.$error-color, $lightness: -10%);
+    }
+  }
+
+  &--cancel {
+    background-color: vars.$secondary-gray; 
+    color: vars.$black; 
+    border-color: transparent;
+  
+    &:hover {
+      background-color: #b1aea9; 
     }
   }
 }

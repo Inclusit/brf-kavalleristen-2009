@@ -2,11 +2,11 @@
 @use "../core/mixins" as *;
 
 .footer {
-  background-color: $gray;
+  background-color: $secondary-blue;
   padding-block: 2rem;
   color: $black;
 
-  &__inner {
+  &__container {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -26,27 +26,56 @@
   }
 
   &__info {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: $gutter;
     font-size: 0.875rem;
-    line-height: 1.4;
+    line-height: 1.4;      
+
+    @include respond(md) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+  }
+
+  &__info-item {
 
     a {
-      color: $link-color;
+      color: $white;
 
       &:hover {
-        color: $link-hover-color;
+        color: $secondary-gray;
+        text-decoration: underline;
       }
     }
+
+    > *:first-child {
+      font-weight: $font-bold;
+      padding-bottom: 0.25rem;
+    }
+
+  }
+
+  &__info-text {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    color: $black;
+
   }
 
   &__login-button {
     background: none;
     border: none;
-    color: $link-color;
+    color: $white;
     cursor: pointer;
     font-weight: $font-bold;
+    font-size: 1rem;
 
     &:hover {
-      color: $link-hover-color;
+      color: $secondary-gray;
       text-decoration: underline;
     }
   }

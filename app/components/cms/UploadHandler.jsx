@@ -1,5 +1,6 @@
 "use client";
 import { useRef } from "react";
+import CTAbtn from "../ui/CTAbtn";
 
 export default function UploadHandler({ onUpload }) {
   const fileInputRef = useRef(null);
@@ -31,12 +32,16 @@ export default function UploadHandler({ onUpload }) {
   return (
     <div className="upload-handler">
       <input
+        className="upload-handler__input"
         type="file"
         accept=".pdf, .doc, .docx, image/*"
         ref={fileInputRef}
         onChange={handleUpload}
       />
-      <button onClick={handleUpload}>Ladda upp fil</button>
+      <button
+        className="upload-handler__button"
+        type="button" 
+      onClick={handleUpload}>Ladda upp fil</button>
     </div>
   );
 }

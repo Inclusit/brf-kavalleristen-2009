@@ -1,4 +1,3 @@
-// === LoginModal.jsx (uppdaterad registrering) ===
 "use client";
 import { useState } from "react";
 import { useUser } from "@/app/context/user";
@@ -13,6 +12,7 @@ export default function LoginModal({ onClose }) {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState("");
   const { setToken, setUser } = useUser();
 
   const doorOptions = [
@@ -27,30 +27,38 @@ export default function LoginModal({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setMessage("");
 
     const urlEndpoint =
-      mode === "login" ? "/api/auth/login" : "/api/auth/register";
+      mode === "login"
+        ? "/api/auth/login"
+        : mode === "register"
+        ? "/api/auth/register"
+        : "/api/auth/password-reset";
 
     const payload =
       mode === "login"
         ? { email, password }
-        : { email, password, firstName, lastName, address, phone };
+        : mode === "register"
+        ? { email, password, firstName, lastName, address, phone }
+        : { email, newPassword: password };
 
     try {
-      const response = await fetch(urlEndpoint, {
+      const res = await fetch(urlEndpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
+
+      if (mode === "reset") {
+        setMessage("Lösenordet har uppdaterats. Du kan nu logga in.");
+        return;
       }
 
-      const data = await response.json();
       setToken(data.token);
       setUser?.(data.user);
       LocalStorageKit.set("user", data.user);
@@ -58,9 +66,8 @@ export default function LoginModal({ onClose }) {
       LocalStorageKit.set("role", data.role);
       window.dispatchEvent(new Event("storage"));
       onClose();
-    } catch (error) {
-      console.error("Error:", error);
-      setError(error.message);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -87,10 +94,15 @@ export default function LoginModal({ onClose }) {
         </div>
 
         <h2 className="modal__title">
-          {mode === "login" ? "Logga in" : "Registrera dig"}
+          {mode === "login"
+            ? "Logga in"
+            : mode === "register"
+            ? "Registrera dig"
+            : "Återställ lösenord"}
         </h2>
 
         {error && <p className="modal__error">{error}</p>}
+        {message && <p className="modal__success">{message}</p>}
 
         <form onSubmit={handleSubmit} className="modal__form">
           <div className="modal__form-content">
@@ -105,7 +117,9 @@ export default function LoginModal({ onClose }) {
           </div>
 
           <div className="modal__form-content">
-            <label htmlFor="password">Lösenord</label>
+            <label htmlFor="password">
+              {mode === "reset" ? "Nytt lösenord" : "Lösenord"}
+            </label>
             <input
               type="password"
               id="password"
@@ -114,6 +128,30 @@ export default function LoginModal({ onClose }) {
               required
             />
           </div>
+
+          {mode === "login" && (
+            <p className="modal__link">
+              <button
+                type="button"
+                className="modal__link-button"
+                onClick={() => setMode("reset")}
+              >
+                Glömt lösenord?
+              </button>
+            </p>
+          )}
+
+          {mode === "reset" && (
+            <p className="modal__link">
+              <button
+                type="button"
+                className="modal__link-button"
+                onClick={() => setMode("login")}
+              >
+                Tillbaka till inloggning
+              </button>
+            </p>
+          )}
 
           {mode === "register" && (
             <>
@@ -163,7 +201,11 @@ export default function LoginModal({ onClose }) {
           )}
 
           <button type="submit" className="modal__submit-button">
-            {mode === "login" ? "Logga in" : "Registrera"}
+            {mode === "login"
+              ? "Logga in"
+              : mode === "register"
+              ? "Registrera"
+              : "Återställ lösenord"}
           </button>
         </form>
       </div>

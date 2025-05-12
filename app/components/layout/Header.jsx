@@ -41,9 +41,10 @@ export default function Header() {
             height={100}
           />
         </div>
+        
         <div className="header__text">
-          <h1>{header.title}</h1>
-          <p>{header.subtitle}</p>
+          <p className="header__title">{header.title}</p>
+          <p className="header__subtitle">{header.subtitle}</p>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
-//app/_styles/core/functions.scss
-@function rem($px) {
-    @return #{$px / 16}rem;
-}
+@use "sass:math";
+
+@function to-rem($px) {
+    @return math.div($px, 16) * 1rem;
+  }

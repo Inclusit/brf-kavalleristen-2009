@@ -1,3 +1,4 @@
+//app/api/content/[slug]/route.ts
 import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import {
@@ -88,8 +89,11 @@ export async function PUT(request: NextRequest, context: any) {
       author: contentBlock.author
         ? {
             id: contentBlock.author.id,
-            name: contentBlock.author.name,
+            firstName: contentBlock.author.firstName,
+            lastName: contentBlock.author.lastName,
             email: contentBlock.author.email ?? null,
+            phone: contentBlock.author.phone ?? null,
+            address: contentBlock.author.address ?? null,
             role: contentBlock.author.role,
             createdAt: contentBlock.author.createdAt,
             updatedAt: contentBlock.author.updatedAt,

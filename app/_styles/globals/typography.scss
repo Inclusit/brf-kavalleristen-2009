@@ -1,4 +1,5 @@
 @use '../core/variables' as *;
+@use '../core/mixins' as *;
 
 @font-face {
     font-family: 'Arial';
@@ -7,3 +8,41 @@
     font-weight: $font-normal;
     font-display: swap;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-heading;
+    font-weight: $font-bold;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: $base-color;
+  }
+  
+  h1 { font-size: to-rem(36); }
+  h2 { font-size: to-rem(30); }
+  h3 { font-size: to-rem(24); }
+  h4 { font-size: to-rem(20); }
+  h5 { font-size: to-rem(18); }
+  h6 { font-size: to-rem(16); }
+  
+  p {
+    @include textstyle(text);
+    margin-bottom: 1rem;
+  }
+  
+  strong {
+    font-weight: $font-heavy;
+  }
+  
+  em {
+    font-style: italic;
+  }
+  
+  ul, ol {
+    margin-left: 2rem;
+    padding-left: 0.5rem;
+    list-style: initial;
+  }
+  
+  li {
+    margin-bottom: 0.5rem;
+  }

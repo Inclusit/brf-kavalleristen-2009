@@ -11,7 +11,7 @@ const UNSAFE_REQUESTS = [
 const AUTH_EXEMPT_REQUESTS = [
   "/api/auth/login",
   "/api/auth/register",
-  "/api/auth/passwordReset",
+  "/api/auth/password-reset",
 ];
 
 export default async function middleware(request: NextRequest) {

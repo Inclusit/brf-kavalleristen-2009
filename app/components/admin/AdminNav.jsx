@@ -20,7 +20,7 @@ export default function AdminNav() {
         aria-controls="admin-dropdown"
         aria-label="Visa adminalternativ"
       >
-        Adminverktyg ▾
+        Admin
       </button>
 
       {dropdownOpen && (

@@ -1,4 +1,3 @@
-//app/_styles/globals/base.scss
 @use '../core/variables' as *;
 @use '../core/mixins' as *;
 @use '../core/functions' as *;
@@ -14,12 +13,16 @@ body {
     font-family: $font-base;
     color: $base-color;
     background-color: $white;
-    background-image: url("#{$img-path}/website-texture.svg");
-  background-repeat: repeat;
-  background-size: auto;
+    background-color: $primary-beige;
     font-size: 16px;
     line-height: 1.5;
+    margin: 0;
 }
+
+/*main {
+  background-color: $secondary-beige;
+}*/
+
 
 a {
   color: $link-color;
@@ -71,9 +74,28 @@ a {
   }
 }
 
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 
-main {
-    background-color: $white;
+button {
+  background: transparent;
+}
+
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
 }
 
 
@@ -112,7 +134,96 @@ main {
   padding-inline: clamp($padding-mobile, 5vw, $padding-desktop);
 }
 
+.site-content {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: $secondary-beige;
+  box-shadow: $border-shadow;
 
+  @include respond(md) {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    padding: 1rem;
+  }
+}
+
+.richtext__content {
+  font-family: $font-base;
+  color: $base-color;
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-heading;
+    font-weight: $font-bold;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-size: to-rem(36);
+  }
+
+  h2 {
+    font-size: to-rem(30);
+  }
+
+  h3 {
+    font-size: to-rem(24);
+  }
+
+  h4 {
+    font-size: to-rem(20);
+  }
+
+  h5 {
+    font-size: to-rem(18);
+  }
+
+  h6 {
+    font-size: to-rem(16);
+  }
+
+  p {
+    @include textstyle(text);
+    margin-bottom: 1rem;
+  }
+
+  a {
+    color: $link-color;
+    text-decoration: underline;
+    @include transition(color);
+
+    &:hover {
+      color: $link-hover-color;
+    }
+  }
+
+  ul, ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  blockquote {
+    border-left: 4px solid $gray;
+    padding-left: 1rem;
+    font-style: italic;
+    color: $gray;
+    margin: 1.5rem 0;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5rem auto;
+  }
+}
 
 
 /*main {

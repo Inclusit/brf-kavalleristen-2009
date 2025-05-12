@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import clsx from "clsx";
 
 export default function CTAbtn({ type, onClick, role }) {
   const [loading, setLoading] = useState(false);

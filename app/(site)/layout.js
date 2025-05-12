@@ -12,14 +12,16 @@ export default function RootLayout({ children }) {
         <UserProvider>
           <div className="site-container">
             <header>
-              <Header />
               <AdminNavWrapper />
+              <Header />
             </header>
             <nav>
               <Navbar />
             </nav>
 
-            <main className="site-wrap">{children}</main>
+            <main className="site-wrap">
+              <div>{children}</div>
+            </main>
 
             <footer>
               <Footer />

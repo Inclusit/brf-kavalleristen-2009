@@ -18,7 +18,13 @@ export default function RichTextEditor({
   const [content, setContent] = useState(fallback || "");
   const isEditing = role === "ADMIN" || role === "MODERATOR";
 
-  // 🟢 Hämta bara om det är en vanlig innehållssida
+  useEffect(() => {
+    console.log(
+      "Plugins i din ClassicEditor:",
+      ClassicEditor.builtinPlugins.map((p) => p.pluginName)
+    );
+  }, []);
+
   const fetchContent = async () => {
     if (!contentId || type !== "content") return;
 
@@ -73,7 +79,6 @@ export default function RichTextEditor({
     }
   };
 
-  // 📜 Scroll + länkfix om man inte redigerar
   useEffect(() => {
     if (!isEditing) {
       const container = document.querySelector(".richtext__content");
@@ -89,7 +94,7 @@ export default function RichTextEditor({
   }, [isEditing, content]);
 
   return (
-    <>
+    <div >
       {isEditing ? (
         <>
           <CKEditor
@@ -114,11 +119,11 @@ export default function RichTextEditor({
           )}
         </>
       ) : (
-        <div
+        <article
           className="richtext__content"
           dangerouslySetInnerHTML={{ __html: content }}
         />
       )}
-    </>
+    </div>
   );
 }

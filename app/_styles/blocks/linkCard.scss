@@ -1,0 +1,132 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.home-page {
+
+  &__title {
+    @include textstyle(title);
+    margin: 4rem 0;
+    text-align: center;
+    color: $blue;
+  }
+
+  &__link-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    position: relative;
+    gap: calc(1rem + 0.5vw);
+    flex-wrap: wrap;
+  }
+
+  &__link-card {
+    display: flex;
+    flex-direction: column; 
+    max-width: 280px;
+    border-radius: 0.25rem;
+    background-color: $secondary-beige;
+    box-shadow: $border-shadow;
+    overflow: hidden;
+    text-align: center;
+    padding:0;
+  }
+
+  &__link-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding: 1rem;
+  }
+
+  &__link-card--image {
+    height: 400px;
+    .home-page__link-image-wrapper {
+      width: 100%;
+      height: 120px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  &__link-card--icon {
+    .home-page__link-icon-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%; 
+      margin-top: 1rem;
+
+      svg,
+      img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  }
+
+  &__link-title {
+    font-size: 1.5rem;
+    font-weight: $font-bold;
+    margin: 0;
+    margin-bottom: 8px;
+  }
+
+  &__link-text {
+    font-size: 1rem;
+    margin: 0;
+    margin-bottom: 1rem;
+  }
+
+  &__info {
+    margin-bottom: 4rem;
+  }
+
+  @include respond(md) {
+    &__link-card {
+      &:hover {
+        .home-page__link-svg-wrapper {
+          background-color: $primary-beige;
+          border-color: $blue;
+        }
+
+        .home-page__link-svg {
+          background-color: $blue;
+        }
+      }
+    }
+
+    &__link-wrapper {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    &__link-svg-wrapper {
+      border: 2px solid $blue;
+      border-radius: 100px;
+      background-color: $blue;
+      margin-top: auto;
+      margin-left: auto;
+      padding: 0;
+    }
+
+    &__link-svg {
+      width: 40px;
+      height: 40px;
+      mask-image: url("#{$icons-path}/right-arrow.svg");
+      background-color: $primary-beige;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
+      -webkit-mask-image: url("#{$icons-path}/right-arrow.svg");
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+    }
+  }
+}
