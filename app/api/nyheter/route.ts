@@ -21,6 +21,27 @@ export async function GET(request: NextRequest) {
     }
 }
 
+export async function GET_LATEST(request: NextRequest) {
+  try {
+    const newsPost = await prisma.newsPost.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: {
+        author: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(newsPost, { status: 200 });
+  } catch (error) {
+    return handleApiErrors(error);
+  }
+}
+
 export async function POST(request: NextRequest) {
     const role = request.headers.get("role");
     const userId = request.headers.get("userId");

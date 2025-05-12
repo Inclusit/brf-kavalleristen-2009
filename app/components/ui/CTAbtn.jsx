@@ -13,7 +13,8 @@ export default function CTAbtn({ type, onClick, role }) {
     edit: "Uppdatera",
     save: "Spara",
     cancel: "Avbryt",
-    post: "Posta nyhet",
+    post: "Publicera nyhet",
+    publish: "Skapa ny nyhet",
   };
 
   const classMap = {
@@ -22,6 +23,7 @@ export default function CTAbtn({ type, onClick, role }) {
     save: "cta-btn cta-btn--save",
     cancel: "cta-btn cta-btn--cancel",
     post: "cta-btn cta-btn--post",
+    publish: "cta-btn cta-btn--publish",
   };
 
   const handleClick = async () => {

@@ -61,9 +61,8 @@ export default function RichTextEditor({
     const headers = {
       "Content-Type": "application/json",
       role,
+      userId, // 🟢 alltid med nu
     };
-
-    if (isNews) headers.userId = userId;
 
     try {
       const response = await fetch(endpoint, {

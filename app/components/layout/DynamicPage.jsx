@@ -16,6 +16,7 @@ export default function DynamicPage({ slug: propSlug }) {
   const { user } = useUser();
   const role = user?.role || "guest";
   const [content, setContent] = useState(null);
+  const [updatedBy, setUpdatedBy] = useState(null);
 
   useEffect(() => {
     if (!slug || typeof slug !== "string") return;
@@ -27,6 +28,18 @@ export default function DynamicPage({ slug: propSlug }) {
         if (data?.content !== undefined) {
           setContent(data.content);
         }
+        if (data.updatedBy) {
+          setUpdatedBy({
+            firstName: data.updatedBy.firstName,
+            lastName: data.updatedBy.lastName,
+            updatedAt: new Date(data.updatedAt).toLocaleDateString("sv-SE", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }),
+          });
+        }
+        
       } catch (err) {
         console.error("Kunde inte hämta content:", err);
       }
@@ -58,12 +71,24 @@ export default function DynamicPage({ slug: propSlug }) {
             <SkeletonLoader lines={7} />
           </div>
         ) : role === "MODERATOR" || role === "ADMIN" ? (
+          
           <div className="dynamic-page__editor">
+            {updatedBy && (
+              <div className="dynamic-page__editor__info">
+                <p>
+                  Senast uppdaterad av: {updatedBy.firstName}{" "}
+                  {updatedBy.lastName} {""} {updatedBy.updatedAt}
+                </p>
+              </div>
+              
+            )}
+
             <RichTextEditor
               contentId={slug} 
               fallback={content ?? ""}
               onContentChange={setContent}
               role={role}
+              userId={user?.id}
             />
           </div>
         ) : (

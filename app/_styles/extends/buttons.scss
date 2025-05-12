@@ -32,6 +32,7 @@
 
 .cta-btn {
   @extend %base-button;
+  cursor: pointer;
 
   &__spinner {
     width: 16px;
@@ -80,6 +81,16 @@
   
     &:hover {
       background-color: #b1aea9; 
+    }
+  }
+  &--publish {
+    background-color: vars.$secondary-blue; 
+    color: vars.$white;
+    border-color: vars.$secondary-blue;
+
+    &:hover {
+      background-color: color.adjust(vars.$secondary-blue, $lightness: -5%);
+      color: vars.$white;
     }
   }
 }

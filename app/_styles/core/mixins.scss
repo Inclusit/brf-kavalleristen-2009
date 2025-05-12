@@ -67,3 +67,30 @@
         @warn "Breakpoint '#{$breakpoint}' is not defined.";
     }
 }
+
+@mixin horizontal-scroll($gap: 1rem) {
+    display: flex;
+    gap: $gap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+  
+    // Visuell scrollbar
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $gray;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  
+    > * {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+  }
+

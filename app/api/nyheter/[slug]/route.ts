@@ -20,6 +20,20 @@ export async function GET(
       where: {
         slug: params.slug,
       },
+      include: {
+        author: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+        updatedBy: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
     });
 
     if (!news) throw createNotFound("News not found");
@@ -66,6 +80,12 @@ export async function PUT(
         title,
         content,
         updatedAt: new Date(),
+        updatedBy: {
+          connect: { id: userId },
+        },
+        author: {
+          connect: { id: userId },
+        },
       },
     });
 

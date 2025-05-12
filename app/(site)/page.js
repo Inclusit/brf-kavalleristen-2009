@@ -1,5 +1,6 @@
 "use client";
 import DynamicPage from "../components/layout/DynamicPage";
+import LatestNews from "../components/layout/LatestNews";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -27,8 +28,7 @@ export default function Home() {
             <div className="home-page__link-content">
               <p className="home-page__link-title">Föreningens stadgar</p>
               <p className="home-page__link-text">
-                Håll dig uppdaterad med de senaste nyheterna och evenemangen i
-                vår förening.
+                Läs om våra stadgar och regler för att bo i föreningen.
               </p>
               <div className="home-page__link-svg-wrapper">
                 <div className="home-page__link-svg"></div>
@@ -77,8 +77,7 @@ export default function Home() {
             <div className="home-page__link-content">
               <p className="home-page__link-title">Styrelsen</p>
               <p className="home-page__link-text">
-                Håll dig uppdaterad med de senaste nyheterna och evenemangen i
-                vår förening.
+                Möt styrelsen och få kontaktuppgifter till våra ledamöter.
               </p>
               <div className="home-page__link-svg-wrapper">
                 <div className="home-page__link-svg"></div>
@@ -87,6 +86,9 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      <LatestNews />
+
       <section>
         <DynamicPage slug="/" />
       </section>

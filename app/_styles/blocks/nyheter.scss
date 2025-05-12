@@ -1,8 +1,12 @@
 @use "../core/variables" as *;
 @use "../core/mixins" as *;
 
-.skapa-nyhet {
+.skapa-nyhet,
+.news-page {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: $gutter;
 
   &__form {
     display: flex;
@@ -10,9 +14,23 @@
     gap: 1rem;
   }
 
+  &__title-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
   input {
     padding: 0.5rem;
     font-size: 1rem;
+    
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
   }
 
   &__submit {
@@ -24,11 +42,7 @@
     border-radius: 0.25rem;
     font-weight: bold;
   }
-
-  @include respond(md) {
-    max-width: 700px;
-    margin: 0 auto;
-  }
+ 
 }
 
 .news-detail {
@@ -53,5 +67,143 @@
     border-radius: 0.25rem;
     cursor: pointer;
     font-weight: bold;
+  }
+}
+
+.news-collection {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: calc(1rem + 0.5vw);
+    padding: 2rem 0;
+  }
+
+  &__news-card {
+    display: flex;
+    flex-direction: column;
+    max-width: 280px;
+    border-radius: 0.25rem;
+    background-color: $secondary-beige;
+    box-shadow: $border-shadow;
+    overflow: hidden;
+    text-align: left;
+    padding: 0;
+
+    a.news-card__link {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 1rem;
+      text-decoration: none;
+      color: inherit;
+
+      &:hover {
+        .news-card__title h2 {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .news-card__date {
+      font-size: 0.875rem;
+      font-weight: $font-light;
+      color: $gray;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+      text-align: left;
+    }
+
+    .news-card__title {
+      h2 {
+        font-size: 1.25rem;
+        font-weight: $font-bold;
+        margin: 0 0 0.5rem;
+        color: $black;
+      }
+    }
+
+    .news-card__author {
+      font-size: 0.875rem;
+      color: $gray;
+    }
+  }
+}
+
+.latest-news {
+  margin-top: 6rem;
+  background-color: $blue;
+
+  &__heading {
+    color: $primary-beige;
+  }
+
+  &__scroll-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    overflow: hidden;
+  }
+}
+
+
+  .latest-news--scroll {
+    @include horizontal-scroll(1.5rem);
+    scroll-behavior: smooth;
+    flex: 1;
+
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+.latest-news__arrow-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.latest-news__arrow {
+  background: $secondary-beige;
+  border: 1px solid $gray;
+  border-radius: 50%;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    color: $blue;
+  }
+
+  &:hover {
+    background-color: $secondary-blue;
+
+    svg {
+      color: $white;
+    }
+  }
+}
+
+.latest-news--fullbleed {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background-color: $blue;
+
+  .latest-news__content {
+    @include wrap(content);
+    padding-block: 2rem;
   }
 }

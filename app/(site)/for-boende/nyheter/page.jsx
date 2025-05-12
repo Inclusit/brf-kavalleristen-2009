@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import CTAbtn from "@/app/components/ui/CTAbtn";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/user";
 
@@ -33,24 +34,40 @@ export default function NewsCollectionPage() {
        router.push("/for-boende/nyheter/skapa-nyhet");
     };
 
-    return(
-        <div className="news-collection-page">
-            <h1 className="news-collection-page__title">Nyheter</h1>
-            {role === "ADMIN" || role === "MODERATOR" ? (<button className="news-collection-page__create-button" onClick={handleCreateNews}>
-                Skapa nyhet
-            </button>) : null}
-            
-            
-
-            <ul className="news-collection-page__list">
-                {news.map((item) => (
-                    <li key={item.id} className="news-collection-page__item">
-                        <Link href={`/for-boende/nyheter/${item.slug}`} className="news-collection-page__link">
-                            {item.title}
-                        </Link>
-                    </li>
-                ))}
-            </ul>   
-        </div>
+    return (
+      <div className="news-collection">
+        <h1 className="news-collection-page__title">Nyheter och händelser</h1>
+        {role === "ADMIN" || role === "MODERATOR" ? (
+          <CTAbtn type="publish" role={role} onClick={handleCreateNews} />
+        ) : null}
+        <ul className="news-collection__list">
+          {news.map((item) => (
+            <li key={item.id} className="news-collection__news-card">
+              <Link
+                href={`/for-boende/nyheter/${item.slug}`}
+                className="news-card__link"
+              >
+                <div className="news-card__date">
+                  <p>
+                    {new Date(item.createdAt).toLocaleDateString("sv-SE", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
+                  </p>
+                </div>
+                <div className="news-card__title">
+                  <h2>{item.title}</h2>
+                </div>
+                <div className="news-card__author">
+                  <p>
+                    {item.author?.firstName} {item.author?.lastName}
+                  </p>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     );
 }

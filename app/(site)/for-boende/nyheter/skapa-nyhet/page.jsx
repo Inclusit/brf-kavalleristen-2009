@@ -65,21 +65,19 @@ export default function CreateNewsPage() {
   return (
     <div className="skapa-nyhet site-content">
       <h1>Skapa nyhet</h1>
-
-      <label htmlFor="title">Titel</label>
-      <input
-        id="title"
-        type="text"
-        value={title}
-        onChange={(e) => {
-          setTitle(e.target.value);
-          setSlug(generateSlug(e.target.value));
-        }}
-      />
-
-      <label>Innehåll</label>
+      <div className="skapa-nyhet__title-wrapper">
+        <input
+          id="title"
+          type="text"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            setSlug(generateSlug(e.target.value));
+          }}
+        />
+      </div>
       <RichTextEditor
-        contentId={slug || "temp-id"} 
+        contentId={slug || "nyhet"}
         fallback=""
         role={role}
         onContentChange={setContent}

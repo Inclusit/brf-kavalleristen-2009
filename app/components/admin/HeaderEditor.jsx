@@ -77,7 +77,7 @@ export default function HeaderEditor({ onClose }) {
 
     alert("Header sparad!");
     router.refresh(); 
-    if (onClose) onClose(); // stäng modalen efter sparning
+    if (onClose) onClose();
   };
 
   if (role !== "ADMIN") return null;

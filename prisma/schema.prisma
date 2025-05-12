@@ -22,7 +22,7 @@ enum Role {
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
- firstName String?
+  firstName String?
   lastName  String?
   email     String?  @unique
   password  String?
@@ -32,31 +32,39 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  posts ContentBlock[]
-  newsPosts NewsPost[]
+  posts                 ContentBlock[] @relation("AuthorContentBlocks")
+  updatedContentBlocks  ContentBlock[] @relation("UpdatedContentBlocks")
+  newsPosts           NewsPost[]
+  updatedNewsPosts     NewsPost[]     @relation("UpdatedNewsPosts")
 }
 
 
 model ContentBlock {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  slug    String   @unique
-  title   String?
-  content String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  authorId String? @db.ObjectId
-  author   User?   @relation(fields: [authorId], references: [id], onDelete: Cascade) 
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String   @unique
+  title       String?
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  authorId    String?  @db.ObjectId
+  author      User?    @relation("AuthorContentBlocks", fields: [authorId], references: [id], onDelete: Cascade)
+
+  updatedById String?  @db.ObjectId
+  updatedBy   User?    @relation("UpdatedContentBlocks", fields: [updatedById], references: [id])
 }
 
 model NewsPost {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  slug    String   @unique
-  title   String?
-  content String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  authorId String? @db.ObjectId
-  author   User?   @relation(fields: [authorId], references: [id]) 
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String   @unique
+  title       String?
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authorId    String?  @db.ObjectId
+  author      User?    @relation(fields: [authorId], references: [id]) 
+  updatedById String?  @db.ObjectId
+  updatedBy   User?    @relation("UpdatedNewsPosts", fields: [updatedById], references: [id])
 }
 
 model Navigation {
@@ -64,4 +72,15 @@ model Navigation {
   category String
   label   String
   href    String @unique
+}
+
+model BoardMembers {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  position String
+  phone   String
+  email    String
+  image    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
