@@ -11,6 +11,34 @@ export default function HeaderEditor({ onClose }) {
   const { user } = useUser(); 
   const role = user?.role; 
   const fileRef = useRef(null);
+  const focusRef = useRef();
+  const modalRef = useRef();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    focusRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const fetchHeader = async () => {
@@ -87,12 +115,26 @@ export default function HeaderEditor({ onClose }) {
       <div className="nav-modal__backdrop" onClick={onClose}>
         <div
           className="nav-modal__content"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="header-editor-title"
+          ref={modalRef}
           onClick={(e) => e.stopPropagation()}
         >
-          <button className="nav-modal__close" onClick={onClose}>
+          <button 
+          className="nav-modal__close" 
+          aria-label="Stäng modal"
+          onClick={onClose}>
             X
           </button>
-          <h2 className="nav-modal__title">Redigera Header</h2>
+          <h2
+            id="header-editor-title"
+            className="nav-modal__title"
+            tabIndex="-1"
+            ref={focusRef}
+          >
+            Redigera Header
+          </h2>
 
           <div className="header-editor">
             {headerImage && (
@@ -104,7 +146,10 @@ export default function HeaderEditor({ onClose }) {
               >
                 <div className="header-editor__preview-content">
                   <div className="header__logo">
-                    <img src="/images/logo-placeholder.jpg" alt="Logo" />
+                    <img
+                      src="/images/logo-placeholder.jpg"
+                      alt="Föreningens logotyp"
+                    />
                   </div>
                   <div className="header__text">
                     <h1 className="header__text-title">
@@ -118,26 +163,42 @@ export default function HeaderEditor({ onClose }) {
               </div>
             )}
 
+            <div className="header-editor__edit-group">
+            <label htmlFor="header-image" className="header-editor__label">
+              Ladda upp headerbild
+            </label>
             <input
+              id="header-image"
               type="file"
               accept="image/*"
               ref={fileRef}
               onChange={handleUpload}
             />
+            
 
+            
+            <label htmlFor="header-title" className="header-editor__label">
+              Header Titel
+            </label>
             <input
+              id="header-title"
               type="text"
               value={headerTitle}
               onChange={(e) => setHeaderTitle(e.target.value)}
               placeholder="Header Title"
             />
 
+            <label htmlFor="header-subtitle" className="header-editor__label">
+              Header Subtitle
+            </label>
             <input
+              id="header-subtitle"
               type="text"
               value={headerSub}
               onChange={(e) => setHeaderSub(e.target.value)}
               placeholder="Header Subtitle"
             />
+            </div>
 
             <button onClick={saveHeaderUpdate}>Spara header</button>
             <button onClick={onClose} className="nav-modal__cancel">

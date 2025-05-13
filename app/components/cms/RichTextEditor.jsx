@@ -114,7 +114,12 @@ export default function RichTextEditor({
 
           {isEditing && enableSave && (
             <div>
-              <CTAbtn type="save" onClick={saveContent} role={role} />
+              <CTAbtn 
+              type="save" 
+              onClick={saveContent} 
+              role={role} 
+              ariaLabel={"Spara innehåll"}
+              />
             </div>
           )}
         </>

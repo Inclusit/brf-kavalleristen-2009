@@ -1,7 +1,13 @@
 "use client";
 import { useState } from "react";
 
-export default function CTAbtn({ type, onClick, role }) {
+export default function CTAbtn({
+  type,
+  onClick,
+  role,
+  ariaLabel,
+  confirmMessage,
+}) {
   const [loading, setLoading] = useState(false);
 
   if (type === "delete" && role !== "ADMIN") {
@@ -13,8 +19,8 @@ export default function CTAbtn({ type, onClick, role }) {
     edit: "Uppdatera",
     save: "Spara",
     cancel: "Avbryt",
-    post: "Publicera nyhet",
-    publish: "Skapa ny nyhet",
+    post: "Publicera",
+    publish: "Skapa nyhet",
   };
 
   const classMap = {
@@ -27,11 +33,9 @@ export default function CTAbtn({ type, onClick, role }) {
   };
 
   const handleClick = async () => {
-    if (type === "delete") {
-      const confirmDelete = window.confirm(
-        "Är du säker på att du vill radera denna nyhet?"
-      );
-      if (!confirmDelete) return;
+    if (type === "delete" && confirmMessage) {
+      const confirmed = window.confirm(confirmMessage);
+      if (!confirmed) return;
     }
 
     try {
@@ -43,8 +47,16 @@ export default function CTAbtn({ type, onClick, role }) {
   };
 
   return (
-    <button className={classMap[type]} onClick={handleClick} disabled={loading}>
-      {loading && <span className="cta-btn__spinner" />}
+    <button
+      className={classMap[type]}
+      onClick={handleClick}
+      disabled={loading}
+      aria-label={ariaLabel || labelMap[type]}
+      aria-busy={loading}
+    >
+      {loading && (
+        <span className="cta-btn__spinner" aria-hidden="true" role="status" />
+      )}
       {labelMap[type]}
     </button>
   );

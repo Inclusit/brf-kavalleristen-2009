@@ -1,12 +1,12 @@
 "use client";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "@/app/context/user";
 import UploadHandler from "../cms/UploadHandler";
 import SkeletonLoader from "../ui/SkeletonLoader";
 
 export default function ProfileCard({ memberId }) {
   const { user } = useUser();
-  const role = user?.role; 
+  const role = user?.role;
 
   const [data, setData] = useState(null);
   const [edit, setEdit] = useState(false);
@@ -19,7 +19,7 @@ export default function ProfileCard({ memberId }) {
     image: "",
   });
 
- useEffect(() => {
+  useEffect(() => {
     const fetchMember = async () => {
       try {
         const response = await fetch(`/api/board-members/${memberId}`);
@@ -32,17 +32,14 @@ export default function ProfileCard({ memberId }) {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchMember();
-    
-    
   }, [memberId]);
-
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
+  };
 
   const handleSave = async () => {
     const response = await fetch(`/api/board-members/${memberId}`, {
@@ -61,7 +58,7 @@ export default function ProfileCard({ memberId }) {
     const updatedMember = await response.json();
     setData(updatedMember);
     setEdit(false);
-  }
+  };
 
   const handleDelete = async () => {
     const response = await fetch(`/api/board-members/${memberId}`, {
@@ -74,16 +71,12 @@ export default function ProfileCard({ memberId }) {
     }
 
     setData(null);
-  }
+  };
 
-  if (loading) {
-    return (
-      <div className="profile-card">
-        <SkeletonLoader />
-      </div>
-    );
-  }
-
+  if (loading)
+    <div aria-busy={loading} aria-live="polite">
+      <SkeletonLoader count={7} />;
+    </div>;
 
   return (
     <div className="profile-card">
@@ -139,6 +132,5 @@ export default function ProfileCard({ memberId }) {
         </div>
       )}
     </div>
-  )
-
+  );
 }

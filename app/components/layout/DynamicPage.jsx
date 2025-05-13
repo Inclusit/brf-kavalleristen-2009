@@ -52,7 +52,10 @@ export default function DynamicPage({ slug: propSlug }) {
   }
 
   return (
-    <div className="dynamic-page site-content">
+    <div
+      className="dynamic-page site-content"
+      aria-labelledby="head-title"
+    >
       <Head>
         <title>{slug}</title>
         <meta
@@ -67,12 +70,15 @@ export default function DynamicPage({ slug: propSlug }) {
 
       <div className="dynamic-page__content">
         {content === null ? (
-          <div className="dynamic-page__loader">
+          <div
+            className="dynamic-page__loader"
+            aria-busy="true"
+            aria-live="polite"
+          >
             <SkeletonLoader lines={7} />
           </div>
         ) : role === "MODERATOR" || role === "ADMIN" ? (
-          
-          <div className="dynamic-page__editor">
+          <article className="dynamic-page__editor">
             {updatedBy && (
               <div className="dynamic-page__editor__info">
                 <p>
@@ -80,19 +86,18 @@ export default function DynamicPage({ slug: propSlug }) {
                   {updatedBy.lastName} {""} {updatedBy.updatedAt}
                 </p>
               </div>
-              
             )}
 
             <RichTextEditor
-              contentId={slug} 
+              contentId={slug}
               fallback={content ?? ""}
               onContentChange={setContent}
               role={role}
               userId={user?.id}
             />
-          </div>
+          </article>
         ) : (
-          <div
+          <article
             className="dynamic-page__html-content prose"
             dangerouslySetInnerHTML={{ __html: content ?? "" }}
           />

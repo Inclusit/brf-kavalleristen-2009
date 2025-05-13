@@ -63,9 +63,15 @@ export default function CreateNewsPage() {
   }
 
   return (
-    <div className="skapa-nyhet site-content">
-      <h1>Skapa nyhet</h1>
+    <section
+      className="skapa-nyhet site-content"
+      aria-labelledby="skapa-nyhet-title"
+    >
+      <h1 id="skapa-nyhet-title">Skapa nyhet</h1>
       <div className="skapa-nyhet__title-wrapper">
+        <label className="skapa-nyhet__title-label" htmlFor="title">
+          Nyhetstitel
+        </label>
         <input
           id="title"
           type="text"
@@ -76,6 +82,7 @@ export default function CreateNewsPage() {
           }}
         />
       </div>
+      <label htmlFor="news-content-input">Nyhetsinnehåll</label>
       <RichTextEditor
         contentId={slug || "nyhet"}
         fallback=""
@@ -87,10 +94,18 @@ export default function CreateNewsPage() {
         enableSave={false}
       />
 
-      <div className="skapa-nyhet__actions">
-        <CTAbtn type="post" role={role} onClick={handleCreate} />
-        <CTAbtn type="cancel" role={role} onClick={() => router.back()} />
+      <div className="skapa-nyhet__actions" aria-label="Åtgärder">
+        <CTAbtn 
+        type="post" 
+        role={role} 
+        ariaLabel={"Skapa nyhet"}
+        onClick={handleCreate} />
+        <CTAbtn 
+        type="cancel" 
+        role={role}
+        ariaLabel={"Avbryt skapande av nyhet"} 
+        onClick={() => router.back()} />
       </div>
-    </div>
+    </section>
   );
 }

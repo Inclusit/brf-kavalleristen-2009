@@ -37,14 +37,18 @@ export default function NewsCollectionPage() {
       <div className="news-collection site-content">
         <h1 className="news-collection__title">Nyheter och händelser</h1>
         {role === "ADMIN" || role === "MODERATOR" ? (
-          <CTAbtn type="publish" role={role} onClick={handleCreateNews} />
+          <CTAbtn 
+          type="publish" 
+          role={role} onClick={handleCreateNews} 
+          ariaLabel={"Skapa nyhet"}
+          />
         ) : null}
-        <ul className="news-collection__list">
+        <ul className="news-collection__list" role="list">
           {news.map((item) => (
-            <li key={item.id} className="news-collection__news-card">
+            <li key={item.id} className="news-collection__news-card" role="listitem">
               <article
                 className="news-card__article"
-                aria-label={`Nyhet: ${item.title}`}
+                aria-labelledby={`news-title-${item.id}`}
               >
                 <Link
                   href={`/for-boende/nyheter/${item.slug}`}
@@ -65,10 +69,14 @@ export default function NewsCollectionPage() {
                   </header>
 
                   <div className="news-card__content">
-                    <h2 className="news-card__title">{item.title}</h2>
+                    <h2
+                      id={`news-title-${item.id}`}
+                      className="news-card__title"
+                    >
+                      {item.title}
+                    </h2>
                     <p
                       className="news-card__excerpt"
-                      aria-label="Förhandsvisning av innehållet"
                     >
                       {item.content?.slice(0, 140) ||
                         "Ingen förhandsvisning tillgänglig"}
@@ -101,7 +109,6 @@ export default function NewsCollectionPage() {
             ))}
           </ul>
         </nav>
-        
       </div>
     );
 }

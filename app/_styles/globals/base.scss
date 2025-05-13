@@ -19,9 +19,24 @@ body {
     margin: 0;
 }
 
-/*main {
-  background-color: $secondary-beige;
-}*/
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+
+  &:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    left: auto;
+    background: #fff;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+  }
+}
 
 
 a {

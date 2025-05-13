@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@/app/context/user";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
 import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
+import CTAbtn from "@/app/components/ui/CTAbtn";
 
 const addressOptions = [
   "Kavallerigatan 1",
@@ -65,45 +66,57 @@ export default function AdminUserPanel() {
       body: JSON.stringify({ id }),
     });
     setUsers(users.filter((user) => user.id !== id));
-    if(!confirm("är du säker på att du vill ta bort denna användare?")) return;
+    if (!confirm("är du säker på att du vill ta bort denna användare?")) return;
     setConfirmDelete(null);
   };
 
   if (role !== "ADMIN") return <p>Du har inte behörighet att se denna sida.</p>;
-  if (loading) return <SkeletonLoader count={5} />;
+  if (loading)
+    return (
+      <div aria-busy={loading} aria-live="polite">
+        <SkeletonLoader count={7} />;
+      </div>
+    );
   if (!users.length) return <p>Inga användare hittades.</p>;
 
   return (
-    <div className="admin-user-panel">
-      <h2>Användare</h2>
+    <fieldset className="admin-user-panel">
+      <legend>Användare</legend>
       {users.map((user) => (
         <div key={user.id} className="admin-user-panel__card">
-          <label>Förnamn</label>
+          <label htmlFor={`firstName-${user.id}`}>Förnamn</label>
           <input
+            id={`firstName-${user.id}`}
             value={user.firstName || ""}
             onChange={(e) => handleChange(user.id, "firstName", e.target.value)}
           />
 
-          <label>Efternamn</label>
+          <label htmlFor={`lastName-${user.id}`}>Efternamn</label>
           <input
+            id={`lastName-${user.id}`}
             value={user.lastName || ""}
             onChange={(e) => handleChange(user.id, "lastName", e.target.value)}
           />
 
-          <label>E-post</label>
+          <label htmlFor={`email-${user.id}`}>E-post</label>
           <input
+            type="email"
+            id={`email-${user.id}`}
             value={user.email || ""}
             onChange={(e) => handleChange(user.id, "email", e.target.value)}
           />
 
-          <label>Telefon</label>
+          <label htmlFor={`phone-${user.id}`}>Telefon</label>
           <input
+            type="tel"
+            id={`phone-${user.id}`}
             value={user.phone || ""}
             onChange={(e) => handleChange(user.id, "phone", e.target.value)}
           />
 
-          <label>Adress</label>
+          <label htmlFor={`address-${user.id}`}>Adress</label>
           <select
+            id={`address-${user.id}`}
             value={user.address || ""}
             onChange={(e) => handleChange(user.id, "address", e.target.value)}
           >
@@ -114,8 +127,9 @@ export default function AdminUserPanel() {
             ))}
           </select>
 
-          <label>Roll</label>
+          <label htmlFor={`role-${user.id}`}>Roll</label>
           <select
+            id={`role-${user.id}`}
             value={user.role}
             onChange={(e) => handleChange(user.id, "role", e.target.value)}
           >
@@ -124,20 +138,42 @@ export default function AdminUserPanel() {
           </select>
 
           <div className="admin-user-panel__actions">
-            <button onClick={() => handleSave(user)}>Spara</button>
+            <CTAbtn
+              type="save"
+              onClick={() => handleSave(user)}
+              role={role}            
+              ariaLabel={`Spara ändringar för ${user.firstName} ${user.lastName}`}
+            />
+
             {confirmDelete === user.id ? (
               <>
-                <button onClick={() => handleDelete(user.id)}>
-                  Bekräfta radering
-                </button>
-                <button onClick={() => setConfirmDelete(null)}>Avbryt</button>
+                <CTAbtn
+                  type="delete"
+                  onClick={() => handleDelete(user.id)}
+                  role={role}
+                  confirmMessage={`Är du säker på att du vill ta bort ${user.firstName} ${user.lastName}?`}
+                  ariaLabel={`Bekräfta radering av ${user.firstName} ${user.lastName}`}
+                />
+                <CTAbtn
+                  type="cancel"
+                  onClick={() => setConfirmDelete(null)}
+                  role={role}
+                  confirmMessage={`Avbryt radering av ${user.firstName} ${user.lastName}?`}
+                  ariaLabel={`Avbryt radering av ${user.firstName} ${user.lastName}`}
+                />
               </>
             ) : (
-              <button onClick={() => setConfirmDelete(user.id)}>Radera</button>
+              <CTAbtn
+                type="delete"
+                onClick={() => setConfirmDelete(user.id)}
+                role={role}
+                confirmMessage={`Vill du radera ${user.firstName} ${user.lastName}?`}
+                ariaLabel={`Förbered radering av ${user.firstName} ${user.lastName}`}
+              />
             )}
           </div>
         </div>
       ))}
-    </div>
+    </fieldset>
   );
 }

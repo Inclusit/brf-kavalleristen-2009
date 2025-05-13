@@ -97,26 +97,35 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="news-page site-content">
+    <section className="news-page site-content" aria-labelledby="news-title">
       <Head>
         <title>{title || slug}</title>
         <meta name="description" content={`Nyhet: ${slug}`} />
       </Head>
 
       {loading ? (
-        <SkeletonLoader lines={7} />
+        <div aria-busy={loading} aria-live="polite">
+          <SkeletonLoader count={7} />;
+        </div>
       ) : (
         <>
           {role === "ADMIN" || role === "MODERATOR" ? (
-            <input
-              className="news-page__title-input"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
+            <div>
+              <div className="news-page__title-wrapper">
+              <label htmlFor="news-title-input">Uppdatera nyhetstitel</label>
+              <input
+                id="news-title-input"
+                className="news-page__title-input"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              </div>
+            </div>
           ) : (
-            <h1>{title}</h1>
+            <h1 id="news-title">{title}</h1>
           )}
 
+          <label htmlFor="news-content">Uppdatera nyhetsinnehåll</label>
           <RichTextEditor
             contentId={slug}
             fallback={content}
@@ -142,11 +151,17 @@ export default function NewsPage() {
 
           {(role === "ADMIN" || role === "MODERATOR") && (
             <div className="news-page__actions">
-              <CTAbtn type="delete" role={role} onClick={handleDelete} />
+              <CTAbtn 
+              type="delete" 
+              role={role} 
+              onClick={handleDelete} 
+              ariaLabel={"Ta bort nyhet"}
+              confirmMessage={"Är du säker på att du vill ta bort nyheten?"}
+              />
             </div>
           )}
         </>
       )}
-    </div>
+    </section>
   );
 }

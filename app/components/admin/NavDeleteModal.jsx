@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicNav } from "@/app/context/dynamicNav";
 
@@ -7,6 +7,34 @@ export default function NavDeleteModal({ onClose }) {
   const navItems = useDynamicNav();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const focusRef = useRef();
+  const modalRef = useRef();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    focusRef.current?.focus();
+  }, []);
 
   const handleDelete = async (href) => {
     if (!confirm("Är du säker på att du vill ta bort denna sida?")) return;
@@ -41,14 +69,26 @@ export default function NavDeleteModal({ onClose }) {
       <div className="nav-modal__backdrop" onClick={onClose}>
         <div
           className="nav-modal__content"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-modal-title"
+          ref={modalRef}
           onClick={(e) => e.stopPropagation()}
         >
-          <h2 className="nav-modal__title">Ta bort dynamisk sida</h2>
-          <ul className="nav-modal__list">
+          <h2
+            id="delete-modal-title"
+            className="nav-modal__title"
+            tabIndex="-1"
+            ref={focusRef}
+          >
+            Ta bort dynamisk sida
+          </h2>
+          <ul className="nav-modal__list" role="list">
             {navItems.map((item) => (
-              <li key={item.href} className="nav-modal__list-item">
+              <li key={item.href} className="nav-modal__list-item" role="listitem">
                 <span>{item.label}</span>
                 <button
+                  aria-label={`Ta bort sidan ${item.label}`}
                   onClick={() => handleDelete(item.href)}
                   disabled={loading === item.href}
                   className="nav-modal__delete-button"
@@ -58,8 +98,13 @@ export default function NavDeleteModal({ onClose }) {
               </li>
             ))}
           </ul>
-          <button type="button" onClick={onClose} className="nav-modal__cancel">
-            Stäng
+          <button
+            aria-label="Stäng modal"
+            type="button"
+            onClick={onClose}
+            className="nav-modal__cancel"
+          >
+            X
           </button>
         </div>
       </div>

@@ -19,12 +19,12 @@ export default function Footer() {
   };
 
   return (
-    <footer className="footer">
+    <div className="footer" id="footer">
       <div className="section-wrap footer__container">
         <div className="footer__logo">
           <Image
             src={"/images/logo-placeholder.jpg"}
-            alt="Logo"
+            alt="BRF Kavalleristen 2009"
             width={100}
             height={100}
           />
@@ -56,7 +56,7 @@ export default function Footer() {
             <p className="footer__info-text">Fakturaadress</p>
             <a
               className="footer__info-text"
-              href="brf.kavalleristen.2009@invoice.realnode.se"
+              href="mailto:brf.kavalleristen.2009@invoice.realnode.se"
             >
               brf.kavalleristen.2009@invoice.realnode.se
             </a>
@@ -70,10 +70,13 @@ export default function Footer() {
             </button>
           ) : (
             <div>
-              <p >Boende i föreningen?</p>
+              <p>Boende i föreningen?</p>
               <button
                 className="footer__login-button"
                 onClick={() => setShowModal(true)}
+                aria-haspopup="dialog"
+                aria-controls="login-modal"
+                aria-expanded={showModal}
               >
                 Logga in
               </button>
@@ -83,6 +86,6 @@ export default function Footer() {
       </div>
 
       {showModal && <LoginModal onClose={() => setShowModal(false)} />}
-    </footer>
+    </div>
   );
 }

@@ -9,6 +9,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="sv">
       <body>
+        <a href="#main-content" className="skip-link">
+          Hoppa till huvudinnehåll
+        </a>
+
         <UserProvider>
           <div className="site-container">
             <header>
@@ -22,11 +26,14 @@ export default function RootLayout({ children }) {
               <Navbar />
             </nav>
 
-            <main className="site-wrap">
+            <main id="main-content" className="site-wrap" role="main">
               <div>{children}</div>
             </main>
 
-            <footer>
+            <footer aria-labelledby="footer-heading">
+              <h2 id="footer-heading" className="sr-only">
+                Sidfotsinformation
+              </h2>
               <Footer />
             </footer>
           </div>

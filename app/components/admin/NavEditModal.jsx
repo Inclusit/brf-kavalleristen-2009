@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { navData } from "../data/navData";
 import { useDynamicNav } from "@/app/context/dynamicNav";
@@ -12,6 +12,34 @@ export default function NavEditModal({ onClose }) {
   const [loading, setLoading] = useState(false);
   const dynamicNav = useDynamicNav();
   const router = useRouter();
+  const focusRef = useRef();
+  const modalRef = useRef();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    focusRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const generatedSlug = title
@@ -90,16 +118,23 @@ export default function NavEditModal({ onClose }) {
     <div className="nav-modal">
       <div className="nav-modal__backdrop" onClick={onClose}>
         <div
-          className="nav-modal__content"
+          className="nav-modal__content" 
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="nav-modal-title"
+          ref={modalRef}
           onClick={(e) => e.stopPropagation()}
         >
-          <button className="nav-modal__close" onClick={onClose}>
+          <button aria-label="Stäng modal" className="nav-modal__close" onClick={onClose}>
             X
           </button>
-          <h2 className="nav-modal__title">Lägg till ny sida</h2>
+          <h2 id="nav-modal-title" className="nav-modal__title" 
+          ref={focusRef} tabIndex="-1">
+          Lägg till ny sida</h2>
           <form onSubmit={handleSubmit} className="nav-modal__form">
-            <label>Kategori</label>
+            <label htmlFor="nav-category" >Kategori</label>
             <select
+              id="nav-category"
               value={selectedCat}
               onChange={(e) => setSelectedCat(e.target.value)}
               required
@@ -122,15 +157,16 @@ export default function NavEditModal({ onClose }) {
                 required
               />
             )}
-            <label>Sidtitel</label>
+            <label htmlFor="nav-title">Sidtitel</label>
             <input
+              id="nav-title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Titel"
               required
             />
-            <p className="modal__slug">
+            <p className="modal__slug" aria-live="polite">
               Slug: <code>{slug}</code>
             </p>
 

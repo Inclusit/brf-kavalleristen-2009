@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useref } from "react";
 import { useUser } from "@/app/context/user";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
+import FeedbackMsg from "./FeedbackMsg";
 
 export default function LoginModal({ onClose }) {
   const [mode, setMode] = useState("login");
@@ -14,6 +15,34 @@ export default function LoginModal({ onClose }) {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
   const { setToken, setUser } = useUser();
+  const modalRef = useRef();
+  const focusRef = useRef();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    focusRef.current?.focus();
+  }, []);
 
   const doorOptions = [
     "Kavallerigatan 1",
@@ -73,9 +102,19 @@ export default function LoginModal({ onClose }) {
 
   return (
     <div className="modal-backdrop">
-      <div className="modal">
-        <button className="modal__close" onClick={onClose}>
-          Stäng
+      <div
+        className="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        ref={modalRef}
+      >
+        <button
+          aria-label="Stäng inloggningsmodal"
+          className="modal__close"
+          onClick={onClose}
+        >
+          X
         </button>
 
         <div className="modal__button-containers">
@@ -93,7 +132,12 @@ export default function LoginModal({ onClose }) {
           </button>
         </div>
 
-        <h2 className="modal__title">
+        <h2
+          id="modal-title"
+          className="modal__title"
+          tabIndex="-1"
+          ref={focusRef}
+        >
           {mode === "login"
             ? "Logga in"
             : mode === "register"
@@ -101,8 +145,8 @@ export default function LoginModal({ onClose }) {
             : "Återställ lösenord"}
         </h2>
 
-        {error && <p className="modal__error">{error}</p>}
-        {message && <p className="modal__success">{message}</p>}
+        <FeedbackMsg type="error" message={error} />
+        <FeedbackMsg type="success" message={message} />
 
         <form onSubmit={handleSubmit} className="modal__form">
           <div className="modal__form-content">
@@ -156,26 +200,29 @@ export default function LoginModal({ onClose }) {
           {mode === "register" && (
             <>
               <div className="modal__form-content">
-                <label>Förnamn</label>
+                <label htmlFor="firstName">Förnamn</label>
                 <input
                   type="text"
+                  id="firstName"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   required
                 />
               </div>
               <div className="modal__form-content">
-                <label>Efternamn</label>
+                <label htmlFor="lastName">Efternamn</label>
                 <input
                   type="text"
+                  id="lastName"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   required
                 />
               </div>
               <div className="modal__form-content">
-                <label>Port (adress)</label>
+                <label htmlFor="address">Port (adress)</label>
                 <select
+                  id="address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   required
@@ -189,9 +236,10 @@ export default function LoginModal({ onClose }) {
                 </select>
               </div>
               <div className="modal__form-content">
-                <label>Telefonnummer</label>
+                <label htmlFor="phone">Telefonnummer</label>
                 <input
                   type="tel"
+                  id="phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   required

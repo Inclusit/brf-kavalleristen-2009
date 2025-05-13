@@ -1,0 +1,29 @@
+@use "../core/variables" as vars;
+@use "../core/mixins" as mixins;
+
+.feedback-message {
+  @include mixins.textstyle(text);
+  border-radius: vars.$border-radius;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid transparent;
+  transition: vars.$transition;
+
+  &--error {
+    background-color: lighten(vars.$error-color, 45%);
+    color: vars.$error-color;
+    border-color: lighten(vars.$error-color, 25%);
+  }
+
+  &--success {
+    background-color: lighten(vars.$secondary-blue, 48%);
+    color: darken(vars.$secondary-blue, 10%);
+    border-color: lighten(vars.$secondary-blue, 30%);
+  }
+
+  &--info {
+    background-color: vars.$secondary-beige;
+    color: vars.$soft-brown;
+    border-color: vars.$soft-brown;
+  }
+}

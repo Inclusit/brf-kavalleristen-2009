@@ -7,14 +7,16 @@ export default function Error({ error, reset }) {
   }, [error]);
 
   return (
-    <div className="error-page">
-      <div className="error-page__message">
-        <h1 className="error-page__title">Ojdå!</h1>
+    <section className="error-page" aria-labelledby="page-title">
+      <article className="error-page__message" role="alert">
+        <h1 className="error-page__title" id="page-title">
+          Ojdå!
+        </h1>
         <p>Det verkar som att något gick fel. Försök igen senare.</p>
-      </div>
+      </article>
       <button className="error-page__reset-btn" onClick={() => reset()}>
         Försök igen
       </button>
-    </div>
+    </section>
   );
 }
