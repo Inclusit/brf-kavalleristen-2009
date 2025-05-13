@@ -5,17 +5,19 @@ import Image from "next/image";
 import LoginModal from "../ui/LoginModal";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
 import { useUser } from "@/app/context/user";
+import { useRouter } from "next/navigation";
 
 export default function Footer() {
   const [showModal, setShowModal] = useState(false);
   const { user } = useUser();
+  const router = useRouter();
 
   const handleLogout = () => {
     LocalStorageKit.remove("user");
     LocalStorageKit.remove("@library/token");
     LocalStorageKit.remove("role");
     window.dispatchEvent(new Event("storage"));
-    window.location.reload(); 
+    router.refresh();
   };
 
   return (

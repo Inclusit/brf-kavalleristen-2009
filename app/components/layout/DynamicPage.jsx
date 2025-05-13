@@ -4,6 +4,7 @@ import Head from "next/head";
 import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
 import FeedbackMessage from "../ui/FeedbackMessage";
 import { useUser } from "@/app/context/user";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useDynamicNav } from "@/app/context/dynamicNav";
@@ -18,6 +19,7 @@ export default function DynamicPage({ slug: propSlug }) {
   const { user } = useUser();
   const role = user?.role || "guest";
   const dynamicNav = useDynamicNav();
+  const router = useRouter();
 
   const [content, setContent] = useState(null);
   const [pageTitle, setPageTitle] = useState("");
@@ -34,7 +36,7 @@ export default function DynamicPage({ slug: propSlug }) {
         const navEntry = dynamicNav.find((item) => item.href === `/${slug}`);
 
         if (navEntry?.authOnly && !user?.id) {
-          window.location.href = "/forbidden";
+          router.push("/forbidden");
           return;
         }
 
@@ -85,7 +87,7 @@ export default function DynamicPage({ slug: propSlug }) {
       </Head>
 
       <div className="dynamic-page__content" aria-labelledby="head-title">
-        
+
         {feedbackMessage && (
           <FeedbackMessage
             type={feedbackMessage.type}

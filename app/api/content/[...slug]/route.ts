@@ -25,17 +25,13 @@ type IncludedContent = Prisma.ContentBlockGetPayload<{
   include: typeof includeRelations;
 }>;
 
-function getSlugFromContext(context: { params: { slug: string | string[] } }) {
-  const slugParam = context.params.slug;
-  return Array.isArray(slugParam) ? slugParam.join("/") : slugParam;
-}
-
+// ✅ GET
 export async function GET(
   request: NextRequest,
-  context: { params: { slug: string | string[] } }
+  { params }: { params: { slug: string[] } }
 ) {
   try {
-    const slug = getSlugFromContext(context);
+    const slug = params.slug?.join("/") ?? "";
     if (!slug) throw createBadRequest("Slug is required");
 
     let content: IncludedContent | null = await prisma.contentBlock.findUnique({
@@ -65,11 +61,12 @@ export async function GET(
   }
 }
 
+// ✅ PUT
 export async function PUT(
   request: NextRequest,
-  context: { params: { slug: string | string[] } }
+  { params }: { params: { slug: string[] } }
 ) {
-  const slug = getSlugFromContext(context);
+  const slug = params.slug?.join("/") ?? "";
 
   console.log("🔧 PUT /api/content/[slug]", {
     slug,
@@ -149,12 +146,13 @@ export async function PUT(
   }
 }
 
+// ✅ DELETE
 export async function DELETE(
   request: NextRequest,
-  context: { params: { slug: string | string[] } }
+  { params }: { params: { slug: string[] } }
 ) {
   try {
-    const slug = getSlugFromContext(context);
+    const slug = params.slug?.join("/") ?? "";
     const role = request.headers.get("role");
 
     if (!slug) throw createBadRequest("Slug is required");

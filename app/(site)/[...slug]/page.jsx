@@ -1,6 +1,7 @@
 "use client";
 import DynamicPage from "@/app/components/layout/DynamicPage";
 import { useParams } from "next/navigation";
+import { useState } from "react";
 import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 
 export default function DynamicPageWrapper() {
