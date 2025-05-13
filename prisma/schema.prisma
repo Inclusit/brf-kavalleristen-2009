@@ -71,7 +71,9 @@ model Navigation {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   category String
   label   String
+  pageTitle String
   href    String @unique
+  authOnly Boolean @default(false)
 }
 
 enum boardPosition{

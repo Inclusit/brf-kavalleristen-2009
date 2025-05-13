@@ -2,11 +2,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useUser } from "@/app/context/user";
 import { useRouter } from "next/navigation";
+import FeedbackMessage from "../ui/FeedbackMessage";
 
 export default function HeaderEditor({ onClose }) {
   const [headerImage, setHeaderImage] = useState("");
   const [headerTitle, setHeaderTitle] = useState("");
   const [headerSub, setHeaderSub] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
+
   const router = useRouter();
   const { user } = useUser(); 
   const role = user?.role; 
@@ -71,9 +74,11 @@ export default function HeaderEditor({ onClose }) {
       });
 
       if (!response.ok) {
-        alert(
-          "Misslyckad uppladdning – kontrollera att bilden är minst 1440px bred."
-        );
+        setFeedback({
+          type: "error",
+          message:
+            "Misslyckad uppladdning – kontrollera att bilden är minst 1440px bred.",
+        });
         return;
       }
 
@@ -99,13 +104,21 @@ export default function HeaderEditor({ onClose }) {
     });
 
     if (!response.ok) {
-      alert("Något gick fel vid sparning av header");
+      setFeedback({
+        type: "error",
+        message: "Något gick fel vid sparande av header.",
+      });
       return;
     }
+    setFeedback({
+      type: "success",
+      message: "Header sparad!",
+    });
+    router.refresh();
 
-    alert("Header sparad!");
-    router.refresh(); 
-    if (onClose) onClose();
+    setTimeout(() => {
+      onClose();
+    }, 1500);
   };
 
   if (role !== "ADMIN") return null;
@@ -127,6 +140,14 @@ export default function HeaderEditor({ onClose }) {
           onClick={onClose}>
             X
           </button>
+          {feedbackMessage && (
+            <FeedbackMessage
+              type={feedbackMessage.type}
+              message={feedbackMessage.message}
+              className="nav-modal__feedback-message"
+            />
+          )}
+
           <h2
             id="header-editor-title"
             className="nav-modal__title"
@@ -137,6 +158,7 @@ export default function HeaderEditor({ onClose }) {
           </h2>
 
           <div className="header-editor">
+
             {headerImage && (
               <div
                 className="header-editor__preview"

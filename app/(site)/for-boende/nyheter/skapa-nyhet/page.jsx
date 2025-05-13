@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useUser } from "@/app/context/user";
 import { useRouter } from "next/navigation";
 import CTAbtn from "@/app/components/ui/CTAbtn";
+import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 import dynamic from "next/dynamic";
 
 const RichTextEditor = dynamic(
@@ -19,6 +20,7 @@ export default function CreateNewsPage() {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [content, setContent] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
 
   const generateSlug = (title) =>
     title
@@ -35,7 +37,10 @@ export default function CreateNewsPage() {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     if (!title.trim() || !content.trim()) {
-      alert("Titel och innehåll måste vara ifyllda.");
+      setFeedbackMessage({
+        type: "error",
+        message: "Titel och innehåll är obligatoriska fält.",
+      });
       return;
     }
 
@@ -51,10 +56,13 @@ export default function CreateNewsPage() {
       });
 
       if (!response.ok) throw new Error("Misslyckades att skapa nyhet");
-      router.push(`/for-boende/nyheter/${finalSlug}`);
+       router.push(`/for-boende/nyheter/${finalSlug}`);
     } catch (err) {
       console.error("Fel vid skapande:", err);
-      alert("Något gick fel.");
+      setFeedbackMessage({
+        type: "error",
+        message: "Något gick fel vid skapande av nyhet.",
+      });
     }
   };
 
@@ -68,14 +76,30 @@ export default function CreateNewsPage() {
       aria-labelledby="skapa-nyhet-title"
     >
       <h1 id="skapa-nyhet-title">Skapa nyhet</h1>
+
+      {feedbackMessage && (
+        <FeedbackMessage
+          type={feedbackMessage.type}
+          message={feedbackMessage.message}
+          className="skapa-nyhet__feedback-message"
+        />
+      )}
+
       <div className="skapa-nyhet__title-wrapper">
-        <label className="skapa-nyhet__title-label" htmlFor="title">
+        <label
+          className="skapa-nyhet__title-label"
+          htmlFor="news-title-input"
+          id="news-title-label"
+        >
           Nyhetstitel
         </label>
         <input
-          id="title"
+          id="news-title-input"
           type="text"
+          className="skapa-nyhet__title-input"
+          aria-labelledby="news-title-label"
           value={title}
+          placeholder="Ange nyhetstitel"
           onChange={(e) => {
             setTitle(e.target.value);
             setSlug(generateSlug(e.target.value));
@@ -92,19 +116,22 @@ export default function CreateNewsPage() {
         title={title}
         userId={userId}
         enableSave={false}
+        onFeedback={setFeedbackMessage}
       />
 
       <div className="skapa-nyhet__actions" aria-label="Åtgärder">
-        <CTAbtn 
-        type="post" 
-        role={role} 
-        ariaLabel={"Skapa nyhet"}
-        onClick={handleCreate} />
-        <CTAbtn 
-        type="cancel" 
-        role={role}
-        ariaLabel={"Avbryt skapande av nyhet"} 
-        onClick={() => router.back()} />
+        <CTAbtn
+          type="post"
+          role={role}
+          ariaLabel={"Skapa nyhet"}
+          onClick={handleCreate}
+        />
+        <CTAbtn
+          type="cancel"
+          role={role}
+          ariaLabel={"Avbryt skapande av nyhet"}
+          onClick={() => router.back()}
+        />
       </div>
     </section>
   );

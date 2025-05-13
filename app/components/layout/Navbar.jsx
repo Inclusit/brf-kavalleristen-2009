@@ -4,12 +4,15 @@ import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { navData } from "../data/navData";
 import { useDynamicNav } from "@/app/context/dynamicNav";
+import { useUser } from "@/app/context/user";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(null);
   const [mobileMenu, setMobileMenu] = useState(false);
   const dropdownRefs = useRef([]);
   const navRef = useRef(null);
+  const { user } = useUser();
+  const isLoggedIn = !!user;
 
   const dynamicNav = useDynamicNav();
 
@@ -30,7 +33,11 @@ export default function Navbar() {
     setIsOpen(isOpen === index ? null : index);
   };
 
-  const groupedDynamic = dynamicNav.reduce((acc, item) => {
+  const filteredDynamicNav = dynamicNav.filter(
+    (item) => !item.authOnly || isLoggedIn
+  );
+
+  const groupedDynamic = filteredDynamicNav.reduce((acc, item) => {
     if (!acc[item.category]) acc[item.category] = [];
     acc[item.category].push(item);
     return acc;

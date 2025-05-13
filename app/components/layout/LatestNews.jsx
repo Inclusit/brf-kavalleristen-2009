@@ -12,7 +12,7 @@ export default function LatestNews() {
     useEffect(() => {
       const fetchNews = async () => {
         try {
-          const response = await fetch("/api/nyheter?limit=5", {
+          const response = await fetch("/api/nyheter?limit=10", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",

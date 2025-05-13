@@ -24,7 +24,7 @@
     flex-direction: column; 
     max-width: 280px;
     border-radius: 0.25rem;
-    background-color: $secondary-beige;
+    background-color: $warm-white;
     box-shadow: $border-shadow;
     overflow: hidden;
     text-align: center;
@@ -91,12 +91,14 @@
 
   @include respond(md) {
     &__link-card {
-      
+      transition: transform 0.2s ease;
       &:hover {
+        transform: translateY(-4px);
         .home-page__link-svg-wrapper {
-          background-color: $primary-beige;
+          background-color: $warm-white;
           border-color: $blue;
           transition: background-color 0.3s;
+          
         }
 
         .home-page__link-svg {

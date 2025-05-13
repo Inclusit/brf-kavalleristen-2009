@@ -32,6 +32,7 @@ export default function Header() {
         backgroundPosition: "center",
       }}
     >
+      <div className="header__overlay" aria-hidden="true"></div>
       <div className="header__container">
         <div className="header__logo">
           <img
@@ -41,7 +42,7 @@ export default function Header() {
             height={100}
           />
         </div>
-        
+
         <div className="header__text">
           <p className="header__title">{header.title}</p>
           <p className="header__subtitle">{header.subtitle}</p>

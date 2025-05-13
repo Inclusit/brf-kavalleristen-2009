@@ -22,6 +22,9 @@ export default function FeedbackMessage({
       role={type === "error" ? "alert" : undefined}
       aria-live={ariaLive}
     >
+      {type === "error" && "⚠️ "}
+      {type === "success" && "✅ "}
+      {type === "info" && "ℹ️ "}
       {message}
     </p>
   );

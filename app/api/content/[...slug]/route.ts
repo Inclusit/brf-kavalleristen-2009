@@ -25,12 +25,17 @@ type IncludedContent = Prisma.ContentBlockGetPayload<{
   include: typeof includeRelations;
 }>;
 
+function getSlugFromContext(context: { params: { slug: string | string[] } }) {
+  const slugParam = context.params.slug;
+  return Array.isArray(slugParam) ? slugParam.join("/") : slugParam;
+}
+
 export async function GET(
   request: NextRequest,
-  context: { params: { slug: string } }
+  context: { params: { slug: string | string[] } }
 ) {
   try {
-    const { slug } = await context.params;
+    const slug = getSlugFromContext(context);
     if (!slug) throw createBadRequest("Slug is required");
 
     let content: IncludedContent | null = await prisma.contentBlock.findUnique({
@@ -60,16 +65,19 @@ export async function GET(
   }
 }
 
-export async function PUT(request: NextRequest, context: any) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: { slug: string | string[] } }
+) {
+  const slug = getSlugFromContext(context);
 
   console.log("🔧 PUT /api/content/[slug]", {
-    slug: context.params.slug,
+    slug,
     role: request.headers.get("role"),
     userId: request.headers.get("userId"),
   });
-  
+
   try {
-    const { slug } = await context.params;
     const userId = request.headers.get("userId");
     const role = request.headers.get("role");
 
@@ -84,9 +92,7 @@ export async function PUT(request: NextRequest, context: any) {
 
     let contentBlock: IncludedContent;
 
-    const existing = await prisma.contentBlock.findUnique({
-      where: { slug },
-    });
+    const existing = await prisma.contentBlock.findUnique({ where: { slug } });
 
     if (!existing) {
       contentBlock = await prisma.contentBlock.create({
@@ -143,9 +149,12 @@ export async function PUT(request: NextRequest, context: any) {
   }
 }
 
-export async function DELETE(request: NextRequest, context: any) {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: { slug: string | string[] } }
+) {
   try {
-    const { slug } = await context.params;
+    const slug = getSlugFromContext(context);
     const role = request.headers.get("role");
 
     if (!slug) throw createBadRequest("Slug is required");
@@ -157,9 +166,7 @@ export async function DELETE(request: NextRequest, context: any) {
 
     if (!contentBlock) throw createNotFound("Content not found");
 
-    await prisma.contentBlock.delete({
-      where: { slug },
-    });
+    await prisma.contentBlock.delete({ where: { slug } });
 
     return NextResponse.json({ message: "Content deleted successfully" });
   } catch (error: any) {

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useUser } from "@/app/context/user";
 import UploadHandler from "../cms/UploadHandler";
 import SkeletonLoader from "../ui/SkeletonLoader";
+import FeedbackMessage from "../ui/FeedbackMessage";
 
 export default function ProfileCard({ memberId }) {
   const { user } = useUser();
@@ -11,6 +12,7 @@ export default function ProfileCard({ memberId }) {
   const [data, setData] = useState(null);
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
   const [form, setForm] = useState({
     name: "",
     role: "",
@@ -51,7 +53,10 @@ export default function ProfileCard({ memberId }) {
     });
 
     if (!response.ok) {
-      alert("Failed to update member");
+      setFeedbackMessage({
+        type: "error",
+        message: "Misslyckades att spara ändringar.",
+      });
       return;
     }
 
@@ -66,7 +71,10 @@ export default function ProfileCard({ memberId }) {
     });
 
     if (!response.ok) {
-      alert("Failed to delete member");
+      setFeedbackMessage({
+        type: "error",
+        message: "Misslyckades att ta bort medlem.",
+      });
       return;
     }
 
@@ -80,6 +88,13 @@ export default function ProfileCard({ memberId }) {
 
   return (
     <div className="profile-card">
+      {feedbackMessage && (
+        <FeedbackMessage
+          type={feedbackMessage.type}
+          message={feedbackMessage.message}
+          className="profile-card__feedback-message"
+        />
+      )}
       {edit ? (
         <div className="profile-card__edit">
           <input

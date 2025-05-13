@@ -3,13 +3,17 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { navData } from "../data/navData";
 import { useDynamicNav } from "@/app/context/dynamicNav";
+import FeedbackMessage from "../ui/FeedbackMessage";
 
 export default function NavEditModal({ onClose }) {
+  const [pageTitle, setPageTitle] = useState("");
   const [selectedCat, setSelectedCat] = useState("");
   const [newCategory, setNewCategory] = useState("");
-  const [title, setTitle] = useState("");
+  const [authOnly, setAuthOnly] = useState(false);
+  const [label, setLabel] = useState("");
   const [slug, setSlug] = useState("");
   const [loading, setLoading] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
   const dynamicNav = useDynamicNav();
   const router = useRouter();
   const focusRef = useRef();
@@ -42,7 +46,7 @@ export default function NavEditModal({ onClose }) {
   }, []);
 
   useEffect(() => {
-    const generatedSlug = title
+    const generatedSlug = label
       .toLowerCase()
       .replace(/[åä]/g, "a")
       .replace(/ö/g, "o")
@@ -62,17 +66,20 @@ export default function NavEditModal({ onClose }) {
       : "";
 
     setSlug(`${prefix}/${generatedSlug}`);
-  }, [title, selectedCat, newCategory]);
+  }, [label, selectedCat, newCategory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const category = selectedCat === "__new" ? newCategory : selectedCat;
 
-    if (!category || !title || !slug) return;
+    if (!category || !label || !slug) return;
     setLoading(true);
 
-    if (!category || !title.trim() || !slug.trim()) {
-      alert("Alla fält måste vara ifyllda.");
+    if (!category || !label.trim() || !slug.trim()) {
+      setFeedbackMessage({
+        type: "error",
+        message: "Kategori, sidnamn och slug är obligatoriska fält.",
+      });
       return;
     }
 
@@ -84,24 +91,36 @@ export default function NavEditModal({ onClose }) {
         },
         body: JSON.stringify({
           category,
-          label: title,
+          label: label,
+          pageTitle: pageTitle,
+          authOnly: authOnly,
           href: slug.startsWith("/") ? slug : `/${slug}`,
         }),
       });
 
-      console.log("Sending nav entry:", {
+      console.log("Skickar till API:", {
         category,
-        label: title,
+        label,
+        pageTitle,
+        authOnly,
         href: slug.startsWith("/") ? slug : `/${slug}`,
       });
 
       if (!res.ok) throw new Error("Fel vid sparande av navigering");
-      alert("Sidan har sparats!");
-      router.refresh();
-      onClose();
+      setFeedbackMessage({
+        type: "success",
+        message: "Navigering skapad!",
+      });
+      setTimeout(() => {
+        router.refresh();
+        onClose();
+      }, 2000);
     } catch (error) {
       console.error(error);
-      alert("Något gick fel vid sparning av navigering");
+      setFeedbackMessage({
+        type: "error",
+        message: "Något gick fel. Försök igen senare.",
+      });
     } finally {
       setLoading(false);
     }
@@ -118,21 +137,37 @@ export default function NavEditModal({ onClose }) {
     <div className="nav-modal">
       <div className="nav-modal__backdrop" onClick={onClose}>
         <div
-          className="nav-modal__content" 
+          className="nav-modal__content"
           role="dialog"
           aria-modal="true"
           aria-labelledby="nav-modal-title"
           ref={modalRef}
           onClick={(e) => e.stopPropagation()}
         >
-          <button aria-label="Stäng modal" className="nav-modal__close" onClick={onClose}>
+          <button
+            aria-label="Stäng modal"
+            className="nav-modal__close"
+            onClick={onClose}
+          >
             X
           </button>
-          <h2 id="nav-modal-title" className="nav-modal__title" 
-          ref={focusRef} tabIndex="-1">
-          Lägg till ny sida</h2>
+          {feedbackMessage && (
+            <FeedbackMessage
+              type={feedbackMessage.type}
+              message={feedbackMessage.message}
+              className="nav-modal__feedback-message"
+            />
+          )}
+          <h2
+            id="nav-modal-title"
+            className="nav-modal__title"
+            ref={focusRef}
+            tabIndex="-1"
+          >
+            Lägg till ny sida
+          </h2>
           <form onSubmit={handleSubmit} className="nav-modal__form">
-            <label htmlFor="nav-category" >Kategori</label>
+            <label htmlFor="nav-category">Kategori</label>
             <select
               id="nav-category"
               value={selectedCat}
@@ -157,15 +192,42 @@ export default function NavEditModal({ onClose }) {
                 required
               />
             )}
-            <label htmlFor="nav-title">Sidtitel</label>
+
+            <label htmlFor="nav-title">
+              Sidtitel (kommer synas högst upp på sidan)
+            </label>
             <input
               id="nav-title"
               type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Titel"
+              value={pageTitle}
+              onChange={(e) => setPageTitle(e.target.value)}
+              placeholder="Tex. Goda grannars guide"
               required
             />
+
+            <label htmlFor="nav-label">
+              Sidans namn (vad som kommer synas i navigationen)
+            </label>
+            <input
+              id="nav-label"
+              type="text"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              placeholder="Sidnamn"
+              required
+            />
+
+            <label htmlFor="auth-only">
+              <input
+                id="auth-only"
+                type="checkbox"
+                checked={authOnly}
+                onChange={() => setAuthOnly(!authOnly)}
+                
+              />
+              Endast synlig för medlemmar
+            </label>
+
             <p className="modal__slug" aria-live="polite">
               Slug: <code>{slug}</code>
             </p>

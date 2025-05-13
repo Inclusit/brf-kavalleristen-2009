@@ -1,20 +1,20 @@
-@use './variables' as *;
+@use "./variables" as *;
 @use "sass:map";
 
 @mixin respond-min($breakpoint) {
-    @media (min-width: $breakpoint) {
-        @content;
-    }
+  @media (min-width: $breakpoint) {
+    @content;
+  }
 }
 
 @mixin flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @mixin transition($prop: all, $speed: $transition) {
-    transition: $prop $speed;
+  transition: $prop $speed;
 }
 
 @mixin wrap($size: site) {
@@ -37,60 +37,55 @@
 }
 
 @mixin textstyle($type) {
-    @if $type == title {
-        font-size: $font-size-title;
-        font-weight: $font-weight-title;
-        line-height: $line-height-title;
-    }
-
-    @else if $type == button {
-        font-size: $font-size-button;
-        font-weight: $font-weight-button;
-        line-height: $line-height-button;
-    }
-
-    @else if $type == text {
-        font-size: $font-size-text;
-        font-weight: $font-weight-text;
-        line-height: $line-height-text;
-    }
+  @if $type == title {
+    font-size: $font-size-title;
+    font-weight: $font-weight-title;
+    line-height: $line-height-title;
+  } @else if $type == button {
+    font-size: $font-size-button;
+    font-weight: $font-weight-button;
+    line-height: $line-height-button;
+  } @else if $type == text {
+    font-size: $font-size-text;
+    font-weight: $font-weight-text;
+    line-height: $line-height-text;
+  }
 }
 
 @mixin respond($breakpoint) {
-    $value: map.get($breakpoints, $breakpoint);
-    
-    @if $value {
-        @media (min-width: $value) {
-            @content;
-        }
-    } @else {
-        @warn "Breakpoint '#{$breakpoint}' is not defined.";
+  $value: map.get($breakpoints, $breakpoint);
+
+  @if $value {
+    @media (min-width: $value) {
+      @content;
     }
+  } @else {
+    @warn "Breakpoint '#{$breakpoint}' is not defined.";
+  }
 }
 
 @mixin horizontal-scroll($gap: 1rem) {
-    display: flex;
-    gap: $gap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 1rem;
-  
-    // Visuell scrollbar
-    scrollbar-width: thin;
-    &::-webkit-scrollbar {
-      height: 6px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: $gray;
-      border-radius: 4px;
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-  
-    > * {
-      flex: 0 0 auto;
-      scroll-snap-align: start;
-    }
+  display: flex;
+  gap: $gap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 1rem;
+
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    height: 6px;
   }
+  &::-webkit-scrollbar-thumb {
+    background-color: $gray;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
 

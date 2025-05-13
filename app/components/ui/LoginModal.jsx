@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect, useref } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useUser } from "@/app/context/user";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
-import FeedbackMsg from "./FeedbackMsg";
+import FeedbackMessage from "./FeedbackMessage";
 
 export default function LoginModal({ onClose }) {
   const [mode, setMode] = useState("login");
@@ -12,8 +12,7 @@ export default function LoginModal({ onClose }) {
   const [lastName, setLastName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
   const { setToken, setUser } = useUser();
   const modalRef = useRef();
   const focusRef = useRef();
@@ -55,8 +54,7 @@ export default function LoginModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setMessage("");
+    setFeedbackMessage(null);
 
     const urlEndpoint =
       mode === "login"
@@ -84,7 +82,10 @@ export default function LoginModal({ onClose }) {
       if (!res.ok) throw new Error(data.message);
 
       if (mode === "reset") {
-        setMessage("Lösenordet har uppdaterats. Du kan nu logga in.");
+        setFeedbackMessage({
+          type: "success",
+          message: "Lösenordet har återställts. Du kan nu logga in.",
+        });
         return;
       }
 
@@ -96,7 +97,10 @@ export default function LoginModal({ onClose }) {
       window.dispatchEvent(new Event("storage"));
       onClose();
     } catch (err) {
-      setError(err.message);
+      setFeedbackMessage({
+        type: "error",
+        message: err.message || "Något gick fel. Försök igen senare.",
+      });
     }
   };
 
@@ -145,8 +149,13 @@ export default function LoginModal({ onClose }) {
             : "Återställ lösenord"}
         </h2>
 
-        <FeedbackMsg type="error" message={error} />
-        <FeedbackMsg type="success" message={message} />
+        {feedbackMessage && (
+          <FeedbackMessage
+            type={feedbackMessage.type}
+            message={feedbackMessage.message}
+            onClose={() => setFeedbackMessage(null)}
+          />
+        )}
 
         <form onSubmit={handleSubmit} className="modal__form">
           <div className="modal__form-content">

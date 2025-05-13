@@ -45,15 +45,11 @@ function UserProvider({ children }: PropsWithChildren) {
   );
 
   useEffect(() => {
-    if (!token) {
-      let _token = LocalStorageKit.get("@library/token");
-      if (_token) {
-        setToken(_token);
-        fetchUser();
-        return;
-      } else {
-        setLoading(false);
-      }
+    const storedToken = LocalStorageKit.get("@library/token");
+    if (storedToken) {
+      setToken(storedToken); 
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -83,7 +79,7 @@ function UserProvider({ children }: PropsWithChildren) {
         throw new Error("Failed to fetch user");
       }
 
-      const data: User = await response.json();
+      const data: SafeUser = await response.json();
       console.log("Fetched user data:", data); // Logga användardata
 
       setUser(data);

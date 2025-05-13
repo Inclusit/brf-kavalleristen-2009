@@ -5,6 +5,8 @@ export type NavigationData = {
     category: string;
     label: string;
     href: string;
+    pageTitle: string;
+    authOnly?: boolean;
 }
 
 export function useDynamicNav() {

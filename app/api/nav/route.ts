@@ -13,11 +13,32 @@ const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
   try {
-    const { category, label, href } = (await request.json()) as NavigationData;
+    const body = await request.json();
+    console.log("Inkommande data till API:", body);
+    
 
-    if (!category || !label || !href) {
-      throw createBadRequest("Alla fält krävs");
-    }
+    const {
+      category,
+      label,
+      href,
+      pageTitle,
+      authOnly = false,
+    } = body as NavigationData & { authOnly?: boolean };
+
+    console.log("Rå category-sträng:", JSON.stringify(category));
+
+    console.log("Validering:", {
+      category,
+      label,
+      href,
+      pageTitle,
+      authOnly,
+    });
+
+    if (!category?.trim()) throw createBadRequest("Kategori saknas");
+    if (!label?.trim()) throw createBadRequest("Navigationsnamn saknas");
+    if (!href?.trim()) throw createBadRequest("Länk saknas");
+    if (!pageTitle?.trim()) throw createBadRequest("Sidtitel saknas");
 
     const existingNavigation = await prisma.navigation.findFirst({
       where: { href },
@@ -29,7 +50,9 @@ export async function POST(request: NextRequest) {
       data: {
         category,
         label,
+        pageTitle,
         href,
+        authOnly,
       },
     });
 
@@ -39,6 +62,7 @@ export async function POST(request: NextRequest) {
     return handleApiErrors(error);
   }
 }
+
 
 export async function GET(request: NextRequest) {
   try {

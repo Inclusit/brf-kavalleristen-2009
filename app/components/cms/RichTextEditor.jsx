@@ -14,9 +14,46 @@ export default function RichTextEditor({
   type = "content",
   title,
   userId,
+  onFeedback
 }) {
   const [content, setContent] = useState(fallback || "");
   const isEditing = role === "ADMIN" || role === "MODERATOR";
+
+  const editorConfig = {
+    toolbar: [
+      "heading",
+      "|",
+      "bold",
+      "italic",
+      "link",
+      "bulletedList",
+      "numberedList",
+      "|",
+      "undo",
+      "redo",
+    ],
+    heading: {
+      options: [
+        {
+          model: "paragraph",
+          title: "Brödtext",
+          class: "ck-heading_paragraph",
+        },
+        {
+          model: "heading2",
+          view: "h2",
+          title: "Rubrik (H2)",
+          class: "ck-heading_heading2",
+        },
+        {
+          model: "heading3",
+          view: "h3",
+          title: "Underrubrik (H3)",
+          class: "ck-heading_heading3",
+        },
+      ],
+    },
+  };
 
   useEffect(() => {
     console.log(
@@ -46,7 +83,10 @@ export default function RichTextEditor({
     const isNews = type === "news";
 
     if (isNews && (!title || !userId)) {
-      alert("Titel och användar-ID krävs för att spara nyhet.");
+      onFeedback?.({
+        type: "error",
+        message: "Titel och användar-ID krävs för att spara nyhet.",
+      });
       return;
     }
 
@@ -54,14 +94,15 @@ export default function RichTextEditor({
       ? `/api/nyheter/${contentId}`
       : `/api/content/${contentId}`;
 
-    const body = isNews
-      ? JSON.stringify({ title, content })
-      : JSON.stringify({ content });
+    const body = JSON.stringify({
+      ...(title && { title }),
+      content,
+    });
 
     const headers = {
       "Content-Type": "application/json",
       role,
-      userId, // 🟢 alltid med nu
+      userId,
     };
 
     try {
@@ -70,11 +111,20 @@ export default function RichTextEditor({
         headers,
         body,
       });
+
       if (!response.ok) throw new Error("Misslyckades att spara innehåll");
-      alert("Innehåll sparat!");
+
+      onFeedback?.({
+        type: "success",
+        message: "Innehåll sparat!",
+      });
+
     } catch (err) {
       console.error(err);
-      alert("Något gick fel vid sparning");
+      onFeedback?.({
+        type: "error",
+        message: "Något gick fel vid sparning",
+      });;
     }
   };
 
@@ -98,8 +148,8 @@ export default function RichTextEditor({
         <>
           <CKEditor
             editor={ClassicEditor}
+            config={editorConfig}
             data={content || `Information om ${contentId}`}
-
             onChange={(__, editor) => {
               const newData = editor.getData();
               setContent(newData);
@@ -114,11 +164,11 @@ export default function RichTextEditor({
 
           {isEditing && enableSave && (
             <div>
-              <CTAbtn 
-              type="save" 
-              onClick={saveContent} 
-              role={role} 
-              ariaLabel={"Spara innehåll"}
+              <CTAbtn
+                type="save"
+                onClick={saveContent}
+                role={role}
+                ariaLabel={"Spara innehåll"}
               />
             </div>
           )}

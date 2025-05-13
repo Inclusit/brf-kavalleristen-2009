@@ -2,10 +2,12 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicNav } from "@/app/context/dynamicNav";
+import FeedbackMessage from "../ui/FeedbackMessage";
 
 export default function NavDeleteModal({ onClose }) {
   const navItems = useDynamicNav();
   const [loading, setLoading] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
   const router = useRouter();
   const focusRef = useRef();
   const modalRef = useRef();
@@ -53,12 +55,17 @@ export default function NavDeleteModal({ onClose }) {
         throw new Error("Något gick fel när sidan skulle tas bort.");
       }
       const data = await res.json();
-      alert("Sidan har tagits bort.");
-      router.refresh();
-      onClose();
+      setFeedback({ type: "success", message: "Sidan har tagits bort." });
+      setTimeout(() => {
+        router.refresh();
+        onClose();
+      }, 1500);
     } catch (error) {
       console.error(error);
-      alert("Något gick fel. Försök igen senare.");
+      setFeedback({
+        type: "error",
+        message: "Något gick fel. Försök igen senare.",
+      });
     } finally {
       setLoading(false);
     }
@@ -75,6 +82,13 @@ export default function NavDeleteModal({ onClose }) {
           ref={modalRef}
           onClick={(e) => e.stopPropagation()}
         >
+          {feedbackMessage && (
+            <FeedbackMessage
+              type={feedbackMessage.type}
+              message={feedbackMessage.message}
+              className="nav-modal__feedback-message"
+            />
+          )}
           <h2
             id="delete-modal-title"
             className="nav-modal__title"

@@ -5,22 +5,35 @@
   position: relative;
   width: 100%;
   height: clamp(13rem, 25vh, 35rem);
-  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.35)),
-    url("#{$img-path}/kavallerigatan.jpg") center 25% / cover no-repeat;
+  background: url("#{$img-path}/kavallerigatan.jpg") center 25% / cover no-repeat;
   background-attachment: fixed;
   overflow: hidden;
+
+  &__overlay {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45); 
+    z-index: 1;
+  }
 
   &__container {
     position: relative;
     width: 100%;
     height: 100%;
+    z-index: 2; 
     @include wrap(site);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: $gutter;
   }
 
   &__logo {
     position: absolute;
     top: $gutter;
     left: $gutter;
+    z-index: 3;
 
     img {
       width: 100px;
@@ -30,31 +43,28 @@
   }
 
   &__text {
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    z-index: 2;
+    color: $white;
     padding: $gutter;
-    text-align: center;;
-
-    @include respond(lg) {
+    text-align: center;
+    max-width: 100%;
+  
+    @include respond(md) {
+      max-width: 60%;
+      margin-left: auto;
       text-align: right;
-      right: $gutter;
     }
-
   }
 
   &__title {
-    font-size: $font-size-title;
+    @include textstyle(title);
+    color: $white;
     margin: 0;
-    font-weight: $font-weight-title;
-    line-height: $line-height-title;
-    color: $black;
   }
 
   &__subtitle {
-    font-size: 1rem;
-    margin-top: 0.25rem;
-    font-weight: $font-weight-text;
+    @include textstyle(text);
     color: $white;
+    margin-top: 0.25rem;
   }
 }
