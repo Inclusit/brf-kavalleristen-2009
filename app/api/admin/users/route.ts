@@ -24,7 +24,6 @@ async function authenticateAdmin(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  console.log("GET /api/admin/users körs");
   
   try {
     await authenticateAdmin(request);
