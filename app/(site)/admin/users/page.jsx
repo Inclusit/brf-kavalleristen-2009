@@ -1,12 +1,11 @@
-"use client";
+export const dynamic = "force-dynamic";
+("use client");
 import { useEffect, useState } from "react";
 import { useUser } from "@/app/context/user";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
 import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
 import CTAbtn from "@/app/components/ui/CTAbtn";
 import { addressData } from "@/app/components/data/addressData";
-
-
 
 export default function AdminUserPanel() {
   const { user } = useUser();
@@ -135,7 +134,7 @@ export default function AdminUserPanel() {
             <CTAbtn
               type="save"
               onClick={() => handleSave(user)}
-              role={role}            
+              role={role}
               ariaLabel={`Spara ändringar för ${user.firstName} ${user.lastName}`}
             />
 
