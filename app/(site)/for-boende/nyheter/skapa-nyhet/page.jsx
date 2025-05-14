@@ -1,10 +1,12 @@
 "use client";
+
 import { useState } from "react";
 import { useUser } from "@/app/context/user";
 import { useRouter } from "next/navigation";
 import CTAbtn from "@/app/components/ui/CTAbtn";
 import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 const RichTextEditor = dynamic(
   () => import("@/app/components/cms/RichTextEditor"),
@@ -34,8 +36,6 @@ export default function CreateNewsPage() {
   const handleCreate = async () => {
     const finalSlug = generateSlug(title);
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
     if (!title.trim() || !content.trim()) {
       setFeedbackMessage({
         type: "error",
@@ -56,7 +56,7 @@ export default function CreateNewsPage() {
       });
 
       if (!response.ok) throw new Error("Misslyckades att skapa nyhet");
-       router.push(`/for-boende/nyheter/${finalSlug}`);
+      router.push(`/for-boende/nyheter/${finalSlug}`);
     } catch (err) {
       console.error("Fel vid skapande:", err);
       setFeedbackMessage({
@@ -67,7 +67,11 @@ export default function CreateNewsPage() {
   };
 
   if (role !== "ADMIN" && role !== "MODERATOR") {
-    return <p>Du har inte behörighet att skapa nyheter.</p>;
+    return (
+      <section className="skapa-nyhet site-content">
+        <p>Du har inte behörighet att skapa nyheter.</p>
+      </section>
+    );
   }
 
   return (
@@ -75,63 +79,76 @@ export default function CreateNewsPage() {
       className="skapa-nyhet site-content"
       aria-labelledby="skapa-nyhet-title"
     >
-      <h1 id="skapa-nyhet-title">Skapa nyhet</h1>
+      <Head>
+        <title>Skapa nyhet</title>
+        <meta name="description" content="Skapa en ny nyhet för boende." />
+      </Head>
 
-      {feedbackMessage && (
-        <FeedbackMessage
-          type={feedbackMessage.type}
-          message={feedbackMessage.message}
-          className="skapa-nyhet__feedback-message"
-        />
-      )}
+      <div className="skapa-nyhet__content">
+        <h1 id="skapa-nyhet-title">Skapa nyhet</h1>
 
-      <div className="skapa-nyhet__title-wrapper">
-        <label
-          className="skapa-nyhet__title-label"
-          htmlFor="news-title-input"
-          id="news-title-label"
+        {feedbackMessage && (
+          <FeedbackMessage
+            type={feedbackMessage.type}
+            message={feedbackMessage.message}
+            className="skapa-nyhet__feedback-message"
+          />
+        )}
+
+        <article
+          className="skapa-nyhet__editor"
+          aria-labelledby="skapa-nyhet-title"
         >
-          Nyhetstitel
-        </label>
-        <input
-          id="news-title-input"
-          type="text"
-          className="skapa-nyhet__title-input"
-          aria-labelledby="news-title-label"
-          value={title}
-          placeholder="Ange nyhetstitel"
-          onChange={(e) => {
-            setTitle(e.target.value);
-            setSlug(generateSlug(e.target.value));
-          }}
-        />
-      </div>
-      <label htmlFor="news-content-input">Nyhetsinnehåll</label>
-      <RichTextEditor
-        contentId={slug || "nyhet"}
-        fallback=""
-        role={role}
-        onContentChange={setContent}
-        type="news"
-        title={title}
-        userId={userId}
-        enableSave={false}
-        onFeedback={setFeedbackMessage}
-      />
+          <div className="skapa-nyhet__title-wrapper">
+            <label
+              className="skapa-nyhet__title-label"
+              htmlFor="news-title-input"
+              id="news-title-label"
+            >
+              Nyhetstitel
+            </label>
+            <input
+              id="news-title-input"
+              type="text"
+              className="skapa-nyhet__title-input"
+              aria-labelledby="news-title-label"
+              value={title}
+              placeholder="Ange nyhetstitel"
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setSlug(generateSlug(e.target.value));
+              }}
+            />
+          </div>
 
-      <div className="skapa-nyhet__actions" aria-label="Åtgärder">
-        <CTAbtn
-          type="post"
-          role={role}
-          ariaLabel={"Skapa nyhet"}
-          onClick={handleCreate}
-        />
-        <CTAbtn
-          type="cancel"
-          role={role}
-          ariaLabel={"Avbryt skapande av nyhet"}
-          onClick={() => router.back()}
-        />
+          <label htmlFor="news-content-input">Nyhetsinnehåll</label>
+          <RichTextEditor
+            contentId={slug || "nyhet"}
+            fallback=""
+            role={role}
+            onContentChange={setContent}
+            type="news"
+            title={title}
+            userId={userId}
+            enableSave={false}
+            onFeedback={setFeedbackMessage}
+          />
+
+          <div className="skapa-nyhet__actions" aria-label="Åtgärder">
+            <CTAbtn
+              type="post"
+              role={role}
+              ariaLabel="Skapa nyhet"
+              onClick={handleCreate}
+            />
+            <CTAbtn
+              type="cancel"
+              role={role}
+              ariaLabel="Avbryt skapande av nyhet"
+              onClick={() => router.back()}
+            />
+          </div>
+        </article>
       </div>
     </section>
   );
