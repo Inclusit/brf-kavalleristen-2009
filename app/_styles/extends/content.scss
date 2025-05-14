@@ -50,6 +50,13 @@
 
 .dynamic-page {
 
+    &__title {
+      font-size: 2rem;
+    font-weight: $font-bold;
+    color: $blue;
+    margin-bottom: 1rem;
+    }
+
     &__heading-input {
        @extend .editable-heading;
       }

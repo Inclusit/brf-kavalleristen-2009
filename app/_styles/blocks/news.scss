@@ -16,6 +16,13 @@
     gap: 1rem;
   }
 
+  &__title {
+    font-size: 2rem;
+    font-weight: $font-bold;
+    color: $blue;
+    margin-bottom: 1rem;
+  }
+
   &__title-wrapper {
     display: flex;
     flex-direction: column;

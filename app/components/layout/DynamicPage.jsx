@@ -87,7 +87,9 @@ export default function DynamicPage({ slug: propSlug }) {
       </Head>
 
       <div className="dynamic-page__content" aria-labelledby="head-title">
-        <h1 id="head-title">{pageTitle}</h1>
+        <h1 id="head-title" className="dynamic-page__title">
+          {pageTitle}
+        </h1>
 
         {feedbackMessage && (
           <FeedbackMessage
