@@ -110,7 +110,7 @@ export default function UploadHandler({ onUpload }) {
           aria-label="Välj fil att ladda upp"
           onClick={triggerFileSelect}
         >
-          Välj fil
+          📎 Välj fil
         </button>
       </div>
 

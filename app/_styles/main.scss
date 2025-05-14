@@ -12,6 +12,7 @@
 @use './extends/buttons';
 @use './extends/feedbackmsg.scss';
 @use './extends/content';
+@use './extends/breadcrumbs.scss';
 
 // blocks 
 @use './blocks/navbar.scss';
@@ -21,6 +22,8 @@
 @use './blocks/adminNav.scss';
 @use './blocks/navEditModal.scss';
 @use './blocks/headerEditor.scss';
-@use './blocks/nyheter.scss';
+@use './blocks/news.scss';
 @use './blocks/linkCard.scss';
 @use './blocks/adminPanel.scss';
+@use './blocks/cardGrid.scss';
+@use './blocks/memberCard.scss';

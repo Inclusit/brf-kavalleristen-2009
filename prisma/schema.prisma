@@ -81,6 +81,7 @@ enum boardPosition{
   SEKRETERARE
   KASSÖR
   SUPPLEANT
+  LEDAMOT
 }
 
 model BoardMembers {

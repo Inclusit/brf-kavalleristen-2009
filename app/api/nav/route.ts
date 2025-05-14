@@ -77,7 +77,8 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { href } = (await request.json()) as NavigationData;
+    const body = await request.json();
+    const { href } = body;
     if (!href) throw createBadRequest("Länk krävs");
 
     const navToDelete = await prisma.navigation.findUnique({
@@ -85,17 +86,6 @@ export async function DELETE(request: NextRequest) {
     });
 
     if (!navToDelete) throw createNotFound("Länken finns inte");
-
-    const categoryContent = await prisma.navigation.findMany({
-      where: {
-        category: navToDelete.category,
-        NOT: { href },
-      },
-    });
-
-    if (categoryContent.length > 0) {
-      throw createBadRequest("Det finns fler länkar i denna kategori");
-    }
 
     await prisma.navigation.delete({
       where: { href },

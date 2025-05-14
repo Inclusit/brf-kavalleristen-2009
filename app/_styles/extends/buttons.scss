@@ -1,23 +1,24 @@
-@use "../core/variables" as vars;
-@use "../core/mixins" as mixins;
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
 @use "sass:color";
 
 %btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  border-radius: vars.$border-radius;
-  font-family: vars.$font-base;
-  font-weight: vars.$font-bold;
+  border-radius: $border-radius;
+  font-family: $font-base;
+  font-weight: $font-bold;
   text-transform: uppercase;
-  transition: vars.$transition;
+  transition: $transition;
 }
 
 %base-button {
-  @include mixins.textstyle(button);
+  @include textstyle(button);
   text-transform: uppercase;
   letter-spacing: 0.8px;
   padding: 18px 32px;
-  border-radius: vars.$border-radius;
+  padding-left: 16px;
+  border-radius: $border-radius;
   text-decoration: none;
   border: 1px solid transparent;
   display: inline-flex;
@@ -44,39 +45,39 @@
   }
 
   &--save {
-    background-color: vars.$blue;
-    color: vars.$white;
-    border-color: vars.$blue;
+    background-color: $blue;
+    color: $white;
+    border-color: $blue;
 
     &:hover {
-      background-color: vars.$secondary-blue;
+      background-color: $secondary-blue;
     }
   }
 
   &--post {
-    background-color: vars.$black;
-    color: vars.$white;
-    border-color: vars.$black;
+    background-color: $black;
+    color: $white;
+    border-color: $black;
 
     &:hover {
-      background-color: color.adjust(vars.$black, $lightness: 10%);
-      color: vars.$black;
+      background-color: color.adjust($black, $lightness: 10%);
+      color: $black;
     }
   }
 
   &--delete {
-    background-color: vars.$error-color;
-    color: vars.$white;
-    border-color: vars.$error-color;
+    background-color: $error-color;
+    color: $white;
+    border-color: $error-color;
 
     &:hover {
-      background-color: color.adjust(vars.$error-color, $lightness: -10%);
+      background-color: color.adjust($error-color, $lightness: -10%);
     }
   }
 
   &--cancel {
-    background-color: vars.$secondary-gray; 
-    color: vars.$black; 
+    background-color: $secondary-gray; 
+    color: $black; 
     border-color: transparent;
   
     &:hover {
@@ -84,13 +85,13 @@
     }
   }
   &--publish {
-    background-color: vars.$secondary-blue; 
-    color: vars.$white;
-    border-color: vars.$secondary-blue;
+    background-color: $secondary-blue; 
+    color: $white;
+    border-color: $secondary-blue;
 
     &:hover {
-      background-color: color.adjust(vars.$secondary-blue, $lightness: -5%);
-      color: vars.$white;
+      background-color: color.adjust($secondary-blue, $lightness: -5%);
+      color: $white;
     }
   }
 }

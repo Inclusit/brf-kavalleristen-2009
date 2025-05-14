@@ -68,6 +68,13 @@ export default function Footer() {
         <div className="footer__login">
           {user ? (
             <button className="footer__login-button" onClick={handleLogout}>
+              <img
+                src="/icons/logout-icon.svg"
+                alt="Logga ut"
+                className="footer__icon logout"
+                width={30}
+                height={30}
+              />
               Logga ut
             </button>
           ) : (
@@ -80,6 +87,13 @@ export default function Footer() {
                 aria-controls="login-modal"
                 aria-expanded={showModal}
               >
+                <img
+                  src="/icons/login-icon.svg"
+                  alt="Logga in"
+                  className="footer__icon login"
+                  width={30}
+                  height={30}
+                />
                 Logga in
               </button>
             </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useDynamicNav } from "@/app/context/dynamicNav";
 import FeedbackMessage from "../ui/FeedbackMessage";
@@ -55,14 +55,14 @@ export default function NavDeleteModal({ onClose }) {
         throw new Error("Något gick fel när sidan skulle tas bort.");
       }
       const data = await res.json();
-      setFeedback({ type: "success", message: "Sidan har tagits bort." });
+      setFeedbackMessage({ type: "success", message: "Sidan har tagits bort." });
       setTimeout(() => {
         router.refresh();
         onClose();
       }, 1500);
     } catch (error) {
       console.error(error);
-      setFeedback({
+      setFeedbackMessage({
         type: "error",
         message: "Något gick fel. Försök igen senare.",
       });

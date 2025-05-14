@@ -52,7 +52,7 @@ export async function PUT(
   const role = request.headers.get("role");
   const userId = request.headers.get("userId");
 
-  console.log("🔄 PUT /api/nyheter/", { slug, role, userId });
+  console.log(" Update /api/nyheter/", { slug, role, userId });
 
   if (!slug) throw createBadRequest("Slug is required");
 

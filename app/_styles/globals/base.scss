@@ -50,7 +50,7 @@ a {
   }
 
   // Intern länkikon
-  &[href^="/"]::after {
+  /*&[href^="/"]::after {
     content: "";
     background-image: url("#{$icons-path}/internal-link-icon.svg") no-repeat center center;
     background-size: 1em;
@@ -86,7 +86,7 @@ a {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-  }
+  }*/
 }
 
 table {

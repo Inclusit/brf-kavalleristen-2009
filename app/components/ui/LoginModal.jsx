@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useUser } from "@/app/context/user";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
 import FeedbackMessage from "./FeedbackMessage";
+import { addressData } from "../data/addressData";
 
 export default function LoginModal({ onClose }) {
   const [mode, setMode] = useState("login");
@@ -42,15 +43,6 @@ export default function LoginModal({ onClose }) {
   useEffect(() => {
     focusRef.current?.focus();
   }, []);
-
-  const doorOptions = [
-    "Kavallerigatan 1",
-    "Kavallerigatan 3",
-    "Kavallerigatan 5",
-    "Kavallerigatan 7",
-    "Kavallerigatan 9",
-    "Kavallerigatan 11",
-  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -237,7 +229,7 @@ export default function LoginModal({ onClose }) {
                   required
                 >
                   <option value="">-- Välj port --</option>
-                  {doorOptions.map((opt) => (
+                  {addressData.map((opt) => (
                     <option key={opt} value={opt}>
                       {opt}
                     </option>

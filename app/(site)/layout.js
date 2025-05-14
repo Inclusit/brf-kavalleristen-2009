@@ -3,6 +3,7 @@ import AdminNavWrapper from "../components/admin/AdminNavWrapper";
 import Footer from "../components/layout/Footer";
 import "../_styles/main.scss";
 import Header from "../components/layout/Header";
+import Breadcrumbs from "../components/ui/Breadcrumbs";
 import { UserProvider } from "../context/user";
 
 export default function RootLayout({ children }) {
@@ -27,6 +28,9 @@ export default function RootLayout({ children }) {
             </nav>
 
             <main id="main-content" className="site-wrap" role="main">
+              <div className="breadcrumbs">
+                <Breadcrumbs />
+              </div>
               <div>{children}</div>
             </main>
 

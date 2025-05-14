@@ -23,6 +23,15 @@ export default function CTAbtn({
     publish: "Skapa nyhet",
   };
 
+  const iconMap = {
+    delete: "🗑️",
+    edit: "✏️",
+    save: "💾",
+    cancel: "↩️",
+    post: "📤",
+    publish: "📰",
+  };
+
   const classMap = {
     delete: "cta-btn cta-btn--delete",
     edit: "cta-btn cta-btn--edit",
@@ -57,7 +66,14 @@ export default function CTAbtn({
       {loading && (
         <span className="cta-btn__spinner" aria-hidden="true" role="status" />
       )}
-      {labelMap[type]}
+      {!loading && (
+        <>
+          <span className="cta-btn__icon" aria-hidden="true">
+            {iconMap[type]}
+          </span>{" "}
+          {labelMap[type]}
+        </>
+      )}
     </button>
   );
 }
