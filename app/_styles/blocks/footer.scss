@@ -1,0 +1,115 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.footer {
+  background-color: $secondary-blue;
+  padding-block: 2rem;
+  color: $black;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 $gutter;
+    
+
+    @include respond(md) {
+      flex-direction: row;
+      justify-content: space-evenly;
+     
+    }
+  }
+
+  &__logo img {
+    max-height: 40px;
+    width: auto;
+  }
+
+  &__info {
+    display: grid;
+  grid-template-columns: 1fr;
+  gap: $gutter;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: $primary-beige;
+
+  @include respond(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond(lg) {
+    grid-template-columns: repeat(4, 1fr); // Tillbaka till fyra kolumner vid stor desktop
+  }
+  }
+
+  &__info-item {
+
+    a {
+      color: $white;
+
+      &:hover {
+        color: $secondary-gray;
+        text-decoration: underline;
+      }
+    }
+
+    > *:first-child {
+      font-weight: $font-bold;
+      padding-bottom: 0.25rem;
+    }
+
+  }
+
+  &__info-text {
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+    
+
+  }
+
+  &__login {
+    position: relative;
+    padding-left: 35px;
+    p {
+      color: $primary-beige;
+      margin:0;
+    }
+  }
+
+  &__login-button {
+    background: none;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    font-weight: $font-bold;
+    font-size: 1rem;
+    padding-left:0;
+
+    &:hover {
+      color: $secondary-gray;
+      text-decoration: underline;
+    }
+  }
+
+  &__icon {
+    padding-right: 0.5rem;
+    position: absolute;
+    left: 0;
+    top: -3px;
+    filter: invert(1);
+  }
+}
+
+.login {
+  top: 42%;
+
+  @include respond(md) {
+    top: 12%;
+  }
+ 
+  @include respond(lg) {
+    top: 23%;
+  }
+  
+}

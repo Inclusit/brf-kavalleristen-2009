@@ -1,0 +1,24 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.member-grid {
+    &__controls {
+      margin-bottom: $gutter;
+    }
+  
+    &__list {
+      display: grid;
+      // Skapa så många 300px-spalter som ryms, annars 1fr
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: $gutter;
+      // Se till att varje cell centrerar sitt innehåll
+      justify-items: center;
+    }
+  
+    &__empty {
+      font-style: italic;
+      color: $gray;
+      margin-top: $gutter;
+      text-align: center;
+    }
+  }

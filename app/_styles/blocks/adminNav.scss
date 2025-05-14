@@ -1,0 +1,65 @@
+@use '../core/variables' as *;
+@use '../core/mixins' as *;
+
+.admin-nav {
+  position: absolute;
+  display: inline-block;
+  z-index: 9999;
+  top: $gutter;
+  right: $gutter;
+
+  &__toggle {
+    padding: 0.5rem 0.8rem;
+    background-color: $white;
+    color: $black;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+
+    &:hover {
+      background-color: $gray;
+    }
+  }
+
+  &__dropdown {
+    position: absolute; 
+    right: 0; 
+    background: white;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    max-width: 200px;
+    padding: 0;
+    margin-top: 8px;
+    overflow: hidden;
+    z-index: 5;
+
+    & > li {
+      margin-bottom: 0;
+    }
+  }
+
+  &__link {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    line-height: 1.5;
+    background: none;
+    border: none;
+    color: $black;
+    text-decoration: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $gray;
+      border: none;
+      overflow: hidden;
+    }
+
+    
+  }
+}

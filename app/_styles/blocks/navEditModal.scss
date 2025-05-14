@@ -1,0 +1,102 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.nav-modal {
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background-color: rgba($black, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+
+    @include respond(md) {
+      justify-content: center;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem $padding-mobile;
+    background-color: $white;
+    padding: $gutter * 1.5;
+    border-radius: $border-radius;
+    box-shadow: $border-shadow;
+    position: relative;
+    z-index: 1001;
+
+    @include respond(md) {
+      margin: 4rem auto;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: $gutter * 0.5;
+    right: $gutter * 0.75;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: $gray;
+
+    @include transition;
+  }
+
+  &__title {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: $font-bold;
+    margin-bottom: $gutter;
+
+    @include respond(md) {
+      font-size: 1.4rem;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $gutter;
+
+    input,
+    select {
+      padding: 0.5rem;
+      border: 1px solid $gray;
+      font-size: $font-size-text;
+      border-radius: 0.25rem;
+      font-family: $font-base;
+    }
+
+    button[type="submit"] {
+      background-color: $base-color;
+      color: $white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: $font-size-button;
+      font-weight: $font-weight-button;
+
+      @include transition;
+
+      &:hover {
+        background-color: $black;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__slug {
+    font-size: 0.9rem;
+    color: $gray;
+    text-align: center;
+  }
+}

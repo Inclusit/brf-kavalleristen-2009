@@ -1,18 +1,53 @@
 "use client";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [header, setHeader] = useState({
+    image: "/images/kavallerigatan.jpg",
+    title: "Välkommen till vår förening",
+    subtitle: "Här hittar du allt om boende, kontakt och miljö.",
+  });
+
+  useEffect(() => {
+    const fetchHeader = async () => {
+      try {
+        const res = await fetch("/api/content/header");
+        if (!res.ok) throw new Error("Kunde inte hämta header");
+        const data = await res.json();
+        setHeader(data);
+      } catch (error) {
+        console.error("Fel vid hämtning av header:", error);
+      }
+    };
+
+    fetchHeader();
+  }, []);
+
   return (
-    <header className="header">
-      <div className="header__logo">
-        <Image src="/images/logo.png" alt="Logo" width={100} height={50} />
+    <div
+      className="header"
+      style={{
+        backgroundImage: `url(${header.image})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="header__overlay" aria-hidden="true"></div>
+      <div className="header__container">
+        <div className="header__logo">
+          <img
+            src="/images/logo-placeholder.jpg"
+            alt="Logo"
+            width={100}
+            height={100}
+          />
+        </div>
+
+        <div className="header__text">
+          <p className="header__title">{header.title}</p>
+          <p className="header__subtitle">{header.subtitle}</p>
+        </div>
       </div>
-      <div className="header__text">
-        <h1 className="header__title">Välkommen till vår hemsida</h1>
-        <p className="header__subtitle">
-          Din källa för information och inspiration
-        </p>
-      </div>
-    </header>
+    </div>
   );
 }

@@ -5,14 +5,25 @@
 @use './core/animations.scss';
 
 // globals
-@use './globals/_reset';
 @use './globals/base';
 @use './globals/typography';
 
 // extends
 @use './extends/buttons';
+@use './extends/feedbackmsg.scss';
+@use './extends/content';
+@use './extends/breadcrumbs.scss';
 
 // blocks 
-@use './blocks/content';
 @use './blocks/navbar.scss';
 @use './blocks/footer.scss';
+@use './blocks/header.scss';
+@use './blocks/loginModal.scss';
+@use './blocks/adminNav.scss';
+@use './blocks/navEditModal.scss';
+@use './blocks/headerEditor.scss';
+@use './blocks/news.scss';
+@use './blocks/linkCard.scss';
+@use './blocks/adminPanel.scss';
+@use './blocks/cardGrid.scss';
+@use './blocks/memberCard.scss';

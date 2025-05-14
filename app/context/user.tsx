@@ -18,12 +18,15 @@ type OnError = (error?: any) => void;
 // default state
 type UserContextState = {
   token: string | null;
+  setToken?: (token: string | null) => void;
   user: SafeUser | null;
+  setUser?: (user: SafeUser | null) => void;
   loading?: boolean;
 };
 
 const defaultState: UserContextState = {
   token: null,
+  setToken: ()=> {},
   user: null,
   loading: true,
 };
@@ -42,36 +45,19 @@ function UserProvider({ children }: PropsWithChildren) {
   );
 
   useEffect(() => {
-    if (!token) {
-      let _token = LocalStorageKit.get("@library/token");
-      if (_token) {
-        setToken(_token);
-        return;
-      } else {
-        setLoading(false);
-      }
+    const storedToken = LocalStorageKit.get("@library/token");
+    if (storedToken) {
+      setToken(storedToken); 
+    } else {
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     fetchUser();
-
-    // Event listener for storage changes
-    const handleStorageChange = () => {
-      fetchUser();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  }, [token]);
 
   const fetchUser = async () => {
-    if (user) {
-      return;
-    }
     console.log("Fetching user...");
     try {
       const token = LocalStorageKit.get("@library/token");
@@ -93,7 +79,7 @@ function UserProvider({ children }: PropsWithChildren) {
         throw new Error("Failed to fetch user");
       }
 
-      const data: User = await response.json();
+      const data: SafeUser = await response.json();
       console.log("Fetched user data:", data); // Logga användardata
 
       setUser(data);
@@ -109,6 +95,8 @@ function UserProvider({ children }: PropsWithChildren) {
     <UserContext.Provider
       value={{
         token,
+        setToken,
+        setUser,
         user,
         loading,
       }}

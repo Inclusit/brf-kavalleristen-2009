@@ -11,4 +11,14 @@ type UserLoginData = Pick<User, "email" | "password">;
 
 type UserUpdateData = Omit<User,"createdAt" | "updatedAt">;
 
-type SafeUser = Omit<User, "password">;
+export type SafeUser = {
+  id: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  role: string;
+  createdAt: string; 
+  updatedAt: string;
+};

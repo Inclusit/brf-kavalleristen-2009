@@ -4,14 +4,14 @@
 
 @mixin hamburger-icon($block) {
   .#{$block} {
-    width: 28px; // Fast bredd för kontroll – justera efter behov
-    height: 20px;
+    width: 50px;
+    height: 100%;
     position: relative;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 5px;
+    gap: 3.5px;
     z-index: 10;
 
     @include respond-min(map.get($breakpoints, md)) {
@@ -20,9 +20,9 @@
 
     span {
       display: block;
-      height: 3px;
+      height: 6px;
       width: 100%;
-      background: black;
+      background: $primary-beige;
       border-radius: 2px;
       transition: transform 0.3s ease, opacity 0.3s ease;
       transform-origin: center;
@@ -52,3 +52,28 @@
   }
 }
 
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.skeleton-line {
+  height: 1rem;
+  width: 100%;
+  max-width: 600px;
+  background: linear-gradient(90deg, #eee, #ddd, #eee);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

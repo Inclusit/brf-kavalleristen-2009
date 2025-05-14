@@ -1,21 +1,25 @@
 @use "../core/mixins" as *;
 @use "../core/animations.scss" as *;
+@use "../core/variables" as *;
 
 .navbar {
+
   width: 100%;
-  background: white;
-  padding: 1rem;
+  background: $blue;
+  font-size: 1.3rem;
+
 
   &__container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    @include wrap(site); 
+    padding: 1.5rem;
+    @include wrap(site);
   }
 
   &__mobile {
-    font-size: 2rem;
+    font-size: 1rem;
     background: none;
     border: none;
     display: block;
@@ -24,52 +28,105 @@
 
   @include hamburger-icon("navbar__mobile");
 
-  
+  &__link {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+    text-align: left;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease-in-out;
+    &:hover {
+      background-color: $primary-beige;
+      color: $black;
+      width: 100%;
+    }
+  }
 
   &__link-list {
     display: none;
     flex-direction: column;
     list-style: none;
+    color: $secondary-beige;
     padding: 0;
     margin: 1rem 0 0;
-    background: white;
+    background: $blue;
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 0;  
     width: 100%;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     z-index: 1;
 
     &--open {
       display: flex;
+      margin-top:0;
+    }
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: inherit
+    }
+
+    li {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    ul {
+      margin-left: 0;
     }
   }
 
   &__dropdown-link {
-  display: block;
-  padding: 1rem;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
+    display: block;
+    padding: 1rem;
+    padding-left: 2.5rem;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+    transition: background-color 0.2s ease-in-out;
 
-  &:hover {
-    background-color: #f0f0f0;
+    &:hover {
+      background-color: $primary-beige;
+      color: $black;
+      
+    }
   }
-}
-
 
   &__item {
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
+    padding: 0;
+    border-top: 1px solid $secondary-blue;
+    font-size: inherit;
+    text-transform: uppercase;
     cursor: pointer;
   }
 
   &__dropdown {
-    padding-left: 1rem;
+    padding:0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+    will-change: max-height;
   }
 
   @include respond(md) {
+
+    font-size: clamp(0.85rem, 1.5vw, 1.3rem);
+
+    &__container {
+      padding: 0;
+    }
+    
     &__mobile {
       display: none;
     }
@@ -85,7 +142,12 @@
     }
 
     &__link {
-        cursor: pointer;
+      cursor: pointer;
+      display: block;
+      padding: 1rem 2rem;
+      width: 100%;
+      height: 100%;
+  
     }
 
 
@@ -97,17 +159,26 @@
 
     &__dropdown {
       position: absolute;
-      background: white;
+      background: $blue;
+      color: $primary-beige;
       top: 100%;
       left: 0;
-      margin-top: 16px;
-      //box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding-left: 0; 
+      padding-left: 0;
+      min-width: 100%;
+      width: fit-content;
+      max-width: 400px;
     }
 
     &__dropdown-item {
-        border-bottom: 1px solid #eee;
-        white-space: nowrap;
+      border: 1px solid $secondary-blue;
+
+      font-size: inherit;
+
     }
+
+    &__dropdown-link {
+      padding: 1rem 2rem;
+      text-align: left;
+    } 
   }
 }

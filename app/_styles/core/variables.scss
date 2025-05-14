@@ -1,4 +1,6 @@
-$assets-path: "./assets/";
+$img-path: "/images";
+$icons-path: "/icons";
+$font-path: "/fonts";
 
 $max-width: 1440px;
 $content-width: 1260px;
@@ -12,20 +14,31 @@ $breakpoints: (
   xl: 1280px
 );
 
+$padding-mobile: 16px;
+$padding-tablet: 30px;
+$padding-desktop: 90px;
+
 $white: #f5f5f9;
+$warm-white: #f3eee8;
 $black: #171717;
 $gray: #d1d1d6;
-$blue: #052261;
-$secondary-blue: #3c5c84;
+$secondary-gray:#cfcbc6;
+$blue: #043256;
+$secondary-blue: #154264;
+$primary-beige: #f9efe0;
+$secondary-beige: #f5eadd;
+$soft-brown: #8c5921;
 
 $base-color: $black;
 $primary-color: $blue;
-$secondary-color: $white;
+$secondary-color: $secondary-beige;
+$background-color: $primary-beige;
 $link-color: $blue;
 $link-hover-color: $black;
-$error-color: red;
+$error-color: #b00020;;
 
 $border-radius: 1.25rem;
+$border-shadow: 0 2px 4px rgba(140, 89, 33, 0.1);
 
 $transition: 0.7s ease-in-out;
 
