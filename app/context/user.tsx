@@ -15,7 +15,6 @@ import { User } from "@prisma/client";
 type OnComplete = (response?: any) => void;
 type OnError = (error?: any) => void;
 
-// default state
 type UserContextState = {
   token: string | null;
   setToken?: (token: string | null) => void;
@@ -31,10 +30,8 @@ const defaultState: UserContextState = {
   loading: true,
 };
 
-// context initator constructor
 const UserContext = createContext<Partial<UserContextState>>(defaultState);
 
-// provider
 function UserProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<typeof defaultState.token>(
     defaultState.token
@@ -61,7 +58,7 @@ function UserProvider({ children }: PropsWithChildren) {
     console.log("Fetching user...");
     try {
       const token = LocalStorageKit.get("@library/token");
-      console.log("Token from localStorage:", token); // Kontrollera om token hittas
+      console.log("Token from localStorage:", token); 
 
       if (!token) {
         console.log("No token found. Setting user to null.");

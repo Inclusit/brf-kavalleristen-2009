@@ -4,15 +4,9 @@ import { useUser } from "@/app/context/user";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
 import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
 import CTAbtn from "@/app/components/ui/CTAbtn";
+import { addressData } from "@/app/components/data/addressData";
 
-const addressOptions = [
-  "Kavallerigatan 1",
-  "Kavallerigatan 3",
-  "Kavallerigatan 5",
-  "Kavallerigatan 7",
-  "Kavallerigatan 9",
-  "Kavallerigatan 11",
-];
+
 
 export default function AdminUserPanel() {
   const { user } = useUser();
@@ -120,7 +114,7 @@ export default function AdminUserPanel() {
             value={user.address || ""}
             onChange={(e) => handleChange(user.id, "address", e.target.value)}
           >
-            {addressOptions.map((opt) => (
+            {addressData.map((opt) => (
               <option key={opt} value={opt}>
                 {opt}
               </option>
