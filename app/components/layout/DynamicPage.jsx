@@ -73,7 +73,7 @@ export default function DynamicPage({ slug: propSlug }) {
   }
 
   return (
-    <div className="dynamic-page site-content" aria-labelledby="head-title">
+    <section className="dynamic-page site-content" aria-labelledby="head-title">
       <Head>
         <title>{pageTitle || slug}</title>
         <meta
@@ -144,6 +144,6 @@ export default function DynamicPage({ slug: propSlug }) {
           />
         )}
       </div>
-    </div>
+    </section>
   );
 }

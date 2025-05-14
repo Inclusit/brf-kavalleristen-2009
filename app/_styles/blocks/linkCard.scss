@@ -24,7 +24,7 @@
     flex-direction: column; 
     max-width: 280px;
     border-radius: 0.25rem;
-    background-color: $warm-white;
+    background-color: $white;
     box-shadow: $border-shadow;
     overflow: hidden;
     text-align: center;
@@ -95,7 +95,7 @@
       &:hover {
         transform: translateY(-4px);
         .home-page__link-svg-wrapper {
-          background-color: $warm-white;
+          background-color: $white;
           border-color: $blue;
           transition: background-color 0.3s;
           
@@ -125,7 +125,7 @@
       width: 40px;
       height: 40px;
       mask-image: url("#{$icons-path}/right-arrow.svg");
-      background-color: $primary-beige;
+      background-color: $white;
       mask-repeat: no-repeat;
       mask-position: center;
       mask-size: contain;

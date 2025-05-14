@@ -42,7 +42,7 @@
     text-transform: uppercase;
     transition: background-color 0.2s ease-in-out;
     &:hover {
-      background-color: $primary-beige;
+      background-color: $warm-white;
       color: $black;
       width: 100%;
     }
@@ -52,7 +52,7 @@
     display: none;
     flex-direction: column;
     list-style: none;
-    color: $secondary-beige;
+    color: $warm-white;
     padding: 0;
     margin: 1rem 0 0;
     background: $blue;
@@ -98,7 +98,7 @@
     transition: background-color 0.2s ease-in-out;
 
     &:hover {
-      background-color: $primary-beige;
+      background-color: $warm-white;
       color: $black;
       
     }
@@ -160,7 +160,7 @@
     &__dropdown {
       position: absolute;
       background: $blue;
-      color: $primary-beige;
+      color: $warm-white;
       top: 100%;
       left: 0;
       padding-left: 0;

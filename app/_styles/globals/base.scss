@@ -12,7 +12,7 @@ html {
 body {
     font-family: $font-base;
     color: $base-color;
-    background-color: $secondary-beige;
+    background-color: $warm-white;
     font-size: 16px;
     line-height: 1.5;
     margin: 0;
@@ -153,7 +153,7 @@ section {
   margin-bottom: 1.5rem;
   padding: 0.5rem;
   border-radius: 0.25rem;
-  background-color: $warm-white;
+  background-color: $white;
   box-shadow: $border-shadow;
 
   @include respond(md) {
@@ -172,6 +172,7 @@ section {
     font-weight: $font-bold;
     line-height: 1.2;
     margin-bottom: 1rem;
+    color: $blue;
   }
 
   h1 {
