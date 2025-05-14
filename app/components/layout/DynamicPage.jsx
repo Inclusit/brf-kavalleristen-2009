@@ -87,6 +87,8 @@ export default function DynamicPage({ slug: propSlug }) {
       </Head>
 
       <div className="dynamic-page__content" aria-labelledby="head-title">
+        <h1 id="head-title">{pageTitle}</h1>
+
         {feedbackMessage && (
           <FeedbackMessage
             type={feedbackMessage.type}
@@ -136,10 +138,10 @@ export default function DynamicPage({ slug: propSlug }) {
             />
           </article>
         ) : (
-          <article className="dynamic-page__html-content prose">
-            <h1 id="head-title">{pageTitle}</h1>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
-          </article>
+          <article
+            className="dynamic-page__html-content prose"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         )}
       </div>
     </div>
