@@ -35,18 +35,22 @@ export default function CardGrid() {
   const onUpdated = (updated) =>
     setMembers((m) => m.map((x) => (x.id === updated.id ? updated : x)));
 
-  if (loading) return <SkeletonLoader count={7} />;
+
 
   return (
-    <div className="member-grid">
+    <article className="member-grid" aria-label="Styrelsemedlemmar">
       {feedback && <FeedbackMessage {...feedback} />}
-
+      {loading && (
+        <div aria-busy="true" aria-live="polite">
+          <SkeletonLoader count={7} />
+        </div>
+      )}
       {role === "ADMIN" && (
         <div className="member-grid__controls">
           <button
             type="button"
             className="cta-btn cta-btn--post"
-            aria-label="Välj fil att ladda upp"
+            aria-label="Lägg till ny styrelsemedlem"
             onClick={() => setAdding(true)}
           >
             ➕👤 Ny medlem
@@ -58,20 +62,21 @@ export default function CardGrid() {
         <AddMemberModal onClose={() => setAdding(false)} onSaved={onSaved} />
       )}
 
-      <div className="member-grid__list">
+      <div className="member-grid__list" role="list">
         {members.length === 0 ? (
           <p>Inga medlemmar.</p>
         ) : (
           members.map((m) => (
-            <ProfileCard
-              key={m.id}
-              memberId={m.id}
-              onDeleted={onDeleted}
-              onUpdated={onUpdated}
-            />
+            <div key={m.id} role="listitem">
+              <ProfileCard
+                memberId={m.id}
+                onDeleted={onDeleted}
+                onUpdated={onUpdated}
+              />
+            </div>
           ))
         )}
       </div>
-    </div>
+    </article>
   );
 }

@@ -4,7 +4,7 @@ import Head from "next/head";
 
 export default function StyrelsenPage() {
   return (
-    <div className="styrelsen-page section-wrap">
+    <section className="styrelsen-page section-wrap" aria-labelledby="page-title">
       <Head>
         <title>Styrelsen</title>
         <meta
@@ -13,7 +13,7 @@ export default function StyrelsenPage() {
         />
       </Head>
 
-      <h1 className="styrelsen-page__title">Styrelsen</h1>
+      <h1 id="page-title" className="styrelsen-page__title">Styrelsen</h1>
       <p className="styrelsen-page__intro">
         Här hittar du information om styrelsen i föreningen, inklusive
         kontaktuppgifter och roller. Om du har frågor eller behöver hjälp, tveka
@@ -21,6 +21,6 @@ export default function StyrelsenPage() {
       </p>
 
       <CardGrid />
-    </div>
+    </section>
   );
 }

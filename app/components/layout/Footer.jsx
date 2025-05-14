@@ -17,7 +17,7 @@ export default function Footer() {
     LocalStorageKit.remove("@library/token");
     LocalStorageKit.remove("role");
     window.dispatchEvent(new Event("storage"));
-    router.refresh();
+    router.push("/");
   };
 
   return (

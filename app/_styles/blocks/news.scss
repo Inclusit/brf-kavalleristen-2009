@@ -229,13 +229,6 @@
     @include horizontal-scroll(1.5rem);
     scroll-behavior: smooth;
     flex: 1;
-
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 
   &__arrow-container {
@@ -280,9 +273,9 @@
     margin-right: -50vw;
     background-color: $blue;
 
-    .latest-news__content {
-      @include wrap(content);
+    .latest-news__content {   
       padding-block: 2rem;
+      @include wrap(content);
     }
   }
 }

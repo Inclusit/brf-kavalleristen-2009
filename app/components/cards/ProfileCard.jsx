@@ -139,8 +139,10 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
   }
 
   return (
-    <article className="profile-card">
-
+    <article
+      className="profile-card"
+      aria-label={`Styrelsemedlem: ${form.name}`}
+    >
       {!isEditing && (
         <div className="profile-card__view">
           <img
@@ -150,8 +152,12 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
           />
           <h3 className="profile-card__name">{form.name}</h3>
           <p className="profile-card__position">{form.position}</p>
-          <p className="profile-card__email">{form.email}</p>
-          <p className="profile-card__phone">{form.phone}</p>
+          <p className="profile-card__email">
+            <a href={`mailto:${form.email}`}>{form.email}</a>
+          </p>
+          <p className="profile-card__phone">
+            <a href={`tel:${form.phone}`}>{form.phone}</a>
+          </p>
           {role === "ADMIN" && (
             <div className="profile-card__actions">
               <CTAbtn type="edit" onClick={() => setIsEditing(true)} />
@@ -167,7 +173,13 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
 
       {isEditing && (
         <div className="member-modal__backdrop">
-          <div className="member-modal" ref={modalRef}>
+          <div
+            className="member-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-member-title"
+            ref={modalRef}
+          >
             {feedback && (
               <FeedbackMessage
                 type={feedback.type}
@@ -186,9 +198,11 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
             </h2>
 
             <div className="member-modal__edit-group">
-              <label className="member-modal__label">
+              <label htmlFor="name" className="member-modal__label">
                 Namn
                 <input
+                  id="name"
+                  type="text"
                   name="name"
                   value={form.name}
                   onChange={handleChange}
@@ -196,9 +210,11 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
                 />
               </label>
 
-              <label className="member-modal__label">
+              <label htmlFor="position" className="member-modal__label">
                 Styrelseroll
                 <select
+                  id="position"
+                  type="text"
                   name="position"
                   value={form.position}
                   onChange={handleChange}
@@ -215,9 +231,10 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
                 </select>
               </label>
 
-              <label className="member-modal__label">
+              <label htmlFor="email" className="member-modal__label">
                 E-post
                 <input
+                  id="email"
                   type="email"
                   name="email"
                   value={form.email}
@@ -225,18 +242,21 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
                 />
               </label>
 
-              <label className="member-modal__label">
+              <label htmlFor="phone" className="member-modal__label">
                 Telefon
                 <input
+                  id="phone"
+                  type="tel"
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
                 />
               </label>
 
-              <label className="member-modal__label">
+              <label htmlFor="image" className="member-modal__label">
                 Profilbild
                 <input
+                 id="image"
                   type="file"
                   accept="image/*"
                   ref={fileInputRef}

@@ -71,7 +71,16 @@
   scroll-snap-type: x mandatory;
   padding-bottom: 1rem;
 
-  scrollbar-width: thin;
+  & {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*scrollbar-width: thin;
   &::-webkit-scrollbar {
     height: 6px;
   }
@@ -81,7 +90,7 @@
   }
   &::-webkit-scrollbar-track {
     background: transparent;
-  }
+  }*/
 
   > * {
     flex: 0 0 auto;

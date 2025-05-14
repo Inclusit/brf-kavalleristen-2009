@@ -24,7 +24,6 @@ export default function AddMemberModal({ onClose, onSaved }) {
   const modalRef = useRef(null);
 
   useEffect(() => {
-    // Escape + click-outside
     const onKey = (e) => e.key === "Escape" && onClose();
     const onClick = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -55,11 +54,10 @@ export default function AddMemberModal({ onClose, onSaved }) {
       return setFeedback({ type: "error", message: "Ingen fil vald." });
     setFeedback(null);
 
-    // lokal preview
     const preview = URL.createObjectURL(file);
     setForm((f) => ({ ...f, image: preview }));
 
-    // uppladdning
+
     const fd = new FormData();
     fd.append("file", file);
     try {
@@ -108,7 +106,13 @@ export default function AddMemberModal({ onClose, onSaved }) {
 
   return (
     <div className="member-modal__backdrop">
-      <div className="member-modal" ref={modalRef}>
+      <div
+        className="member-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="add-member-title"
+        ref={modalRef}
+      >
         {feedback && (
           <FeedbackMessage
             type={feedback.type}
@@ -127,9 +131,11 @@ export default function AddMemberModal({ onClose, onSaved }) {
         </h2>
 
         <div className="member-modal__edit-group">
-          <label className="member-modal__label">
+          <label htmlFor="name" className="member-modal__label">
             Namn
             <input
+             id="name"
+                type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
@@ -138,9 +144,11 @@ export default function AddMemberModal({ onClose, onSaved }) {
             />
           </label>
 
-          <label className="member-modal__label">
-            Roll
+          <label htmlFor="position" className="member-modal__label">
+            Styrelseroll
             <select
+                id="position"
+            type="text"
               name="position"
               value={form.position}
               onChange={handleChange}
@@ -157,9 +165,11 @@ export default function AddMemberModal({ onClose, onSaved }) {
             </select>
           </label>
 
-          <label className="member-modal__label">
+          <label htmlFor="email" className="member-modal__label">
             E-post
             <input
+                id="email"
+                type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
@@ -167,9 +177,11 @@ export default function AddMemberModal({ onClose, onSaved }) {
             />
           </label>
 
-          <label className="member-modal__label">
+          <label htmlFor="phone" className="member-modal__label">
             Telefon
             <input
+                id="phone"
+                type="tel"
               name="phone"
               value={form.phone}
               onChange={handleChange}
@@ -177,9 +189,10 @@ export default function AddMemberModal({ onClose, onSaved }) {
             />
           </label>
 
-          <label className="member-modal__label">
+          <label htmlFor="image" className="member-modal__label">
             Profilbild
             <input
+                id="image"
               type="file"
               accept="image/*"
               ref={fileInputRef}

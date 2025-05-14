@@ -2,7 +2,7 @@
 @use "../core/mixins" as *;
 
 .feedback-message {
-  @include mixins.textstyle(text);
+  @include textstyle(text);
   border-radius: $border-radius;
   padding: 1rem 1.5rem;
   margin: 1rem 0;
