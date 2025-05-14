@@ -66,7 +66,7 @@ function UserProvider({ children }: PropsWithChildren) {
         return;
       }
       setLoading(true);
-      const response = await fetch("http://localhost:3000/api/users/me", {
+      const response = await fetch("/api/users/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

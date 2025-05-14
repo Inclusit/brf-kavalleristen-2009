@@ -5,12 +5,14 @@ import CTAbtn from "@/app/components/ui/CTAbtn";
 import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/user";
+import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
 
 export default function NewsCollectionPage() {
     const [news, setNews] = useState([]);
     const [feedbackMessage, setFeedbackMessage] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
+    const [loading, setLoading] = useState(true);
     const itemsPerPage = 6;
 
     const router = useRouter();
@@ -42,12 +44,14 @@ export default function NewsCollectionPage() {
     return (
       <div className="news-collection site-content">
         <h1 className="news-collection__title">Nyheter och händelser</h1>
+        
         {feedbackMessage && (
           <FeedbackMessage
             type={feedbackMessage.type}
             message={feedbackMessage.message}
           />
         )}
+        
         {role === "ADMIN" || role === "MODERATOR" ? (
           <CTAbtn 
           type="publish" 
