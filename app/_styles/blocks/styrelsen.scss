@@ -1,0 +1,18 @@
+@use "../core/variables" as *;
+@use "../core/mixins" as *;
+
+.stryrelsen {
+
+    &___title {
+        font-size: 3rem;
+        font-weight: $font-bold;
+        color: $blue;
+        margin-bottom: 4.5rem;
+    }
+
+    &__intro {
+        font-size: 1.5rem;
+        color: $blue;
+        margin-bottom: 4.5rem;
+    }
+}
