@@ -4,7 +4,7 @@ import { useHeaderRefresh } from "@/app/context/headerRefres";
 
 export default function Header() {
   const [header, setHeader] = useState({
-    image: "/images/kavallerigatan.jpg",
+    image: null,
     title: "Välkommen till vår förening",
     subtitle: "Här hittar du allt om boende, kontakt och miljö.",
   });
@@ -17,7 +17,15 @@ export default function Header() {
         const res = await fetch("/api/content/header");
         if (!res.ok) throw new Error("Kunde inte hämta header");
         const data = await res.json();
-        setHeader(data);
+        
+        setHeader({
+          image: data?.image || null,
+          title: data?.title || "Välkommen till vår förening",
+          subtitle:
+            data?.subtitle ||
+            "Här hittar du allt om boende, kontakt och miljö.",
+        });
+        
       } catch (error) {
         console.error("Fel vid hämtning av header:", error);
       }
@@ -30,9 +38,13 @@ export default function Header() {
     <div
       className="header"
       style={{
-        backgroundImage: `url(${header.image})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        ...(header.image
+          ? {
+              backgroundImage: `url(${header.image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }
+          : {}),
       }}
     >
       <div className="header__overlay" aria-hidden="true"></div>
