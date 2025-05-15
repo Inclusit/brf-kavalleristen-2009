@@ -6,6 +6,7 @@ import "../_styles/main.scss";
 import Header from "../components/layout/Header";
 import Breadcrumbs from "../components/ui/Breadcrumbs";
 import { UserProvider } from "../context/user";
+import { HeaderRefreshProvider } from "../context/headerRefres";
 
 export default function RootLayout({ children }) {
   return (
@@ -16,32 +17,34 @@ export default function RootLayout({ children }) {
         </a>
 
         <UserProvider>
-          <div className="site-container">
-            <header>
-              <AdminNavWrapper />
-              <Header />
-            </header>
-            <nav>
-              <h2 id="mainnav-heading" className="sr-only">
-                Webbplatsnavigation
-              </h2>
-              <Navbar />
-            </nav>
+          <HeaderRefreshProvider>
+            <div className="site-container">
+              <header>
+                <AdminNavWrapper />
+                <Header />
+              </header>
+              <nav>
+                <h2 id="mainnav-heading" className="sr-only">
+                  Webbplatsnavigation
+                </h2>
+                <Navbar />
+              </nav>
 
-            <main id="main-content" className="site-wrap" role="main">
-              <div className="breadcrumbs">
-                <Breadcrumbs />
-              </div>
-              <div>{children}</div>
-            </main>
+              <main id="main-content" className="site-wrap" role="main">
+                <div className="breadcrumbs">
+                  <Breadcrumbs />
+                </div>
+                <div>{children}</div>
+              </main>
 
-            <footer aria-labelledby="footer-heading">
-              <h2 id="footer-heading" className="sr-only">
-                Sidfotsinformation
-              </h2>
-              <Footer />
-            </footer>
-          </div>
+              <footer aria-labelledby="footer-heading">
+                <h2 id="footer-heading" className="sr-only">
+                  Sidfotsinformation
+                </h2>
+                <Footer />
+              </footer>
+            </div>
+          </HeaderRefreshProvider>
         </UserProvider>
       </body>
     </html>

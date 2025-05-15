@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useHeaderRefresh } from "@/app/context/headerRefres";
 
 export default function Header() {
   const [header, setHeader] = useState({
@@ -7,6 +8,8 @@ export default function Header() {
     title: "Välkommen till vår förening",
     subtitle: "Här hittar du allt om boende, kontakt och miljö.",
   });
+
+  const { refreshKey } = useHeaderRefresh();
 
   useEffect(() => {
     const fetchHeader = async () => {
@@ -21,7 +24,7 @@ export default function Header() {
     };
 
     fetchHeader();
-  }, []);
+  }, [refreshKey]);
 
   return (
     <div

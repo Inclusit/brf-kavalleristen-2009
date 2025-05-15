@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useUser } from "@/app/context/user";
 import { useRouter } from "next/navigation";
 import FeedbackMessage from "../ui/FeedbackMessage";
+import { useHeaderRefresh } from "@/app/context/headerRefres";
 
 export default function HeaderEditor({ onClose }) {
   const [headerImage, setHeaderImage] = useState("");
@@ -16,6 +17,7 @@ export default function HeaderEditor({ onClose }) {
   const fileRef = useRef(null);
   const focusRef = useRef();
   const modalRef = useRef();
+  const { bump } = useHeaderRefresh();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -111,6 +113,9 @@ export default function HeaderEditor({ onClose }) {
       });
       return;
     }
+
+    bump();
+
     setFeedbackMessage({
       type: "success",
       message: "Header sparad!",
