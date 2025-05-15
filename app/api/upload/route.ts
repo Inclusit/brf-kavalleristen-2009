@@ -6,11 +6,7 @@ import sharp from "sharp";
 import { createBadRequest } from "@/app/lib/errors";
 import { handleApiErrors } from "@/app/lib/handleApiErrors";
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-const isVercel = process.env.VERCEL === "1";
-const UPLOAD_DIR = isVercel
-  ? "/tmp"
-  : path.join(process.cwd(), "public", "uploads");
+const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 function createUniqueName(originalName: string) {
   const ext = path.extname(originalName);
@@ -28,8 +24,6 @@ export async function POST(req: NextRequest) {
       throw createBadRequest("Ingen fil uppladdad.");
     }
 
-    console.log("Filmottagen:", file.name, file.type, file.size);
-
     const buffer = Buffer.from(await file.arrayBuffer());
     const fileType = file.type;
 
@@ -39,27 +33,16 @@ export async function POST(req: NextRequest) {
 
     let filename = createUniqueName(file.name);
     let outputPath = path.join(UPLOAD_DIR, filename);
-    let fileUrl = `${BASE_URL}${
-      isVercel ? `/tmp/${filename}` : `/uploads/${filename}`
-    }`;
+    let fileUrl = `/uploads/${filename}`;
 
-    // Om det är en bild, konvertera till .webp
+    // Om det är en bild, konvertera till webp
     if (fileType.startsWith("image/")) {
       filename = filename.replace(/\.\w+$/, ".webp");
       outputPath = path.join(UPLOAD_DIR, filename);
-      fileUrl = `${BASE_URL}${
-        isVercel ? `/tmp/${filename}` : `/uploads/${filename}`
-      }`;
+      fileUrl = `/uploads/${filename}`;
 
-      try {
-        const webpBuffer = await sharp(buffer).webp({ quality: 75 }).toBuffer();
-        await writeFile(outputPath, webpBuffer);
-      } catch (sharpError) {
-        console.error("Konvertering misslyckades:", sharpError);
-        throw createBadRequest(
-          "Ogiltig bildfil eller konvertering misslyckades."
-        );
-      }
+      const webpBuffer = await sharp(buffer).webp({ quality: 75 }).toBuffer();
+      await writeFile(outputPath, webpBuffer);
     } else {
       await writeFile(outputPath, buffer);
     }
