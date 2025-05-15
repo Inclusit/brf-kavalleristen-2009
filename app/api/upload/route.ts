@@ -40,8 +40,10 @@ export async function POST(req: NextRequest) {
       const type = url.searchParams.get("type");
 
       const metadata = await sharp(buffer).metadata();
-      if (type === "header" && metadata.width! < 1440) {
-        throw createBadRequest("Headerbilden måste vara minst 1440px bred.");
+      if (type === "header") {
+        if (!metadata.width || metadata.width < 1440) {
+          throw createBadRequest("Headerbilden måste vara minst 1440px bred.");
+        }
       }
 
       savedFilename = savedFilename.replace(/\.\w+$/, ".webp");
@@ -60,7 +62,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ url: fileUrl, html }, { status: 201 });
-  } catch (error) {
+  } catch (error) {  
     console.error("Uppladdningsfel:", error);
     return handleApiErrors(error);
   }

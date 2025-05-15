@@ -85,6 +85,10 @@ export default function HeaderEditor({ onClose }) {
       const data = await response.json();
       setHeaderImage(data.url);
     } catch (error) {
+      console.error("Filtyp:", file?.type);
+      console.error("Filnamn:", file?.name);
+      console.error("Filstorlek:", file?.size);
+      
       console.error("Fel vid filuppladdning:", error.message);
     }
   };
