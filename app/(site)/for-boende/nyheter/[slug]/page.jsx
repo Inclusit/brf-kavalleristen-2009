@@ -103,10 +103,12 @@ export default function NewsPage() {
       </Head>
 
       <div className="news-page__content">
-        <h1 id="news-title" className="news-page__title">
-          {title}
-        </h1>
-
+        
+        {role !== "ADMIN" && role !== "MODERATOR" && (
+          <h1 id="news-title" className="news-page__title">
+            {title}
+          </h1>
+        )}
         {feedbackMessage && (
           <FeedbackMessage
             type={feedbackMessage.type}
@@ -114,7 +116,6 @@ export default function NewsPage() {
             onClose={() => setFeedbackMessage(null)}
           />
         )}
-
         {loading ? (
           <div aria-busy="true" aria-live="polite">
             <SkeletonLoader lines={6} />

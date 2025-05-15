@@ -45,7 +45,7 @@ export default function CardGrid() {
           <SkeletonLoader count={7} />
         </div>
       )}
-      {role === "ADMIN" && (
+      {role === "ADMIN" || role === "MODERATOR" &&  (
         <div className="member-grid__controls">
           <button
             type="button"
@@ -67,7 +67,7 @@ export default function CardGrid() {
           <p>Inga medlemmar.</p>
         ) : (
           members.map((m) => (
-            <div key={m.id} role="listitem">
+            <div className="member-grid__list-item" key={m.id} role="listitem">
               <ProfileCard
                 memberId={m.id}
                 onDeleted={onDeleted}

@@ -158,7 +158,7 @@ export default function ProfileCard({ memberId, onDeleted, onUpdated }) {
           <p className="profile-card__phone">
             <a href={`tel:${form.phone}`}>{form.phone}</a>
           </p>
-          {role === "ADMIN" && (
+          {role === "ADMIN" &&  (
             <div className="profile-card__actions">
               <CTAbtn type="edit" onClick={() => setIsEditing(true)} />
               <CTAbtn

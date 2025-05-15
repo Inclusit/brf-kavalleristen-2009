@@ -47,7 +47,7 @@ export default function NewsCollectionPage() {
 
   return (
     <article
-      className="news-collection site-content"
+      className="news-collection"
       aria-label="Nyheter och händelser"
     >
       <h1 className="news-collection__title">Nyheter och händelser</h1>

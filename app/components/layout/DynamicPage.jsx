@@ -87,9 +87,11 @@ export default function DynamicPage({ slug: propSlug }) {
       </Head>
 
       <div className="dynamic-page__content" aria-labelledby="head-title">
-        <h1 id="head-title" className="dynamic-page__title">
-          {pageTitle}
-        </h1>
+        {slug !== "home" && (
+          <h1 id="head-title" className="dynamic-page__title">
+            {pageTitle}
+          </h1>
+        )}
 
         {feedbackMessage && (
           <FeedbackMessage
@@ -109,15 +111,17 @@ export default function DynamicPage({ slug: propSlug }) {
           </div>
         ) : role === "ADMIN" || role === "MODERATOR" ? (
           <article className="dynamic-page__editor">
-            <input
-              id="head-title"
-              className="dynamic-page__heading-input"
-              value={pageTitle}
-              onChange={(e) => setPageTitle(e.target.value)}
-              aria-label="Sidtitel"
-              placeholder="Sidtitel"
-            />
-
+            {slug !== "home" && (
+              <input
+                id="head-title"
+                className="dynamic-page__heading-input"
+                value={pageTitle}
+                onChange={(e) => setPageTitle(e.target.value)}
+                aria-label="Sidtitel"
+                placeholder="Sidtitel"
+              />
+            )}
+            
             {updatedBy && (
               <div className="dynamic-page__editor__info">
                 <p>
