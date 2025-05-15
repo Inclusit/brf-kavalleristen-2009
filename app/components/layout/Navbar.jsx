@@ -30,7 +30,8 @@ export default function Navbar() {
   }, []);
 
   const toggleDropdown = (index) => {
-    setIsOpen(isOpen === index ? null : index);
+    const newIndex = String(index);
+    setIsOpen(isOpen === newIndex ? null : newIndex);
   };
 
   const filteredDynamicNav = dynamicNav.filter(
@@ -49,10 +50,7 @@ export default function Navbar() {
   );
 
   return (
-    <div
-      className="navbar"
-      ref={navRef}
-    >
+    <div className="navbar" ref={navRef}>
       <div className="navbar__container">
         <button
           className={`navbar__mobile ${
@@ -74,154 +72,153 @@ export default function Navbar() {
             mobileMenu ? "navbar__link-list--open" : ""
           }`}
         >
-          {navData.map((item, index) => (
-            <li
-              key={index}
-              className={`navbar__item ${
-                item.children ? "navbar__item--has-dropdown" : ""
-              }`}
-            >
-              {item.href ? (
-                <Link href={item.href} className="navbar__link">
-                  {item.label}
-                </Link>
-              ) : (
+          {navData.map((item, index) => {
+            const strIndex = String(index);
+            return (
+              <li
+                key={index}
+                className={`navbar__item ${
+                  item.children ? "navbar__item--has-dropdown" : ""
+                }`}
+              >
+                {item.href ? (
+                  <Link href={item.href} className="navbar__link">
+                    {item.label}
+                  </Link>
+                ) : (
+                  <button
+                    className="navbar__link"
+                    onClick={() => toggleDropdown(index)}
+                    aria-expanded={isOpen === strIndex}
+                    aria-controls={`dropdown-${index}`}
+                    aria-label={`Öppna meny för ${item.label}`}
+                    role="button"
+                  >
+                    {item.label}
+                  </button>
+                )}
+
+                {(item.children || groupedDynamic[item.label]) && (
+                  <ul
+                    id={`dropdown-${index}`}
+                    ref={(el) => (dropdownRefs.current[index] = el)}
+                    className={`navbar__dropdown ${
+                      isOpen === strIndex ? "navbar__dropdown--open" : ""
+                    }`}
+                    style={{
+                      maxHeight:
+                        isOpen === strIndex
+                          ? `${dropdownRefs.current[index]?.scrollHeight}px`
+                          : "0px",
+                    }}
+                    aria-hidden={isOpen !== strIndex}
+                    role="menu"
+                  >
+                    {isOpen === strIndex && (
+                      <>
+                        {item.children?.map((subItem, subIndex) => (
+                          <li
+                            key={`static-${subIndex}`}
+                            className="navbar__dropdown-item"
+                            role="none"
+                          >
+                            {subItem.external ? (
+                              <a
+                                href={subItem.href}
+                                className="navbar__dropdown-link"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                role="menuitem"
+                              >
+                                {subItem.label}
+                              </a>
+                            ) : (
+                              <Link
+                                href={subItem.href}
+                                className="navbar__dropdown-link"
+                                role="menuitem"
+                              >
+                                {subItem.label}
+                              </Link>
+                            )}
+                          </li>
+                        ))}
+
+                        {groupedDynamic[item.label]?.map((nav, dynIndex) => (
+                          <li
+                            key={`dynamic-${dynIndex}`}
+                            className="navbar__dropdown-item"
+                            role="none"
+                          >
+                            <Link
+                              href={nav.href}
+                              className="navbar__dropdown-link"
+                              role="menuitem"
+                            >
+                              {nav.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </>
+                    )}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
+
+          {extraCategories.map(([label, items], dynCatIndex) => {
+            const extraKey = `extra-${dynCatIndex}`;
+            return (
+              <li
+                key={extraKey}
+                className="navbar__item navbar__item--has-dropdown"
+              >
                 <button
                   className="navbar__link"
-                  onClick={() => toggleDropdown(index)}
-                  aria-expanded={isOpen === index}
-                  aria-controls={`dropdown-${index}`}
-                  aria-label={`Öppna meny för ${item.label}`}
+                  onClick={() => toggleDropdown(extraKey)}
+                  aria-expanded={isOpen === extraKey}
+                  aria-controls={`extra-dropdown-${dynCatIndex}`}
+                  aria-label={`Öppna meny för ${label}`}
                   role="button"
                 >
-                  {item.label}
+                  {label}
                 </button>
-              )}
-
-              {(item.children || groupedDynamic[item.label]) && (
                 <ul
-                  id={`dropdown-${index}`}
-                  ref={(el) => (dropdownRefs.current[index] = el)}
+                  id={`extra-dropdown-${dynCatIndex}`}
+                  ref={(el) => (dropdownRefs.current[extraKey] = el)}
                   className={`navbar__dropdown ${
-                    isOpen === index ? "navbar__dropdown--open" : ""
+                    isOpen === extraKey ? "navbar__dropdown--open" : ""
                   }`}
                   style={{
                     maxHeight:
-                      isOpen === index
-                        ? `${dropdownRefs.current[index]?.scrollHeight}px`
+                      isOpen === extraKey
+                        ? `${dropdownRefs.current[extraKey]?.scrollHeight}px`
                         : "0px",
                   }}
-                  aria-hidden={isOpen !== index}
+                  aria-hidden={isOpen !== extraKey}
                   role="menu"
                 >
-                  {isOpen === index && (
-                    <>
-                      {item.children?.map((subItem, subIndex) => (
-                        <li
-                          key={`static-${subIndex}`}
-                          className="navbar__dropdown-item"
-                          role="none"
-                        >
-                          {subItem.external ? (
-                            <a
-                              href={subItem.href}
-                              className="navbar__dropdown-link"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              role="menuitem"
-                            >
-                              {subItem.label}
-                            </a>
-                          ) : (
-                            <Link
-                              href={subItem.href}
-                              className="navbar__dropdown-link"
-                              role="menuitem"
-                            >
-                              {subItem.label}
-                            </Link>
-                          )}
-                        </li>
-                      ))}
-
-                      {groupedDynamic[item.label]?.map((nav, dynIndex) => (
-                        <li
-                          key={`dynamic-${dynIndex}`}
-                          className="navbar__dropdown-item"
-                          role="none"
-                        >
-                          <Link
-                            href={nav.href}
-                            className="navbar__dropdown-link"
-                            role="menuitem"
-                          >
-                            {nav.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </>
-                  )}
-                </ul>
-              )}
-            </li>
-          ))}
-
-          {extraCategories.map(([label, items], dynCatIndex) => (
-            <li
-              key={`extra-cat-${dynCatIndex}`}
-              className="navbar__item navbar__item--has-dropdown"
-            >
-              <button
-                className="navbar__link"
-                onClick={() => toggleDropdown(`extra-${dynCatIndex}`)}
-                aria-expanded={isOpen === `extra-${dynCatIndex}`}
-                aria-controls={`extra-dropdown-${dynCatIndex}`}
-                aria-label={`Öppna meny för ${label}`}
-                role="button"
-              >
-                {label}
-              </button>
-              <ul
-                id={`extra-dropdown-${dynCatIndex}`}
-                ref={(el) =>
-                  (dropdownRefs.current[`extra-${dynCatIndex}`] = el)
-                }
-                className={`navbar__dropdown ${
-                  isOpen === `extra-${dynCatIndex}`
-                    ? "navbar__dropdown--open"
-                    : ""
-                }`}
-                style={{
-                  maxHeight:
-                    isOpen === `extra-${dynCatIndex}`
-                      ? `${
-                          dropdownRefs.current[`extra-${dynCatIndex}`]
-                            ?.scrollHeight
-                        }px`
-                      : "0px",
-                }}
-                aria-hidden={isOpen !== `extra-${dynCatIndex}`}
-                role="menu"
-              >
-                {isOpen === `extra-${dynCatIndex}` &&
-                  items.map((nav, subIndex) => (
-                    <li
-                      key={`extra-link-${subIndex}`}
-                      className="navbar__dropdown-item"
-                      role="none"
-                    >
-                      <Link
-                        href={nav.href}
-                        className="navbar__dropdown-link"
-                        role="menuitem"
+                  {isOpen === extraKey &&
+                    items.map((nav, subIndex) => (
+                      <li
+                        key={`extra-link-${subIndex}`}
+                        className="navbar__dropdown-item"
+                        role="none"
                       >
-                        {nav.label}
-                      </Link>
-                    </li>
-                  ))}
-              </ul>
-            </li>
-          ))}
+                        <Link
+                          href={nav.href}
+                          className="navbar__dropdown-link"
+                          role="menuitem"
+                        >
+                          {nav.label}
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
