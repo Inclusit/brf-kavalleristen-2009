@@ -74,7 +74,7 @@ export default function HeaderEditor({ onClose }) {
       });
 
       if (!response.ok) {
-        setFeedback({
+        setFeedbackMessage({
           type: "error",
           message:
             "Misslyckad uppladdning – kontrollera att bilden är minst 1440px bred.",
@@ -104,13 +104,13 @@ export default function HeaderEditor({ onClose }) {
     });
 
     if (!response.ok) {
-      setFeedback({
+      setFeedbackMessage({
         type: "error",
         message: "Något gick fel vid sparande av header.",
       });
       return;
     }
-    setFeedback({
+    setFeedbackMessage({
       type: "success",
       message: "Header sparad!",
     });
