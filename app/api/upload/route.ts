@@ -40,9 +40,9 @@ export async function POST(req: NextRequest) {
     let filename = createUniqueName(file.name);
     let outputPath = path.join(UPLOAD_DIR, filename);
     let fileUrl = `${BASE_URL}${
-      isVercel ? `/tmp/${filename}` : `/uploads/${filename}`
+      isVercel ? `/api/tmp/${filename}` : `/uploads/${filename}`
     }`;
-
+    
     if (fileType.startsWith("image/")) {
       filename = filename.replace(/\.\w+$/, ".webp");
       outputPath = path.join(UPLOAD_DIR, filename);
