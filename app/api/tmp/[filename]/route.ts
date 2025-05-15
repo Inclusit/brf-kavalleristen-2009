@@ -1,21 +1,25 @@
-
-import { NextRequest, NextResponse } from "next/server";
-import { createReadStream } from "fs";
+import { readFile } from "fs/promises";
 import path from "path";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { filename: string } }
+) {
   const { filename } = params;
   const filePath = path.join("/tmp", filename);
 
   try {
-    const file = createReadStream(filePath);
-    return new NextResponse(file, {
+    const fileBuffer = await readFile(filePath);
+
+    return new NextResponse(fileBuffer, {
       headers: {
         "Content-Type": "image/webp",
         "Content-Disposition": `inline; filename="${filename}"`,
       },
     });
-  } catch {
+  } catch (error) {
+    console.error("Kunde inte läsa fil:", error);
     return NextResponse.json({ message: "Fil ej hittad" }, { status: 404 });
   }
 }
