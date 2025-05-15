@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import LoginModal from "../ui/LoginModal";
 import LocalStorageKit from "@/app/lib/utils/localStorageKit";
-import { useUser } from "@/app/context/user";
+import { useUser, setUser } from "@/app/context/user";
 import { useRouter } from "next/navigation";
 
 export default function Footer() {
@@ -16,9 +16,10 @@ export default function Footer() {
     LocalStorageKit.remove("user");
     LocalStorageKit.remove("@library/token");
     LocalStorageKit.remove("role");
+    LocalStorageKit.remove("userId");
+    setUser?.(null);
     window.dispatchEvent(new Event("storage"));
     router.push("/");
-    router.refresh();
   };
 
   return (
