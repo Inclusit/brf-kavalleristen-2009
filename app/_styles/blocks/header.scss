@@ -5,9 +5,10 @@
   position: relative;
   width: 100%;
   height: clamp(13rem, 25vh, 35rem);
-  background: url("#{$img-path}/kavallerigatan.jpg") center 25% / cover no-repeat !important;
+  //background: url("#{$img-path}/kavallerigatan.jpg") center 25% / cover no-repeat;
   background-attachment: fixed;
   overflow: hidden;
+  background-color: $gray;
 
   &__overlay {
     content: "";
