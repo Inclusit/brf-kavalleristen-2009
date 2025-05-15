@@ -18,6 +18,7 @@ export default function Footer() {
     LocalStorageKit.remove("role");
     window.dispatchEvent(new Event("storage"));
     router.push("/");
+    router.refresh();
   };
 
   return (

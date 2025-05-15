@@ -54,6 +54,18 @@ function UserProvider({ children }: PropsWithChildren) {
     fetchUser();
   }, [token]);
 
+  useEffect(() => {
+    const handleStorageChange = () => {
+      console.log("Storage event received, reloading user...");
+      fetchUser();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const fetchUser = async () => {
     console.log("Fetching user...");
     try {
