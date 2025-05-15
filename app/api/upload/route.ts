@@ -1,8 +1,8 @@
+// app/api/upload/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import { mkdir, writeFile } from "fs/promises";
 import { existsSync } from "fs";
-import sharp from "sharp";
 import { handleApiErrors } from "@/app/lib/handleApiErrors";
 import { createBadRequest } from "@/app/lib/errors";
 
@@ -35,38 +35,22 @@ export async function POST(req: NextRequest) {
       await mkdir(UPLOAD_DIR, { recursive: true });
     }
 
-    let savedFilename = createUniqueName(file.name);
-    const rawOutputPath = path.join(UPLOAD_DIR, savedFilename);
-    let outputPath = rawOutputPath;
-    let fileUrl = `${BASE_URL}${
+    const savedFilename = createUniqueName(file.name);
+    const outputPath = path.join(UPLOAD_DIR, savedFilename);
+    const fileUrl = `${
       isVercel ? `/tmp/${savedFilename}` : `/uploads/${savedFilename}`
     }`;
     let html = "";
 
+    await writeFile(outputPath, buffer);
+
     if (fileType.startsWith("image/")) {
-      savedFilename = savedFilename.replace(/\.\w+$/, ".webp");
-      outputPath = path.join(UPLOAD_DIR, savedFilename);
-      fileUrl = `${BASE_URL}${
-        isVercel ? `/tmp/${savedFilename}` : `/uploads/${savedFilename}`
-      }`;
-
-      try {
-        const webpBuffer = await sharp(buffer).webp({ quality: 75 }).toBuffer();
-        await writeFile(outputPath, webpBuffer);
-      } catch (sharpErr) {
-        throw createBadRequest(
-          "Ogiltig bildfil eller konvertering misslyckades."
-        );
-      }
-
       html = `<img src="${fileUrl}" alt="${savedFilename}" style="max-width: 100%;" />`;
     } else {
-      await writeFile(outputPath, buffer);
       html = `<a href="${fileUrl}" target="_blank" rel="noopener noreferrer">${file.name}</a>`;
     }
 
-    console.log("Fil uppladdad:", fileUrl);
-
+    console.log("Uppladdad:", fileUrl);
     return NextResponse.json({ url: fileUrl, html }, { status: 201 });
   } catch (error: any) {
     console.error("Uppladdningsfel:", {
