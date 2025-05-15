@@ -87,7 +87,8 @@ export default function DynamicPage({ slug: propSlug }) {
       </Head>
 
       <div className="dynamic-page__content" aria-labelledby="head-title">
-        {slug !== "home" && (
+        
+        {slug !== "home" && role !== "ADMIN" && role !== "MODERATOR" && (
           <h1 id="head-title" className="dynamic-page__title">
             {pageTitle}
           </h1>
@@ -121,7 +122,7 @@ export default function DynamicPage({ slug: propSlug }) {
                 placeholder="Sidtitel"
               />
             )}
-            
+
             {updatedBy && (
               <div className="dynamic-page__editor__info">
                 <p>
