@@ -77,7 +77,7 @@ export default function HeaderEditor({ onClose }) {
         setFeedbackMessage({
           type: "error",
           message:
-            "Misslyckad uppladdning – kontrollera att bilden är minst 1440px bred.",
+            "Misslyckad uppladdning, vänligen försök igen.",
         });
         return;
       }
