@@ -94,7 +94,7 @@ export default function HeaderEditor({ onClose }) {
         return;
       }
 
-      setHeaderImage(`${data.url}?t=${Date.now()}`);
+      setHeaderImage(data.url);
       setFeedbackMessage({
         type: "success",
         message: "Bild uppladdad!",
