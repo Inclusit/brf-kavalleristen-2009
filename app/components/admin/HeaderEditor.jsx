@@ -78,16 +78,17 @@ export default function HeaderEditor({ onClose }) {
         body: formData,
       });
 
+      const data = await response.json(); 
+
       if (!response.ok) {
         setFeedbackMessage({
           type: "error",
           message:
-            "Misslyckad uppladdning, vänligen försök igen.",
+            data.message || "Misslyckad uppladdning, vänligen försök igen.",
         });
         return;
       }
 
-      const data = await response.json();
       setHeaderImage(data.url);
     } catch (error) {
 
