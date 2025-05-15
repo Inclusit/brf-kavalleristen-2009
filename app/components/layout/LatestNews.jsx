@@ -44,10 +44,9 @@ export default function LatestNews() {
       <section
         className="latest-news latest-news--fullbleed"
         aria-labelledby="latest-news-heading"
-        id="latest-news"
       >
         <div className="latest-news__content">
-          <h2 className="latest-news__heading">
+          <h2 id="latest-news-heading" className="latest-news__heading">
             Senaste nyheter och händelser
           </h2>
 

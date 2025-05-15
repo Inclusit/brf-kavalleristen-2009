@@ -102,8 +102,8 @@ export default function Home() {
         <DynamicPage slug="/" />
       </section>
 
-      <section className="home-page__info" aria-labelledby="home-page__title">
-        <h2 className="home-page__title">
+      <section className="home-page__info" aria-labelledby="home-page-info">
+        <h2 id="home-page-info" className="home-page__title">
           Intresserad av att flytta till Upplands Väsby?
         </h2>
 
