@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     const { password, ...safeUser } = user;
     return NextResponse.json(safeUser);
   } catch (error: any) {
-    console.warn("Error: Failed to get user from request", error.message);
+    console.warn("Error: Kundte inte hämta användare", error.message);
     return handleApiErrors(error);
   }
 }
@@ -49,7 +49,7 @@ export async function PUT(request: NextRequest) {
     const { password, ...safeUser } = updatedUser;
     return NextResponse.json(safeUser);
   } catch (error: any) {
-    console.warn("Error: Failed to update user", error.message);
+    console.warn("Error: Kunde inte uppdatera användare", error.message);
     return handleApiErrors(error);
   }
 }
@@ -67,7 +67,7 @@ export async function DELETE(request: NextRequest) {
     await prisma.user.delete({ where: { id: userId } });
     return NextResponse.json(null, { status: 204 });
   } catch (error: any) {
-    console.warn("Error: Failed to delete user", error.message);
+    console.warn("Error: Kunde inte radera användare", error.message);
     return handleApiErrors(error);
   }
 }

@@ -2,7 +2,7 @@
 @use "../core/mixins" as *;
 
 .layout__container {
-  @include wrap(site); // max-width + auto margin + $gutter-padding
+  @include wrap(site); 
 
   @include respond(md) {
     padding-inline: 2rem;

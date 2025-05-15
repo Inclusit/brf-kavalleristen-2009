@@ -24,7 +24,7 @@ export default function NewsCollectionPage() {
       try {
         setLoading(true);
         const res = await fetch(`/api/nyheter?page=${currentPage}`);
-        if (!res.ok) throw new Error("Failed to fetch");
+        if (!res.ok) throw new Error("Misslyckades att hämta nyheter");
         const data = await res.json();
         setNews(data.newsPost);
         setTotalCount(data.totalCount);

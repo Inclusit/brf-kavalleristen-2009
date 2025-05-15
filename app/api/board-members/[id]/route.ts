@@ -21,7 +21,7 @@ export async function GET(
 
     return NextResponse.json(member);
   } catch (error: any) {
-    console.warn("Error fetching board member by ID", error.message);
+    console.warn("Kunde inte hämta medlem via ID", error.message);
     return handleApiErrors(error);
   }
 }
@@ -40,7 +40,7 @@ export async function PUT(
     const { name, position, phone, email, image } = body;
 
     if (!name || !position || !phone || !email || !image) {
-      throw createBadRequest("All fields are required");
+      throw createBadRequest("Alla fält krävs");
     }
 
     const updated = await prisma.boardMembers.update({
@@ -50,7 +50,7 @@ export async function PUT(
 
     return NextResponse.json(updated);
   } catch (error: any) {
-    console.warn("Error updating board member", error.message);
+    console.warn("Error i att uppdatera styrelsemedlem", error.message);
     return handleApiErrors(error);
   }
 }
@@ -71,7 +71,7 @@ export async function DELETE(
 
     return NextResponse.json(deleted);
   } catch (error: any) {
-    console.warn("Error deleting board member", error.message);
+    console.warn("Kunde inte radera styrelsemedlem", error.message);
     return handleApiErrors(error);
   }
 }

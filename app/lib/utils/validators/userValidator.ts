@@ -7,15 +7,15 @@ export function UserRegistrationValidator(
   let errors: ErrorObject = {};
 
   if (!data.email) {
-    errors.email = "Email is required";
+    errors.email = "Email krävs";
   } else if (!/\S+@\S+\.\S+/.test(data.email)) {
-    errors.email = "Email is invalid";
+    errors.email = "Email ej giltig";
   }
 
   if (!data.password) {
-    errors.password = "Password is required";
+    errors.password = "Password krävs";
   } else if (data.password.length < 6) {
-    errors.password = "Password must be at least 6 characters";
+    errors.password = "Password måste vara minst 6 tecken";
   }
   
 
@@ -31,13 +31,13 @@ export function userLoginValidator(
   let errors: ErrorObject = {};
 
   if (!data.email) {
-    errors.email = "Email is required";
+    errors.email = "Email krävs";
   } else if (!/\S+@\S+\.\S+/.test(data.email)) {
-    errors.email = "Email is invalid";
+    errors.email = "Email ej giltig";
   }
 
   if (!data.password) {
-    errors.password = "Password is required";
+    errors.password = "Password krävs";
   }
 
   const hasErrors = Object.keys(errors).length > 0;

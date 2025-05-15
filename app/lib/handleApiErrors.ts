@@ -17,13 +17,13 @@ export function handleApiErrors(error: unknown) {
       case "Conflict":
         return NextResponse.json({ message: error.message }, { status: 409 });
       default:
-        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ message: "Intern Server Error" }, { status: 500 });
     }
   }
 
   console.error("Unexpected error:", error);
   return NextResponse.json(
-    { message: "Internal Server Error - try again later" }, 
+    { message: "Intern Server Error - Försök igen senare" }, 
     { status: 500 }
   )
 

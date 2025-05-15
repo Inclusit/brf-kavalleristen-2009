@@ -49,14 +49,14 @@ export async function POST(request: NextRequest) {
         throw createUnauthorized("Unauthorized");
     }
 
-    if (!userId) throw createBadRequest("User ID is required");
+    if (!userId) throw createBadRequest("User ID krävs");
     
 
     try {
         const body = await request.json();
 
         if (!body.title || !body.content || !body.slug) {
-            throw createBadRequest("Title, content, and slug are required");
+            throw createBadRequest("Title, content, och slug krävs");
         }
 
         const newsPost = await prisma.newsPost.create({

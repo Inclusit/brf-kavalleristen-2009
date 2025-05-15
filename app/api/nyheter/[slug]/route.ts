@@ -36,7 +36,7 @@ export async function GET(
       },
     });
 
-    if (!news) throw createNotFound("News not found");
+    if (!news) throw createNotFound("Nyhet hittades inte");
 
     return NextResponse.json(news, { status: 200 });
   } catch (error) {
@@ -54,7 +54,7 @@ export async function PUT(
 
   console.log(" Update /api/nyheter/", { slug, role, userId });
 
-  if (!slug) throw createBadRequest("Slug is required");
+  if (!slug) throw createBadRequest("Slug krävs");
 
   if (role !== "ADMIN" && role !== "MODERATOR") {
     throw createUnauthorized("Du har inte rätt att uppdatera nyheter.");
@@ -102,14 +102,14 @@ export async function DELETE(
 ) {
   const role = request.headers.get("role");
   if (role !== "ADMIN") throw createUnauthorized("Unauthorized");
-  if (!params.slug) throw createBadRequest("Slug is required");
+  if (!params.slug) throw createBadRequest("Slug krävs");
 
   try {
     await prisma.newsPost.delete({
       where: { slug: params.slug },
     });
     return NextResponse.json(
-      { message: "News deleted successfully" },
+      { message: "Nyhet raderad" },
       { status: 200 }
     );
   } catch (error) {

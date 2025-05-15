@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     const { name, position, phone, email, image } = body;
 
     if (!name || !position || !phone || !email || !image) {
-      throw createBadRequest("All fields are required");
+      throw createBadRequest("Alla fält krävs");
     }
 
     const newBoardMember = await prisma.boardMembers.create({
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newBoardMember);
   } catch (error: any) {
-    console.warn("Error: Failed to create board member", error.message);
+    console.warn("Error: Kunde inte skapa styrelsemedlem", error.message);
     return handleApiErrors(error);
   }
 }

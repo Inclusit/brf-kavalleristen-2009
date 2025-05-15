@@ -32,7 +32,7 @@ export async function GET(
 ) {
   try {
     const slug = params.slug?.join("/") ?? "";
-    if (!slug) throw createBadRequest("Slug is required");
+    if (!slug) throw createBadRequest("Slug krävs");
 
     let content: IncludedContent | null = await prisma.contentBlock.findUnique({
       where: { slug },
@@ -56,7 +56,7 @@ export async function GET(
 
     return NextResponse.json(content);
   } catch (error: any) {
-    console.warn("Error: Failed to get content", error.message);
+    console.warn("Error: Kunde inte hämta innehåll", error.message);
     return handleApiErrors(error);
   }
 }
@@ -78,14 +78,14 @@ export async function PUT(
     const userId = request.headers.get("userId");
     const role = request.headers.get("role");
 
-    if (!slug) throw createBadRequest("Slug is required");
-    if (!userId) throw createBadRequest("User ID is required");
+    if (!slug) throw createBadRequest("Slug krävs");
+    if (!userId) throw createBadRequest("User ID krävs");
     if (role !== "ADMIN" && role !== "MODERATOR") {
       throw createUnauthorized("Unauthorized");
     }
 
     const body: ContentUpdateData = await request.json();
-    if (!body || !body.content) throw createBadRequest("Content is required");
+    if (!body || !body.content) throw createBadRequest("Content krävs");
 
     let contentBlock: IncludedContent;
 
@@ -141,7 +141,7 @@ export async function PUT(
 
     return NextResponse.json(safeContent, { status: 200 });
   } catch (error: any) {
-    console.warn("Error: Failed to update content", error.message);
+    console.warn("Error: Kunde inte hämta innehåll", error.message);
     return handleApiErrors(error);
   }
 }
@@ -155,20 +155,20 @@ export async function DELETE(
     const slug = params.slug?.join("/") ?? "";
     const role = request.headers.get("role");
 
-    if (!slug) throw createBadRequest("Slug is required");
+    if (!slug) throw createBadRequest("Slug krävs");
     if (role !== "ADMIN") throw createUnauthorized("Unauthorized");
 
     const contentBlock = await prisma.contentBlock.findUnique({
       where: { slug },
     });
 
-    if (!contentBlock) throw createNotFound("Content not found");
+    if (!contentBlock) throw createNotFound("Innehåll hittades inte");
 
     await prisma.contentBlock.delete({ where: { slug } });
 
-    return NextResponse.json({ message: "Content deleted successfully" });
+    return NextResponse.json({ message: "Innehåll raderat" });
   } catch (error: any) {
-    console.warn("Error: Failed to delete content", error.message);
+    console.warn("Error: Kunde inte radera innehåll", error.message);
     return handleApiErrors(error);
   }
 }

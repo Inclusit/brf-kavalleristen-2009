@@ -6,10 +6,8 @@ import sharp from "sharp";
 import { handleApiErrors } from "@/app/lib/handleApiErrors";
 import { createBadRequest } from "@/app/lib/errors";
 
-// Mapp för uppladdade filer
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
-// Enkel funktion för unika filnamn
 function createUniqueName(originalName: string) {
   const ext = path.extname(originalName);
   const base = path.basename(originalName, ext);

@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const [hasErrors, errors] = userLoginValidator(body);
 
     if (hasErrors) {
-      throw createBadRequest("Error in form: " + JSON.stringify(errors));
+      throw createBadRequest("Error i inloggningsformulär: " + JSON.stringify(errors));
     }
 
     const user = await prisma.user.findUniqueOrThrow({
@@ -30,11 +30,11 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (!user) throw createNotFound("User not found");
+    if (!user) throw createNotFound("Användare hittades inte");
 
 
     const validPassword = await comparePasswords(body.password, user.password);
-    if (!validPassword) throw createUnauthorized("Invalid email or password");
+    if (!validPassword) throw createUnauthorized("Felaktigt lösenord");
     
 
     const token = await signJWT({

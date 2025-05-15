@@ -80,18 +80,6 @@
     display: none;
   }
 
-  /*scrollbar-width: thin;
-  &::-webkit-scrollbar {
-    height: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: $gray;
-    border-radius: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }*/
-
   > * {
     flex: 0 0 auto;
     scroll-snap-align: start;

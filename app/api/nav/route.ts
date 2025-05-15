@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(entry, { status: 201 });
   } catch (error: any) {
-    console.warn("Error: Failed to create navigation", error.message);
+    console.warn("Error: Kunde inte skapa ny navigation", error.message);
     return handleApiErrors(error);
   }
 }
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(entries, { status: 200 });
   } catch (error: any) {
-    console.warn("Error: Failed to get navigation", error.message);
+    console.warn("Error: Kunde inte hämta navigation", error.message);
     return handleApiErrors(error);
   }
 }
@@ -96,7 +96,7 @@ export async function DELETE(request: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.warn("Error: Failed to delete navigation", error.message);
+    console.warn("Error: Kunde inte radera navigation", error.message);
     return handleApiErrors(error);
   }
 }

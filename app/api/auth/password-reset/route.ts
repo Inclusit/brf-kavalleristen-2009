@@ -13,12 +13,12 @@ import {
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
-  console.log("POST /api/auth/password-reset");
+  
   try {
     const {email, newPassword} = await request.json();
   
     if (!email || !newPassword) {
-      throw createBadRequest("Email and new password are required");
+      throw createBadRequest("Email och nytt lösenord krävs");
     }
 
     const user = await prisma.user.findUnique({
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      throw createNotFound("User not found");
+      throw createNotFound("Användare hittades inte");
     }
 
     const hashedPassword = await hashPassword(newPassword);

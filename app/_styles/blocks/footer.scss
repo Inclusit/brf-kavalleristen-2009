@@ -38,7 +38,7 @@
   }
 
   @include respond(lg) {
-    grid-template-columns: repeat(4, 1fr); // Tillbaka till fyra kolumner vid stor desktop
+    grid-template-columns: repeat(4, 1fr); 
   }
   }
 

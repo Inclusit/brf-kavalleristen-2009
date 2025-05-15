@@ -15,14 +15,14 @@ import {
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
-  console.log("POST /api/auth/register called");
+ 
   try {
     const body: UserRegistrationData = await request.json();
     const [hasErrors, errors] = UserRegistrationValidator(body);
 
     if (hasErrors) {
       throw createBadRequest(
-        "Error in registration form: " + JSON.stringify(errors)
+        "Error i registreringsformulär: " + JSON.stringify(errors)
       );
     }
 
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await hashPassword(body.password);
 
     const userCheck = await userExists(prisma, body.email);
-    if (userCheck) throw createConflict("User already exists");
+    if (userCheck) throw createConflict("Användare med denna e-postadress finns redan");
 
 
     const user: User = await prisma.user.create({
