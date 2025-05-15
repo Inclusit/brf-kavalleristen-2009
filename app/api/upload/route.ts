@@ -39,21 +39,22 @@ export async function POST(req: NextRequest) {
 
     let filename = createUniqueName(file.name);
     let outputPath = path.join(UPLOAD_DIR, filename);
-    let fileUrl = `${BASE_URL}${
-      isVercel ? `/api/tmp/${filename}` : `/uploads/${filename}`
-    }`;
-    
+
     if (fileType.startsWith("image/")) {
       filename = filename.replace(/\.\w+$/, ".webp");
       outputPath = path.join(UPLOAD_DIR, filename);
-      fileUrl = `${BASE_URL}${
-        isVercel ? `/tmp/${filename}` : `/uploads/${filename}`
-      }`;
+    }
 
-      console.log("file url", fileUrl);
-      console.log("output path", outputPath);
-      console.log("filename", filename);
-      
+    // ✅ URL sätts EN gång — efter ev. .webp-ändring
+    const fileUrl = `${BASE_URL}${
+      isVercel ? `/api/tmp/${filename}` : `/uploads/${filename}`
+    }`;
+
+    console.log("file url", fileUrl);
+    console.log("output path", outputPath);
+    console.log("filename", filename);
+
+    if (fileType.startsWith("image/")) {
       try {
         const webpBuffer = await sharp(buffer).webp({ quality: 75 }).toBuffer();
         await writeFile(outputPath, webpBuffer);
