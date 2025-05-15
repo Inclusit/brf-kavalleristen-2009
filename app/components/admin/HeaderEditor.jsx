@@ -64,7 +64,7 @@ export default function HeaderEditor({ onClose }) {
 
     fetchHeader();
   }, []);
-  
+
   const handleUpload = async () => {
     const file = fileRef.current?.files[0];
     if (!file) {
@@ -94,7 +94,7 @@ export default function HeaderEditor({ onClose }) {
         return;
       }
 
-      setHeaderImage(data.url);
+      setHeaderImage(`${data.url}?t=${Date.now()}`);
       setFeedbackMessage({
         type: "success",
         message: "Bild uppladdad!",
@@ -156,10 +156,11 @@ export default function HeaderEditor({ onClose }) {
           ref={modalRef}
           onClick={(e) => e.stopPropagation()}
         >
-          <button 
-          className="nav-modal__close" 
-          aria-label="Stäng modal"
-          onClick={onClose}>
+          <button
+            className="nav-modal__close"
+            aria-label="Stäng modal"
+            onClick={onClose}
+          >
             X
           </button>
           {feedbackMessage && (
@@ -180,12 +181,13 @@ export default function HeaderEditor({ onClose }) {
           </h2>
 
           <div className="header-editor">
-
             {headerImage && (
               <div
                 className="header-editor__preview"
                 style={{
                   backgroundImage: `url(${headerImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
                 }}
               >
                 <div className="header-editor__preview-content">
@@ -208,40 +210,38 @@ export default function HeaderEditor({ onClose }) {
             )}
 
             <div className="header-editor__edit-group">
-            <label htmlFor="header-image" className="header-editor__label">
-              Ladda upp headerbild
-            </label>
-            <input
-              id="header-image"
-              type="file"
-              accept="image/*"
-              ref={fileRef}
-              onChange={handleUpload}
-            />
-            
+              <label htmlFor="header-image" className="header-editor__label">
+                Ladda upp headerbild
+              </label>
+              <input
+                id="header-image"
+                type="file"
+                accept="image/*"
+                ref={fileRef}
+                onChange={handleUpload}
+              />
 
-            
-            <label htmlFor="header-title" className="header-editor__label">
-              Header Titel
-            </label>
-            <input
-              id="header-title"
-              type="text"
-              value={headerTitle}
-              onChange={(e) => setHeaderTitle(e.target.value)}
-              placeholder="Header Title"
-            />
+              <label htmlFor="header-title" className="header-editor__label">
+                Header Titel
+              </label>
+              <input
+                id="header-title"
+                type="text"
+                value={headerTitle}
+                onChange={(e) => setHeaderTitle(e.target.value)}
+                placeholder="Header Title"
+              />
 
-            <label htmlFor="header-subtitle" className="header-editor__label">
-              Header Subtitle
-            </label>
-            <input
-              id="header-subtitle"
-              type="text"
-              value={headerSub}
-              onChange={(e) => setHeaderSub(e.target.value)}
-              placeholder="Header Subtitle"
-            />
+              <label htmlFor="header-subtitle" className="header-editor__label">
+                Header Subtitle
+              </label>
+              <input
+                id="header-subtitle"
+                type="text"
+                value={headerSub}
+                onChange={(e) => setHeaderSub(e.target.value)}
+                placeholder="Header Subtitle"
+              />
             </div>
 
             <button onClick={saveHeaderUpdate}>Spara header</button>
