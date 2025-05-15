@@ -51,11 +51,14 @@ export default function HeaderEditor({ onClose }) {
         const response = await fetch("/api/content/header");
         if (!response.ok) throw new Error("Misslyckades att hämta header");
         const data = await response.json();
+        console.log("Felmeddelande:", data);
+
         setHeaderImage(data?.image);
         setHeaderTitle(data?.title);
         setHeaderSub(data?.subtitle);
       } catch (error) {
         console.error("Error fetching header:", error);
+        console.log("Felmeddelande:", data);
       }
     };
 

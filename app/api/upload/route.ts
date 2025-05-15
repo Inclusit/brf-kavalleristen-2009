@@ -43,6 +43,9 @@ export async function POST(req: NextRequest) {
         const webpBuffer = await sharp(buffer).webp({ quality: 75 }).toBuffer();
         await writeFile(outputPath, webpBuffer);
       } catch (sharpErr) {
+
+        console.error("Sharp-konverteringsfel:", sharpErr.message);
+        
         throw createBadRequest(
           "Ogiltig bildfil eller konvertering misslyckades."
         );
