@@ -3,11 +3,19 @@ import DynamicPage from "../components/layout/DynamicPage";
 import LatestNews from "../components/layout/LatestNews";
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 
 export default function Home() {
   return (
     <div className="home-page">
       <section className="home-page__hero">
+        <Head>
+          <title>Brf Kavalleristen 2009</title>
+          <meta
+            name="description"
+            content="Välkommen till Brf Kavalleristen 2009 i Upplands Väsby. Här hittar du information om föreningen, nyheter och kontaktuppgifter."
+          />
+        </Head>
         <h1 id="hero-title" className="home-page__title">
           Välkommen till Brf Kavalleristen 2009
         </h1>

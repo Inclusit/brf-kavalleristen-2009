@@ -7,6 +7,7 @@ import LocalStorageKit from "@/app/lib/utils/localStorageKit";
 import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
 import CTAbtn from "@/app/components/ui/CTAbtn";
 import { addressData } from "@/app/components/data/addressData";
+import Head from "next/head";
 
 export default function AdminUserPanel() {
   const { user } = useUser();
@@ -75,6 +76,13 @@ export default function AdminUserPanel() {
 
   return (
     <fieldset className="admin-user-panel">
+      <Head>
+        <title>Administrera användare</title>
+        <meta
+          name="description"
+          content="Administrera användare i Brf Kavalleristen 2009. Lägg till, redigera eller ta bort användare."
+        />
+      </Head>
       <legend>Användare</legend>
       {users.map((user) => (
         <div key={user.id} className="admin-user-panel__card">

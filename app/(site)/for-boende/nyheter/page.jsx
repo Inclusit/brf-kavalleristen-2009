@@ -6,6 +6,7 @@ import FeedbackMessage from "@/app/components/ui/FeedbackMessage";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/context/user";
 import SkeletonLoader from "@/app/components/ui/SkeletonLoader";
+import Head from "next/head";
 
 export default function NewsCollectionPage() {
   const [news, setNews] = useState([]);
@@ -46,6 +47,14 @@ export default function NewsCollectionPage() {
   };
 
   return (
+    <section >
+      <Head>
+        <title>Nyheter och händelser</title>
+        <meta
+          name="description"
+          content="Håll dig uppdaterad med de senaste nyheterna och händelserna i Brf Kavalleristen 2009."
+        />
+        </Head>
     <article
       className="news-collection"
       aria-label="Nyheter och händelser"
@@ -153,5 +162,6 @@ export default function NewsCollectionPage() {
         </nav>
       )}
     </article>
+    </section>
   );
 }
