@@ -64,10 +64,16 @@ export default function HeaderEditor({ onClose }) {
 
     fetchHeader();
   }, []);
-
+  
   const handleUpload = async () => {
     const file = fileRef.current?.files[0];
-    if (!file) return;
+    if (!file) {
+      setFeedbackMessage({
+        type: "error",
+        message: "Ingen fil vald.",
+      });
+      return;
+    }
 
     const formData = new FormData();
     formData.append("file", file);
@@ -78,21 +84,27 @@ export default function HeaderEditor({ onClose }) {
         body: formData,
       });
 
-      const data = await response.json(); 
+      const data = await response.json();
 
       if (!response.ok) {
         setFeedbackMessage({
           type: "error",
-          message:
-            data.message || "Misslyckad uppladdning, vänligen försök igen.",
+          message: data.message || "Misslyckad uppladdning.",
         });
         return;
       }
 
       setHeaderImage(data.url);
+      setFeedbackMessage({
+        type: "success",
+        message: "Bild uppladdad!",
+      });
     } catch (error) {
-
-      console.error("Fel vid filuppladdning:", error.message);
+      console.error("Fel vid filuppladdning:", error);
+      setFeedbackMessage({
+        type: "error",
+        message: "Tekniskt fel vid uppladdning.",
+      });
     }
   };
 
