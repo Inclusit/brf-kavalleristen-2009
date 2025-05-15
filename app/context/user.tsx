@@ -56,8 +56,12 @@ function UserProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const handleStorageChange = () => {
-      console.log("Storage event received, reloading user...");
-      fetchUser();
+      console.log("Storage event received, updating token and fetching user");
+      const updatedToken = LocalStorageKit.get("@library/token");
+      setToken(updatedToken); 
+
+      if (!updatedToken) setUser(null); 
+      
     };
 
     window.addEventListener("storage", handleStorageChange);
