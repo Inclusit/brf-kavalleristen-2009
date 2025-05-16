@@ -24,17 +24,11 @@ export default function RootLayout({ children }) {
                 <Header />
               </header>
               <nav aria-label="Huvudmeny" >
-                <h2 id="mainnav-heading" className="sr-only">
-                  Webbplatsnavigation
-                </h2>
                 <Navbar />
               </nav>
 
               <main id="main-content" className="site-wrap" role="main">
                 <div className="breadcrumbs" aria-labelledby="breadcrumbs-heading">
-                  <h2 id="breadcrumbs-heading" className="sr-only">
-                    Webbplatsens navigering
-                  </h2>
                   <Breadcrumbs />
                 </div>
                 <div>{children}</div>

@@ -27,7 +27,7 @@ export default function Footer() {
       <div className="section-wrap footer__container">
         <div className="footer__logo">
           <Image
-            src={"/images/logo-placeholder.jpg"}
+            src={"/icons/logo.svg"}
             alt="BRF Kavalleristen 2009"
             width={100}
             height={100}

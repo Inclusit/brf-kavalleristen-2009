@@ -51,7 +51,7 @@ export default function Header() {
       <div className="header__container">
         <div className="header__logo">
           <img
-            src="/images/logo-placeholder.jpg"
+            src="/icons/logo.svg"
             alt="Logo"
             width={100}
             height={100}

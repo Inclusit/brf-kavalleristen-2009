@@ -2,7 +2,8 @@
 @use "../core/mixins" as *;
 
 .styrelsen-page {
-
+    margin-bottom: 5rem;
+    
     &__title {
         font-size: 3rem;
         font-weight: $font-bold;
