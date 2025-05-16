@@ -50,11 +50,10 @@ export default function Header() {
       <div className="header__overlay" aria-hidden="true"></div>
       <div className="header__container">
         <div className="header__logo">
-          <img
-            src="/icons/logo.svg"
-            alt="Logo"
-            width={100}
-            height={100}
+          <div
+            className="header__logo-icon"
+            role="img"
+            aria-label="BRF Kavalleristen 2009"
           />
         </div>
 

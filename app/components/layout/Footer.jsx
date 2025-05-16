@@ -25,14 +25,11 @@ export default function Footer() {
   return (
     <div className="footer" id="footer">
       <div className="section-wrap footer__container">
-        <div className="footer__logo">
-          <Image
-            src={"/icons/logo.svg"}
-            alt="BRF Kavalleristen 2009"
-            width={100}
-            height={100}
-          />
-        </div>
+        <div
+          className="footer__logo"
+          role="img"
+          aria-label="BRF Kavalleristen 2009"
+        ></div>
 
         <div className="footer__info">
           <div className="footer__info-item">

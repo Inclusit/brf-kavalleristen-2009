@@ -35,12 +35,22 @@
     top: $gutter;
     left: $gutter;
     z-index: 3;
+  }
 
-    img {
-      width: 100px;
-      height: auto;
-      display: block;
-    }
+  &__logo-icon {
+    width: 100px;
+    height: 40px;
+    background-color: $blue;
+  
+    mask-image: url("/icons/logo.svg");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  
+    -webkit-mask-image: url("/icons/logo.svg");
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
   }
 
   &__text {

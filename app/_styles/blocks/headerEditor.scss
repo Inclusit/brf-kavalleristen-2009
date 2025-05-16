@@ -36,9 +36,31 @@
       left: 0.25rem;
       z-index: 3;
 
-      img {
-        width: 50px;
-        height: auto;
+    }
+
+    &____logo-icon {
+      width: 50px;
+      height: 40px;
+      background-color: $blue;
+    
+      mask-image: url("/icons/logo.svg");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
+    
+      -webkit-mask-image: url("/icons/logo.svg");
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      -webkit-mask-size: contain;
+    
+      @include respond(md) {
+        width: 70px;
+        height: 50px;
+      }
+    
+      @include respond(lg) {
+        width: 80px;
+        height: 60px;
       }
     }
 
@@ -69,9 +91,6 @@
     }
 
     @include respond(md) {
-      .header__logo img {
-        width: 70px;
-      }
 
       .header__text {
         &-title {
@@ -87,9 +106,6 @@
     @include respond(md) {
       aspect-ratio: 3 / 1;
 
-      .header__logo img {
-        width: 80px;
-      }
 
       .header__text {
         max-height: 90%;
