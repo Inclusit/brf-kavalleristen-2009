@@ -20,10 +20,10 @@
     }
   }
 
-  &__logo img {
+  &__logo {
     width: 100px;
-  height: 40px;
-  background-color: $blue;
+  height: 100px;
+  background-color: $white;
 
  
   mask-image: url("/icons/logo.svg");
