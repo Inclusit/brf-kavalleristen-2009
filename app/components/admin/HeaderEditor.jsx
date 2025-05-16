@@ -193,7 +193,7 @@ export default function HeaderEditor({ onClose }) {
                 <div className="header-editor__preview-content">
                   <div className="header__logo">
                     <div
-                      className="header__logo-icon"
+                      className="header__logo-preview"
                       role="img"
                       aria-label="Föreningens logotyp"
                     />
