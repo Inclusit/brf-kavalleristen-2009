@@ -123,6 +123,12 @@ export default function Navbar() {
                           aria-hidden={isOpen !== index}
                         >
                           {subItem.label}
+                          <img
+                            src="/icons/external-link-icon.svg"
+                            alt=""
+                            aria-hidden="true"
+                            className="navbar__external-icon"
+                          />
                         </a>
                       ) : (
                         <Link
