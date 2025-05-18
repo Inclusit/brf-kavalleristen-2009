@@ -13,6 +13,7 @@
     "@ckeditor/ckeditor5-react": "^9.5.0",
     "@lexical/react": "^0.30.0",
     "@prisma/client": "^6.7.0",
+    "@vercel/blob": "^1.0.1",
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
     "jose": "^6.0.10",
