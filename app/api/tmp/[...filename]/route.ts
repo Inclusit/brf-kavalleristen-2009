@@ -1,13 +1,16 @@
-//api/tmp/[filename]/route.ts
+// app/api/tmp/[...filename]/route.ts
 import { readFile } from "fs/promises";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: { filename: string[] | string } }
 ) {
-  const { filename } = params;
+  const filename = Array.isArray(params.filename)
+    ? params.filename.join("/")
+    : params.filename;
+
   const filePath = path.join("/tmp", filename);
 
   try {
@@ -15,7 +18,7 @@ export async function GET(
 
     return new NextResponse(fileBuffer, {
       headers: {
-        "Content-Type": "image/webp",
+        "Content-Type": "image/webp", // Anpassa om du har olika bildtyper
         "Content-Disposition": `inline; filename="${filename}"`,
       },
     });
