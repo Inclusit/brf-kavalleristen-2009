@@ -105,8 +105,9 @@
   }
 
   &__external-icon {
-    width: 0.9rem;
-    height: 0.9rem;
+    width: 2rem;
+    height: 1rem;
+    filter: invert(1);
   }
 
   &__item {
